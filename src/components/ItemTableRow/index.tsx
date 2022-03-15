@@ -1,12 +1,37 @@
-import { Box, Button, Text } from "native-base";
+import { Box, Button, HamburgerIcon, Menu, Pressable, Text } from "native-base";
 import { theme } from "../../theme";
 import { BadgeStatus, BageTypes } from "../BadgeStatus";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 interface IItemTableRowProps {
   status: BageTypes;
 }
 
 export function ItemTableRow({ status }: IItemTableRowProps) {
+  function DetailsButtonActionMenu() {
+    return (
+      <Box h="80%" w="90%" alignItems="flex-start">
+        <Menu
+          w="190"
+          trigger={(triggerProps) => {
+            return (
+              <Pressable
+                accessibilityLabel="More options menu"
+                {...triggerProps}
+              >
+                <BsThreeDotsVertical />
+              </Pressable>
+            );
+          }}
+        >
+          <Menu.Item>Começar ação</Menu.Item>
+          <Menu.Item>Ver detalhes</Menu.Item>
+          <Menu.Item isDisabled>Excluir ação</Menu.Item>
+        </Menu>
+      </Box>
+    );
+  }
+
   return (
     <Box
       flex={1}
@@ -17,7 +42,9 @@ export function ItemTableRow({ status }: IItemTableRowProps) {
       borderBottomColor="#E0DDF0"
       paddingY="12px"
     >
-      <BadgeStatus type={status} />
+      <Box w="180px">
+        <BadgeStatus type={status} />
+      </Box>
 
       <Box maxWidth="280px">
         <Text>
@@ -69,7 +96,7 @@ export function ItemTableRow({ status }: IItemTableRowProps) {
       <Box maxWidth="150px">
         <Button
           variant="outline"
-          borderColor={theme.colors.primary.ligther}
+          borderColor="primary.dark"
           bgColor={theme.colors.primary.ligther}
           _text={{
             color: "#392D8B",
@@ -79,23 +106,7 @@ export function ItemTableRow({ status }: IItemTableRowProps) {
             borderColor: theme.colors.primary.ligther,
           }}
         >
-          Ver detalhes
-        </Button>
-      </Box>
-      <Box maxWidth="150px">
-        <Button
-          variant="outline"
-          borderColor={theme.colors.primary.ligther}
-          bgColor={theme.colors.info.medium}
-          _text={{
-            color: theme.colors.neutral.ligth,
-          }}
-          _hover={{
-            bgColor: theme.colors.info.dark,
-            borderColor: theme.colors.primary.ligther,
-          }}
-        >
-          Comerçar projeto
+          <DetailsButtonActionMenu />
         </Button>
       </Box>
     </Box>

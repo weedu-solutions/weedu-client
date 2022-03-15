@@ -1,7 +1,8 @@
 import { Box, Image } from "native-base";
 import { AuthBox } from "../../components/AuthBox";
 import { Hearder } from "../../components/Header";
-import Background from "./assets/bg.svg";
+
+import Background from "../../assets/bg.svg";
 
 export function Signin() {
   return (

@@ -7,11 +7,12 @@ export function CreateTask() {
     <Fab
       renderInPortal={false}
       shadow={20}
-      right={70}
-      bottom={50}
+      right="18%"
+      bottom="15%"
       position="fixed"
       size="sm"
       bgColor={theme.colors.primary.medium}
+      zIndex={2}
       icon={
         <Box flexDir="row" alignItems="center">
           <TiPlus color="#fff" size="32" />

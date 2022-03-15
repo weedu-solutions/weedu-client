@@ -34,11 +34,29 @@ export function AuthBox() {
           placeholder="Digite sua senha aqui"
           type={show ? "text" : "password"}
           InputRightElement={
-            <Button size="xs" rounded="none" w="1/6" h="full" bgColor="neutral.medium" >{show ? "Esconder" : "Mostrar"}</Button>
+            <Button
+              size="xs"
+              rounded="none"
+              w="1/6"
+              h="full"
+              bgColor="neutral.medium"
+            >
+              {show ? "Esconder" : "Mostrar"}
+            </Button>
           }
         />
 
         <CustomButton title="Entrar" />
+        <Box w="100%" alignItems="flex-end">
+          <Button
+            variant="outline"
+            borderWidth={0}
+            _text={{ color: "primary.darker" }}
+            _hover={{ background: "neutral.ligther" }}
+          >
+            Esqueci minha senha
+          </Button>
+        </Box>
       </Box>
       <Box
         bgColor="#EFF0F1"

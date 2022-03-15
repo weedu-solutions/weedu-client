@@ -19,7 +19,7 @@ export function BadgeStatus({ type }: IBadgeProps) {
         return {
           text: "A iniciar",
           bgColor: "rgba(46, 196, 182, 0.24)",
-          txtColor: "succes.medium",
+          txtColor: "success.medium",
         };
       case "Late_To_Start":
         return {
@@ -50,18 +50,19 @@ export function BadgeStatus({ type }: IBadgeProps) {
 
   return (
     <Box
-      width="145px"
       height="32px"
       borderRadius="16px"
       bgColor={handleStatus.bgColor}
       alignItems="center"
       justifyContent="center"
+      paddingX={6}
     >
       <Text
         fontFamily="Inter"
         fontWeight="700"
         fontSize="12px"
         color={handleStatus.txtColor}
+        noOfLines={1}
       >
         {handleStatus.text}
       </Text>
