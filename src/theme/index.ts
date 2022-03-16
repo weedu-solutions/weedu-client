@@ -37,6 +37,9 @@ const theme = extendTheme({
       dark: "#0A3466",
       darker: "#051A33",
     },
+    warning: {
+      medium: "#FB7756"
+    }
   },
 //   fontSizes: {
 
