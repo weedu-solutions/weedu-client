@@ -1,4 +1,4 @@
-import { Box, Input, Text } from "native-base";
+import { Box, HamburgerIcon, Input, Menu, Pressable, Text } from "native-base";
 import { DashHeader } from "../../components/DashHeader";
 import { PieChart } from "react-minimal-pie-chart";
 import { ItemTableRow } from "../../components/ItemTableRow";
@@ -8,6 +8,9 @@ import { theme } from "../../theme";
 
 import * as S from "./styles";
 import { CreateTask } from "../../components/CreateTask";
+import { GlobalModal } from "../../components/GlobalModal";
+import { TooltipAlert } from "../../components/TooltipAlert";
+import { NewAction } from "../Action/NewAction";
 
 export function Home() {
   const dataGraph = [
@@ -20,6 +23,25 @@ export function Home() {
     { title: "No prazo", value: 32, color: "#011627" },
     { title: "Fora do praz", value: 68, color: "#E71D36" },
   ];
+
+  // function Example() {
+  //   return <Box h="80%" w="90%" alignItems="flex-start">
+  //       <Menu w="190" trigger={triggerProps => {
+  //       return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
+  //               <HamburgerIcon />
+  //             </Pressable>;
+  //     }}>
+  //         <Menu.Item>Arial</Menu.Item>
+  //         <Menu.Item>Nunito Sans</Menu.Item>
+  //         <Menu.Item>Roboto</Menu.Item>
+  //         <Menu.Item>Poppins</Menu.Item>
+  //         <Menu.Item>SF Pro</Menu.Item>
+  //         <Menu.Item>Helvetica</Menu.Item>
+  //         <Menu.Item isDisabled>Sofia</Menu.Item>
+  //         <Menu.Item>Cookie</Menu.Item>
+  //       </Menu>
+  //     </Box>;
+  // }
 
   return (
     <Box alignItems="center" paddingBottom="5%">
@@ -252,6 +274,12 @@ export function Home() {
       </S.Container>
 
       <CreateTask />
+
+      <GlobalModal />
+
+      <TooltipAlert />
+
+      {/* <NewAction /> */}
     </Box>
   );
 }
