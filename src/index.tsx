@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { MyRoutes } from "./Routes";
+import { MyRoutes } from "./routes";
 import { NativeBaseProvider } from "native-base";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./theme";
