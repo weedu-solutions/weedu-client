@@ -20,8 +20,8 @@ export const Wrapper = styled.div`
     font-weight: 600;
     font-size: 11px;
     align-self: flex-start;
-    margin-top: -20px;
-    margin-left: 10px;
+    margin-top: -15px;
+    margin-bottom: 20px;
   }
 
   strong {
