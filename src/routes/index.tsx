@@ -12,7 +12,7 @@ export function MyRoutes() {
       <AppProvider>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/test"
+          <Route path="/dashboard"
             element={
               <RequireAuth>
                 <Dashboard />

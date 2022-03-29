@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ICredentials from '../interfaces/credentials';
 import { Api } from '../services/api';
 
@@ -19,8 +20,10 @@ interface IAuthState {
 export interface IAuthContextState {
   user: IUser;
   token: string;
-  signIn(credentials: ICredentials): Promise<void>;
+  signIn(credentials: ICredentials, route: string): Promise<void>;
   signOut(): void;
+  error: string;
+  loading: boolean;
 }
 
 export const AuthContext = createContext<IAuthContextState>(
@@ -28,30 +31,42 @@ export const AuthContext = createContext<IAuthContextState>(
 );
 
 export const AuthProvider: React.FC = ({ children }) => {
+  const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<IAuthState>(() => {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
-
+    
     if (token && user) {
       return { token, user: JSON.parse(user) };
     }
-
+    
     return {} as IAuthState;
   });
 
-  const signIn = useCallback(async (credentials: ICredentials) => {
-    const response = await Api.post('/login', credentials);
+  const signIn = async (credentials: ICredentials, route: string) => {
+      try {
+        setLoading(loading => !loading);
+        const { data } = await Api.post('/login', credentials);
+        console.log(data.error)
+        setLoading(loading => !loading);
+        if(data.error) return setError(data.error);
 
-    const { access_token, user } = response.data;
-
-    localStorage.setItem('token', access_token);
-    localStorage.setItem('user', JSON.stringify(user));
-
-    setData({
-      token: access_token,
-      user,
-    });
-  }, []);
+        setError("");
+        const { access_token, user } = data;
+        localStorage.setItem('token', access_token);
+        localStorage.setItem('user', JSON.stringify(user));
+        setData({
+          token: access_token,
+          user,
+        });
+        navigate(route);
+      } catch (error) {
+        setError("Usuário não autorizado");
+        setLoading(loading => !loading);
+      }
+  };
 
   const signOut = useCallback(() => {
     localStorage.removeItem('token');
@@ -62,7 +77,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signIn, user: data.user, token: data.token, signOut }}
+      value={{ signIn, user: data.user, token: data.token, signOut, error, loading }}
     >
       {children}
     </AuthContext.Provider>

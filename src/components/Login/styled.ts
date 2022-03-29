@@ -15,8 +15,18 @@ export const Wrapper = styled.div`
   align-items: center;
   text-align: center;
 
+  span {
+    color: ${colors.error.ligth};
+    font-weight: 600;
+    font-size: 11px;
+    align-self: flex-start;
+    margin-top: -20px;
+    margin-left: 10px;
+  }
+
   strong {
     font-size: 32px;
+    margin-bottom: 20px;
   }
 
   p {
@@ -32,5 +42,15 @@ export const Wrapper = styled.div`
     font-weight: 700;
     align-items: center;
     border-radius: 0 0 8px 8px;
+  }
+  a {
+    color: ${colors.primary.dark};
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 11px;
+    align-self: flex-end;
+    margin-top: 10px;
+    border: none;
+    background-color: none;
   }
 `

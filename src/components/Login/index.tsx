@@ -11,10 +11,10 @@ export interface InputsValues {
 
 export function LoginComponent() {
   const [values, setValues] = useState<InputsValues>({email: '', password: ''});
-  const { signIn } = useAuth();
+  const { signIn, error, loading } = useAuth();
 
   function handleSubmit() {
-    signIn(values)
+    signIn(values, "/dashboard")
   }
 
   return (
@@ -22,19 +22,24 @@ export function LoginComponent() {
       <strong>Bem vindo de volta!</strong>
       <InputText 
         title="E-mail" 
+        isInvalid={error ? true : false}
         value={values.email ?? ''}
         onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
         placeholder="Digite seu e-mail aqui"
         type="email"
         />
+        {error && error === "Usuário não foi encontrado" && <span>{error}</span>}
       <InputText
         title="Senha"
+        isInvalid={error ? true : false}
         value={values.password ?? ''}
         onChange={(event: any) => setValues({ ...values, password: String(event.target.value) })}
         placeholder="Digite sua senha aqui"
         type="password"
-      />
-      <Button disabled={!(values.email && values.password)} onClick={handleSubmit} title="Entrar" />
+        />
+        {error && error !== "Usuário não foi encontrado" && <span>{error}</span>}
+      <Button disabled={!(values.email && values.password)} onClick={handleSubmit} title={loading ? "Carregando..." : "Entrar"} />
+      <a onClick={() => {}}>Esqueci minha senha</a>
       <p>SEUS GERENCIAMENTOS DE FORMA CENTRALIZADA!</p>
     </Wrapper>
   )
