@@ -2,7 +2,15 @@ import styled, {css} from "styled-components";
 import { colors } from '../../theme'
 
 export const MyButton = styled.button`
-  background-color: ${({ disabled }) => disabled ? colors.primary.ligther : colors.primary.medium };
+  ${({ disabled }) => disabled ? css`
+    background-color: ${colors.primary.ligther};
+    &:hover {
+      filter: none !important;
+    }
+    cursor: default;
+    `: css`
+    background-color: ${colors.primary.medium};
+  `}
   border-radius: 4px;
   border: none;
   min-height: 56px;

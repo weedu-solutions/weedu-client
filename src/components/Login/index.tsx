@@ -1,46 +1,30 @@
-import { useState } from 'react';
-import { Button } from '../Button'
-import { InputText } from '../InputText'
-import { Wrapper } from './styled'
-import { useAuth } from '../../hooks/auth'
+import { useState } from 'react'
+import { AppProvider } from '../../contexts';
+import { ForgotPassword } from './Components/ForgotPassword'
+import { Login } from './Components/Login'
+import { Wrapper } from './styled';
 
-export interface InputsValues {
-  email: string;
-  password: string;
-}
+enum STEPS_LOGIN {
+  login = "LOGIN", 
+  forgot = "FORGOT",
+} 
+  
 
 export function LoginComponent() {
-  const [values, setValues] = useState<InputsValues>({email: '', password: ''});
-  const { signIn, error, loading } = useAuth();
+  const [step, setStep] = useState<STEPS_LOGIN>(STEPS_LOGIN.login);
 
-  function handleSubmit() {
-    signIn(values, "/dashboard")
+  function handleForgot() {
+    setStep(() => STEPS_LOGIN.forgot)
   }
 
   return (
-    <Wrapper>
-      <strong>Bem vindo de volta!</strong>
-      <InputText 
-        title="E-mail" 
-        isInvalid={error ? true : false}
-        value={values.email ?? ''}
-        onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
-        placeholder="Digite seu e-mail aqui"
-        type="email"
-        />
-        {error && error === "Usuário não foi encontrado" && <span>{error}</span>}
-      <InputText
-        title="Senha"
-        isInvalid={error ? true : false}
-        value={values.password ?? ''}
-        onChange={(event: any) => setValues({ ...values, password: String(event.target.value) })}
-        placeholder="Digite sua senha aqui"
-        type="password"
-        />
-        {error && error !== "Usuário não foi encontrado" && <span>{error}</span>}
-      <Button disabled={!(values.email && values.password)} onClick={handleSubmit} title={loading ? "Carregando..." : "Entrar"} />
-      <a onClick={() => {}}>Esqueci minha senha</a>
-      <p>SEUS GERENCIAMENTOS DE FORMA CENTRALIZADA!</p>
-    </Wrapper>
+    <AppProvider>
+      <Wrapper>
+        {/* <InactiveUser /> */}
+        {step === STEPS_LOGIN.login && <Login onClick={handleForgot} />}
+        {step === STEPS_LOGIN.forgot && <ForgotPassword />}
+        <p>SEUS GERENCIAMENTOS DE FORMA CENTRALIZADA!</p>
+      </Wrapper>
+    </AppProvider>
   )
 }

@@ -35,8 +35,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<IAuthState>(() => {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
     
     if (token && user) {
       return { token, user: JSON.parse(user) };
@@ -49,10 +49,8 @@ export const AuthProvider: React.FC = ({ children }) => {
       try {
         setLoading(loading => !loading);
         const { data } = await Api.post('/login', credentials);
-        console.log(data.error)
         setLoading(loading => !loading);
         if(data.error) return setError(data.error);
-
         setError("");
         const { access_token, user } = data;
         localStorage.setItem('token', access_token);
@@ -62,9 +60,10 @@ export const AuthProvider: React.FC = ({ children }) => {
           user,
         });
         navigate(route);
-      } catch (error) {
-        setError("Usuário não autorizado");
+      } catch (error: any) {
         setLoading(loading => !loading);
+        setError(error.response.data.error);
+        if(error.response.data.error === "Usuário inativo") navigate("/inactive");
       }
   };
 
