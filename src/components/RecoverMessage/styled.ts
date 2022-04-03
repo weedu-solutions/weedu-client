@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
   padding-bottom: 80px;
   position: relative;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: column;
   align-items: center;
   text-align: center;
@@ -25,7 +25,7 @@ export const Wrapper = styled.div`
 
   strong {
     font-size: 32px;
-    margin: 20px 0;
+    margin-bottom: 20px;
   }
 
   h3 {

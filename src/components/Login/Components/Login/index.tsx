@@ -18,7 +18,7 @@ export function Login({onClick}: Props) {
   const { signIn, error, loading } = useAuth();
 
   function handleSubmit() {
-    signIn(values, "/dashboard")
+    signIn(values)
   }
 
   return (

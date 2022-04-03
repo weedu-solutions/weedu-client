@@ -1,11 +1,11 @@
 // import { LoginComponent } from "../../components/Login";
 import { Layout } from "../../components/LayoutLogin";
-import { InactiveUser } from "../../components/InactiveUser";
+import { RecoverMessageComponent } from "../../components/RecoverMessage";
 
-export function InactivePage() {
+export function RecoverMessagePage() {
   return (
     <Layout>
-      <InactiveUser />
+      <RecoverMessageComponent />
     </Layout>
   );
 }

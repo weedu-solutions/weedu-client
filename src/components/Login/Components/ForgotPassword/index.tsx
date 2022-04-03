@@ -9,11 +9,11 @@ export interface InputsValues {
 }
 
 export function ForgotPassword() {
-  const [values, setValues] = useState<InputsValues>({email: ''});
-  const { error, loading } = useAuth();
+  const [email, setEmail] = useState<InputsValues>({email: ""});
+  const { error, loading, recover } = useAuth();
 
   function handleSubmit() {
-    // signIn(values, "/dashboard")
+    recover(email)
   }
 
   return (
@@ -23,13 +23,13 @@ export function ForgotPassword() {
       <InputText 
         title="E-mail" 
         isInvalid={error ? true : false}
-        value={values.email ?? ''}
-        onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
+        value={email.email ?? ''}
+        onChange={(event: any) => setEmail({ ...email, email: String(event.target.value) })}
         placeholder="Digite seu e-mail aqui"
         type="email"
         />
         {error && error === "Usuário não foi encontrado" && <span>{error}</span>}
-      <Button disabled={!values.email} onClick={handleSubmit} title={loading ? "Carregando..." : "Recuperar senha"} />
+      <Button disabled={!email.email} onClick={handleSubmit} title={loading ? "Carregando..." : "Recuperar senha"} />
     </Wrapper>
   )
 }

@@ -20,10 +20,11 @@ interface IAuthState {
 export interface IAuthContextState {
   user: IUser;
   token: string;
-  signIn(credentials: ICredentials, route: string): Promise<void>;
+  signIn(credentials: ICredentials): Promise<void>;
   signOut(): void;
   error: string;
   loading: boolean;
+  recover(email: ICredentials): void;
 }
 
 export const AuthContext = createContext<IAuthContextState>(
@@ -45,7 +46,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     return {} as IAuthState;
   });
 
-  const signIn = async (credentials: ICredentials, route: string) => {
+  const signIn = async (credentials: ICredentials) => {
       try {
         setLoading(loading => !loading);
         const { data } = await Api.post('/login', credentials);
@@ -59,13 +60,30 @@ export const AuthProvider: React.FC = ({ children }) => {
           token: access_token,
           user,
         });
-        navigate(route);
+        navigate("/dashboard");
       } catch (error: any) {
         setLoading(loading => !loading);
         setError(error.response.data.error);
-        if(error.response.data.error === "Usuário inativo") navigate("/inactive");
+        if(error.response.data.error === "Usuário inativo") {
+          navigate("/inactive");
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
       }
   };
+
+  const recover = async (email: ICredentials) => {
+    try {
+      setLoading(loading => !loading);
+      const { data } = await Api.post('/password/email', email);
+      console.log(data)
+      if(data.error) return setError(data.error);
+      navigate("/recovermessage");
+    } catch (error: any) {
+      setLoading(loading => !loading);
+      setError(error.response.data.error);
+    }
+  }
 
   const signOut = useCallback(() => {
     localStorage.removeItem('token');
@@ -76,7 +94,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signIn, user: data.user, token: data.token, signOut, error, loading }}
+      value={{ signIn, user: data.user, token: data.token, signOut, error, loading, recover }}
     >
       {children}
     </AuthContext.Provider>
