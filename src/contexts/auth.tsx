@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
 import ICredentials from '../interfaces/credentials';
 import { Api } from '../services/api';
 
@@ -23,6 +24,7 @@ export interface IAuthContextState {
   signIn(credentials: ICredentials): Promise<void>;
   signOut(): void;
   error: string;
+  recoverError: string;
   loading: boolean;
   recover(email: ICredentials): void;
 }
@@ -33,6 +35,7 @@ export const AuthContext = createContext<IAuthContextState>(
 
 export const AuthProvider: React.FC = ({ children }) => {
   const [error, setError] = useState<string>("");
+  const [recoverError, setRecoverError] = useState<string>("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<IAuthState>(() => {
@@ -60,12 +63,12 @@ export const AuthProvider: React.FC = ({ children }) => {
           token: access_token,
           user,
         });
-        navigate("/dashboard");
+        navigate(ROUTES.ADMIN_REGISTER);
       } catch (error: any) {
         setLoading(loading => !loading);
         setError(error.response.data.error);
         if(error.response.data.error === "Usuário inativo") {
-          navigate("/inactive");
+          navigate(ROUTES.INACTIVE);
           localStorage.removeItem('token');
           localStorage.removeItem('user');
         }
@@ -77,11 +80,11 @@ export const AuthProvider: React.FC = ({ children }) => {
       setLoading(loading => !loading);
       const { data } = await Api.post('/password/email', email);
       console.log(data)
-      if(data.error) return setError(data.error);
-      navigate("/recovermessage");
+      if(data.error) return setRecoverError(data.error);
+      navigate(ROUTES.RECOVER);
     } catch (error: any) {
       setLoading(loading => !loading);
-      setError(error.response.data.error);
+      setRecoverError(error.response.data.error);
     }
   }
 
@@ -94,7 +97,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signIn, user: data.user, token: data.token, signOut, error, loading, recover }}
+      value={{ signIn, user: data.user, token: data.token, signOut, error, loading, recover, recoverError }}
     >
       {children}
     </AuthContext.Provider>

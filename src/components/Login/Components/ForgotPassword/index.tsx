@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import { Button } from '../../../Button'
 import { InputText } from '../../../InputText'
 import { Wrapper } from './styled'
@@ -10,7 +10,7 @@ export interface InputsValues {
 
 export function ForgotPassword() {
   const [email, setEmail] = useState<InputsValues>({email: ""});
-  const { error, loading, recover } = useAuth();
+  const { recoverError, loading, recover } = useAuth();
 
   function handleSubmit() {
     recover(email)
@@ -22,13 +22,13 @@ export function ForgotPassword() {
       <h3>Informe seu email para conseguirmos prosseguir<br/>com o a recuperacao da sua senha</h3>
       <InputText 
         title="E-mail" 
-        isInvalid={error ? true : false}
+        isInvalid={recoverError ? true : false}
         value={email.email ?? ''}
         onChange={(event: any) => setEmail({ ...email, email: String(event.target.value) })}
         placeholder="Digite seu e-mail aqui"
         type="email"
-        />
-        {error && error === "Usuário não foi encontrado" && <span>{error}</span>}
+      />
+      {recoverError && recoverError === "Usuário não foi encontrado" && <span>{recoverError}</span>}
       <Button disabled={!email.email} onClick={handleSubmit} title={loading ? "Carregando..." : "Recuperar senha"} />
     </Wrapper>
   )

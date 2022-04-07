@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Image } from "native-base";
 import Background from "../../assets/bg.svg";
-import { Header } from "../Header";
+import { Header } from "./components/Header";
 import { Wrapper } from "./styled";
 
 export interface Props {

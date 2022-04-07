@@ -1,5 +1,5 @@
 import { Box, Image } from "native-base";
-import WeedoLogo from "../../assets/logo.svg";
+import WeedoLogo from "../../../../assets/logo.svg";
 
 export function Header() {
   return (
