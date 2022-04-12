@@ -1,6 +1,6 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { LoginPage } from '../pages/Login';
-import { Admin } from '../pages/Admin';
+import { AdminPage } from '../pages/Admin';
 
 import '../styles.css'
 import { RequireAuth } from "./components/RequireAuth";
@@ -26,7 +26,7 @@ export function MyRoutes() {
           <Route path={ROUTES.ADMIN_REGISTER}
             element={
               <RequireAuth>
-                <Admin />
+                <AdminPage />
               </RequireAuth>
             }
           />

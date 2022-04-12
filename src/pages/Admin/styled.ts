@@ -11,7 +11,12 @@ export const Content = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  flex-direction: row;
-  position: relative;
+  flex-direction: column;
+  position: relative; 
   padding-top: 60px;
+
+  h1 {
+    font-weight: 900;
+    margin-bottom: 40px;
+  }
 `
