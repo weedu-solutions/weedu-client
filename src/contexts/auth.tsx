@@ -63,7 +63,7 @@ export const AuthProvider: React.FC = ({ children }) => {
           token: access_token,
           user,
         });
-        navigate(ROUTES.ADMIN_REGISTER);
+        navigate(ROUTES.CUSTOMERS);
       } catch (error: any) {
         setLoading(loading => !loading);
         setError(error.response.data.error);

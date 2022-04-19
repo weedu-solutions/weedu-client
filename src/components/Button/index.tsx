@@ -4,9 +4,13 @@ interface IProps {
   title?: string;
   disabled?: boolean;
   onClick?: () => void;
+  outlined?: boolean;
+  customSize?: string;
+  customColor?: string;
+  customStyles?: string;
 }
 
-export function Button({ title, disabled, onClick }: IProps) {
+export function Button({ title, disabled, onClick, outlined, customSize, customColor, customStyles }: IProps) {
   return (
     <>
       {
@@ -15,7 +19,7 @@ export function Button({ title, disabled, onClick }: IProps) {
           {title}
         </MyButton>
         :
-        <MyButton onClick={onClick}>
+        <MyButton customStyles={customStyles} customColor={customColor} customSize={customSize} outlined={outlined} onClick={onClick}>
           {title}
         </MyButton>
       }

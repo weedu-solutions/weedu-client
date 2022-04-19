@@ -1,6 +1,7 @@
 export enum ROUTES {
-  ADMIN_REGISTER = '/admin/register',
+  CUSTOMERS = '/customers',
   LOGIN = '/login',
   INACTIVE = '/INACTIVE',
-  RECOVER = '/recovermessage'
+  RECOVER = '/recovermessage',
+  REGISTER = '/register'
 }

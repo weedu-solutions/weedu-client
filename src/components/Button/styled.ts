@@ -1,26 +1,33 @@
 import styled, {css} from "styled-components";
 import { colors } from '../../theme'
 
-export const MyButton = styled.button`
-  ${({ disabled }) => disabled ? css`
-    background-color: ${colors.primary.ligther};
-    &:hover {
-      filter: none !important;
-    }
-    cursor: default;
-    `: css`
-    background-color: ${colors.primary.medium};
-  `}
-  border-radius: 4px;
-  border: none;
-  min-height: 56px;
-  max-height: 520px;
-  font-weight: 700;
-  font-family: Inter;
-  width: 100%;
-  color: #fff;
+interface MyButtonTypes {
+  outlined?: boolean;
+  customSize?: string;
+  customColor?: string;
+  customStyles?: string;
+}
 
-  &:hover {
-    filter: brightness(0.9);
-  }
+export const MyButton = styled.button<MyButtonTypes>`
+  ${({ disabled, outlined, customSize, customColor, customStyles }) => css`
+    background-color: ${ disabled ? colors.primary.ligther : colors.primary.medium};
+    cursor: ${ disabled ? 'default' : 'pointer' };
+    border-radius: 4px;
+    border: ${ outlined ? `2px solid ${colors.primary.medium}` : 'none'};
+    background-color: ${ outlined ? colors.primary.ligther : colors.primary.medium};
+    background-color: ${ customColor ?? colors.primary.medium};
+    min-height: 56px;
+    max-height: 520px;
+    padding: 0 5px;
+    font-weight: 700;
+    font-family: Inter;
+    width: ${customSize ?? '100%'};
+    height: auto;
+    color: ${ outlined ? colors.primary.medium : '#fff'};
+    ${customStyles ?? ''}
+
+    &:hover {
+      filter: ${ disabled ? 'none !important' : 'brightness(0.9)'};
+    }
+  `}
 `
