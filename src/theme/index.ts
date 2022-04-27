@@ -58,7 +58,7 @@ const colors = {
     ligther: "#FFFFFF",
     ligth: "#EFF0F1",
     medium: "#D6D7DA",
-    dark: "#747880",
+    dark: "#646170",
     darker: "#000000",
   },
   success: {

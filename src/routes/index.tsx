@@ -1,14 +1,13 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import { LoginPage } from '../pages/Login';
-import { AdminPage } from '../pages/Customers';
+import { Routes, Route, BrowserRouter } from "react-router-dom"
 
 import '../styles.css'
-import { RequireAuth } from "./components/RequireAuth";
-import { InactivePage } from "../pages/Inactive";
-import { RecoverMessagePage } from "../pages/RecoverMessage";
-import { AppProvider } from "../contexts";
-import { ROUTES } from "../constants/routes";
-import { Register } from "../pages/Register";
+import { RequireAuth } from "./components/RequireAuth"
+import { InactivePage } from "../pages/Inactive"
+import { RecoverMessagePage } from "../pages/RecoverMessage"
+import { AppProvider } from "../contexts"
+import { ROUTES } from "../constants/routes"
+import { Register } from "../pages/Register"
+import { LoginPage, Customers } from '../pages'
 
 export function MyRoutes() {
   return (
@@ -16,28 +15,15 @@ export function MyRoutes() {
       <AppProvider>
         <Routes>
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTES.INACTIVE}
-            element={
-              <RequireAuth>
-                <InactivePage />
-              </RequireAuth>
-            }
-          />
+          <Route path={ROUTES.INACTIVE} element={<InactivePage />} />
           <Route path={ROUTES.RECOVER} element={<RecoverMessagePage />} />
           <Route path={ROUTES.CUSTOMERS}
-            element={
-              <RequireAuth>
-                <AdminPage />
-              </RequireAuth>
-            }
+            element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<Customers />} />}
           />
           <Route path={ROUTES.REGISTER}
-            element={
-              <RequireAuth>
-                <Register />
-              </RequireAuth>
-            }
+            element={<RequireAuth fallbackAuth={<LoginPage />} element={<Register />} />}
           />
+          <Route path="*" element={<h1>Página não encontrada!</h1>} />
         </Routes>
       </AppProvider>
     </BrowserRouter>

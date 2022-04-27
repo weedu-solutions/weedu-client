@@ -1,7 +1,12 @@
-import { Wrapper } from "./styled";
+import { Wrapper } from "./styled"
 import { HiPlus } from 'react-icons/hi'
-export function AddButton() {
+
+type Props = {
+  onClick(): void;
+}
+
+export function AddButton({ onClick }: Props) {
   return (
-    <Wrapper><HiPlus fill="#fff" size="20" /></Wrapper>
+    <Wrapper onClick={onClick} ><HiPlus fill="#fff" size="20" /></Wrapper>
   )
 }

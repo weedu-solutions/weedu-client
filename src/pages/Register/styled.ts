@@ -66,3 +66,13 @@ export const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: center;
 `
+
+export const Label = styled.label`
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
+`
+
+export const CustomInput = styled.div`
+  margin-bottom: 20px;
+`

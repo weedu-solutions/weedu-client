@@ -1,6 +1,6 @@
 export enum ROUTES {
   CUSTOMERS = '/customers',
-  LOGIN = '/login',
+  LOGIN = '/',
   INACTIVE = '/INACTIVE',
   RECOVER = '/recovermessage',
   REGISTER = '/register'

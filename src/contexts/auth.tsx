@@ -1,5 +1,6 @@
-import React, { createContext, useCallback, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginRedirect } from '../utils/loginRedirect';
 import { ROUTES } from '../constants/routes';
 import ICredentials from '../interfaces/credentials';
 import { Api } from '../services/api';
@@ -63,7 +64,9 @@ export const AuthProvider: React.FC = ({ children }) => {
           token: access_token,
           user,
         });
-        navigate(ROUTES.CUSTOMERS);
+        const route = loginRedirect(user.user_type_id)
+        navigate(route);
+        window.location.reload();
       } catch (error: any) {
         setLoading(loading => !loading);
         setError(error.response.data.error);

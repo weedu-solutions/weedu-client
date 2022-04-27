@@ -9,6 +9,10 @@ export const Wrapper = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0px 16px 25px rgba(50, 0, 90, 0.4);
+  box-shadow: 0px 12px 25px rgba(50, 0, 90, 0.4);
   border: none;
+
+  :hover {
+    box-shadow: 0px 0px 10px rgba(50, 0, 90, 0.4);
+  }
 `

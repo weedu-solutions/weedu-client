@@ -1,9 +1,10 @@
-import { Wrapper, ImageContainer, FormContainer, ReactSelect, ButtonWrapper } from './styled'
+import { Wrapper, ImageContainer, FormContainer, ReactSelect, ButtonWrapper, Label, CustomInput } from './styled'
 import BG from '../../assets/register-bg.jpg'
 import { InputText } from '../../components/InputText'
 import { Button } from '../../components/Button'
 
 export function Register() {
+
   return (
     <Wrapper>
       <ImageContainer>
@@ -46,7 +47,16 @@ export function Register() {
             placeholder="Agora digite seu e-mail"
             type="email"
           />
-          <ReactSelect options={['fsdfs','sdfs','sddfsd']} />
+          <Label htmlFor="">Tipo de perfil</Label>
+          <CustomInput>
+            <ReactSelect
+              options={[
+                { value: 'chocolate', label: 'Chocolate' },
+                { value: 'strawberry', label: 'Strawberry' },
+                { value: 'vanilla', label: 'Vanilla' }
+              ]}
+            />
+          </CustomInput>
           <InputText 
             title="Senha" 
             // isInvalid={error ? true : false}
@@ -56,7 +66,7 @@ export function Register() {
             type="email"
           />
           <InputText 
-            title="ID do usuário" 
+            title="ID da empresa" 
             // isInvalid={error ? true : false}
             // value={values.email ?? ''}
             // onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
