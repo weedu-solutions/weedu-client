@@ -1,4 +1,4 @@
-import { Button, Input, Wrapper } from "./styled";
+import { IconWrapper, Input, Wrapper } from "./styled";
 import { BiEdit } from 'react-icons/bi'
 import { colors } from "../../theme";
 
@@ -8,19 +8,18 @@ interface Props {
   value?: string;
   onChange?: any;
   name?: string;
-  edit?(): void;
   disabled?: boolean;
 }
 
-export function InputSelected({ label, onChange, style, disabled, name, edit, value }: Props) {
+export function InputSelected({ label, onChange, style, disabled, name, value }: Props) {
   return (
     <>
       <Wrapper style={style}>
         <label htmlFor="">{label}</label>
         <Input disabled={disabled} name={name} onChange={onChange} value={value} />
-        <Button onClick={edit}>
+        <IconWrapper>
           <BiEdit size="22" fill={colors.neutral.dark} />
-        </Button>
+        </IconWrapper>
       </Wrapper>
     </>
   )

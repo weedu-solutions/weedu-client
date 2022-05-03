@@ -23,9 +23,9 @@ export const Input = styled.input`
   background-color: ${colors.neutral.ligth};
 `
 
-export const Button = styled.button`
+export const IconWrapper = styled.div`
   position: absolute;
   bottom: 5px;
   right: 7px;
-  border: none;
+  cursor: default;
 `

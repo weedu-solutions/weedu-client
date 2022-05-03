@@ -56,7 +56,7 @@ export function Customers() {
   const [currentCompany, setCurrentCompany] = useState<any>({});
   const [pending, setPending] = useState<boolean>(false);
   const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false);
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate()
 
@@ -107,7 +107,7 @@ export function Customers() {
 
   function handleModal(currentCompanyRow: any) {
     setCurrentCompany(currentCompanyRow)
-    setIsOpen(value => !value)
+    setIsModalOpen(value => !value)
   }
 
   function handleEdit() {
@@ -115,7 +115,13 @@ export function Customers() {
     setIsAbleToEdit(oldValue => !oldValue)
   }
 
+  async function handleUpdate() {
+    await CustomerServices.updateCustomer(currentCompany.id, currentCompany)
+    setIsModalOpen(value => !value)
+  }
+
   function handleChange(event: any) {
+    event.preventDefault()
     setCurrentCompany({ ...currentCompany, [event.target.name]: String(event.target.value) })
   }
 
@@ -127,7 +133,7 @@ export function Customers() {
     <LayoutLogged>
           <Modal
             style={customStyleModal}
-            isOpen={!!modalIsOpen}
+            isOpen={isModalOpen}
             ariaHideApp={false}
           >
             <ModalContent>
@@ -136,22 +142,22 @@ export function Customers() {
               <div className="hr"></div>
               <form>
                 <WrapperInputs style={{ marginTop: '30px' }}>
-                  <InputSelected disabled={isAbleToEdit} style={{ marginRight: '10px' }} label="Razão social" name="company_name" onChange={(event: any) => handleChange(event)} value={currentCompany.company_name ?? ''} />
-                  <InputSelected disabled={isAbleToEdit} style={{ marginLeft: '10px' }} label="Nome fantasia" name="fantasy_name" onChange={(event: any) => handleChange(event)} value={currentCompany.fantasy_name ?? ''} />
+                  <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Razão social" name="company_name" onChange={(event: any) => handleChange(event)} value={currentCompany.company_name ?? ''} />
+                  <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Nome fantasia" name="fantasy_name" onChange={(event: any) => handleChange(event)} value={currentCompany.fantasy_name ?? ''} />
                 </WrapperInputs>
-                <InputSelected disabled={isAbleToEdit} style={{ marginTop: '10px' }} label="CNPJ" name="cpf_cnpj" onChange={(event: any) => handleChange(event)} value={currentCompany.cpf_cnpj ?? ''}/>
+                <InputSelected disabled={!!isAbleToEdit} style={{ marginTop: '10px' }} label="CNPJ" name="cpf_cnpj" onChange={(event: any) => handleChange(event)} value={currentCompany.cpf_cnpj ?? ''}/>
                 <WrapperInputs style={{ marginTop: '10px' }}>
-                  <InputSelected disabled={isAbleToEdit} style={{ marginRight: '10px' }} label="Nome do Gestor" name="maneger_name" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_name ?? ''} />
-                  <InputSelected disabled={isAbleToEdit} style={{ marginLeft: '10px' }} label="E-mail financeiro" name="financial_email" onChange={(event: any) => handleChange(event)} value={currentCompany.financial_email ?? ''} />
+                  <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Nome do Gestor" name="maneger_name" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_name ?? ''} />
+                  <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="E-mail financeiro" name="financial_email" onChange={(event: any) => handleChange(event)} value={currentCompany.financial_email ?? ''} />
                 </WrapperInputs>
                 <WrapperInputs style={{ marginTop: '10px' }}>
-                  <InputSelected disabled={isAbleToEdit} style={{ marginRight: '10px' }} label="Telefone do Gestor" name="maneger_telephone" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_telephone ?? ''} />
-                  <InputSelected disabled={isAbleToEdit} style={{ marginLeft: '10px' }} label="Número máximo de usuários" name="number_of_users" onChange={(event: any) => handleChange(event)} value={currentCompany.number_of_users ?? ''} />
+                  <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Telefone do Gestor" name="maneger_telephone" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_telephone ?? ''} />
+                  <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Número máximo de usuários" name="number_of_users" onChange={(event: any) => handleChange(event)} value={currentCompany.number_of_users ?? ''} />
                 </WrapperInputs>
                 <ButtonsWrapper>
                   <Button small customColor="red" customSize="30%" title={'Bloquear'} />
                   <Button small customSize="60%" customStyles="margin-left:40px;margin-right:10px;" outlined  title={'Adicionar novo funcionário'} />
-                  <Button small customSize="40%" title={'Atualizar'} />
+                  <Button small customSize="40%" onClick={handleUpdate} title={'Atualizar'} />
                 </ButtonsWrapper>
               </form>
             </ModalContent>

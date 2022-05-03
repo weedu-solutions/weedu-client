@@ -20,7 +20,7 @@ export function Button({ title, disabled, onClick, outlined, small, customSize, 
           {title}
         </MyButton>
         :
-        <MyButton small={small} customStyles={customStyles} customColor={customColor} customSize={customSize} outlined={outlined} onClick={onClick}>
+        <MyButton type="button" small={small} customStyles={customStyles} customColor={customColor} customSize={customSize} outlined={outlined} onClick={onClick}>
           {title}
         </MyButton>
       }
