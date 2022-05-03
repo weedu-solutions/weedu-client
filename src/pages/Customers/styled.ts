@@ -22,13 +22,22 @@ export const Content = styled.div`
   }
 `
 
-export const ButtonWrapper = styled.div`
+export const ButtonsWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  padding-bottom: 30px;
+`
+
+export const AddButtonWrapper = styled.div`
   position: absolute;
   right: 20px;
   bottom: 30px;
 `
 
-export const Button = styled.button`
+export const MyButton = styled.button`
   background-color: ${colors.primary.ligther};
   color: ${colors.primary.medium};
   padding: 5px 7px;
@@ -45,8 +54,8 @@ export const ModalContent = styled.div`
   padding: 15px;
   display: flex;
   max-width: 500px;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   margin: 0 auto;
 
@@ -65,7 +74,7 @@ export const ModalContent = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 5px;
+    padding: 3px;
     border-radius: 50%;
   }
 

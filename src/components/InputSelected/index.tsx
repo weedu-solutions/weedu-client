@@ -1,20 +1,25 @@
 import { Button, Input, Wrapper } from "./styled";
-import { MdEditNote } from 'react-icons/md'
+import { BiEdit } from 'react-icons/bi'
 import { colors } from "../../theme";
 
 interface Props {
   label?: string;
   style?: React.CSSProperties;
+  value?: string;
+  onChange?: any;
+  name?: string;
+  edit?(): void;
+  disabled?: boolean;
 }
 
-export function InputSelected({ label, style }: Props) {
+export function InputSelected({ label, onChange, style, disabled, name, edit, value }: Props) {
   return (
     <>
-      <Wrapper style={style} >
+      <Wrapper style={style}>
         <label htmlFor="">{label}</label>
-        <Input />
-        <Button>
-          <MdEditNote size="22" fill={colors.neutral.dark} />
+        <Input disabled={disabled} name={name} onChange={onChange} value={value} />
+        <Button onClick={edit}>
+          <BiEdit size="22" fill={colors.neutral.dark} />
         </Button>
       </Wrapper>
     </>

@@ -1,11 +1,4 @@
 import styled from 'styled-components'
-import Select from 'react-select'
-
-export const ReactSelect = styled(Select)`
-  .react-select__indicator react-select__dropdown-indicator {
-    border-color: transparent transparent red;
-  }
-`
 
 export const Wrapper = styled.div`
   width: 100vw;
@@ -65,14 +58,4 @@ export const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
-
-export const Label = styled.label`
-  font-weight: 600;
-  margin-bottom: 10px;
-  display: block;
-`
-
-export const CustomInput = styled.div`
-  margin-bottom: 20px;
 `

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import { Button } from '../../../Button'
 import { InputText } from '../../../InputText'
 import { Wrapper } from './styled'
