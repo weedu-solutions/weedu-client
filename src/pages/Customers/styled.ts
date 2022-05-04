@@ -85,6 +85,21 @@ export const ModalContent = styled.div`
   }
 `
 
+export const ModalBlockContent = styled.div`
+  padding: 15px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin: 0 auto;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+  p {
+    margin-bottom: 20px;
+  }
+`
+
 export const WrapperInputs = styled.div`
   display: flex;
   justify-content: center;

@@ -10,12 +10,20 @@ export class CustomerServices {
 		return data
 	}
 
-	static async getCustomer(params: number) {
-		var { data } = await Api.get(`auth/customer/${params}`)
+	static async getCustomer(CompanyId: number) {
+		var { data } = await Api.get(`auth/customer/${CompanyId}`)
 		return data
 	}
 
-	static async updateCustomer(params: number, body: any) {
-		await Api.post(`auth/customer/${params}`, body)
+	static async updateCustomer(CompanyId: number, body: any) {
+		await Api.post(`auth/customer/${CompanyId}`, body)
+	}
+
+	static async createCustomer(formData: any) {
+		await Api.post(`auth/customer`, formData)
+	}
+
+	static async blockCustomer(CompanyId: number) {
+		await Api.post(`auth/block_customer/${CompanyId}`)
 	}
 }

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
 
 import LayoutLogged from "../../components/LayoutLogged"
-import { Content, Wrapper, MyButton, ModalContent, WrapperInputs, AddButtonWrapper, ButtonsWrapper } from "./styled"
+import { Content, Wrapper, MyButton, ModalContent, WrapperInputs, AddButtonWrapper, ButtonsWrapper, ModalBlockContent } from "./styled"
 import { useEffect, useState } from "react"
 import { CustomerServices } from "../../services/customer"
 import { useAuth } from '../../hooks/auth'
@@ -51,12 +51,24 @@ const customStyleModal = {
   }
 }
 
+const customStyleModalBlock = {
+  overlay: {
+    backgroundColor:'rgba(0,0,0,0.50)'
+  },
+  content: {
+    maxWidth: '400px',
+    height: '300px', 
+    margin: 'auto',
+  }
+}
+
 export function Customers() {
   const [customers, setCustomers] = useState<any>([]);
   const [currentCompany, setCurrentCompany] = useState<any>({});
   const [pending, setPending] = useState<boolean>(false);
   const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalBlockOpen, setIsModalBlockOpen] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate()
 
@@ -111,18 +123,26 @@ export function Customers() {
   }
 
   function handleEdit() {
-    console.log(isAbleToEdit)
     setIsAbleToEdit(oldValue => !oldValue)
   }
 
-  async function handleUpdate() {
+  async function handleUpdateCompany() {
     await CustomerServices.updateCustomer(currentCompany.id, currentCompany)
-    setIsModalOpen(value => !value)
+    navigate(0)
   }
 
   function handleChange(event: any) {
     event.preventDefault()
     setCurrentCompany({ ...currentCompany, [event.target.name]: String(event.target.value) })
+  }
+
+  function handleOpenModalBlock() {
+    setIsModalBlockOpen((oldValue) => !oldValue)
+  }
+
+  async function handleBlockCompany() {
+    await CustomerServices.blockCustomer(currentCompany.id)
+    navigate(0)
   }
 
   useEffect(() => {
@@ -155,12 +175,23 @@ export function Customers() {
                   <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Número máximo de usuários" name="number_of_users" onChange={(event: any) => handleChange(event)} value={currentCompany.number_of_users ?? ''} />
                 </WrapperInputs>
                 <ButtonsWrapper>
-                  <Button small customColor="red" customSize="30%" title={'Bloquear'} />
-                  <Button small customSize="60%" customStyles="margin-left:40px;margin-right:10px;" outlined  title={'Adicionar novo funcionário'} />
-                  <Button small customSize="40%" onClick={handleUpdate} title={'Atualizar'} />
+                  <Button small type="button" customColor="red" onClick={handleOpenModalBlock} customSize="30%" title={'Bloquear'} />
+                  <Button small type="button" onClick={() => navigate(`${ROUTES.REGISTER_USER_COMPANY}/${currentCompany.id}`)} customSize="60%" customStyles="margin-left:40px;margin-right:10px;" outlined title={'Adicionar novo funcionário'} />
+                  <Button small type="button" customSize="40%" onClick={handleUpdateCompany} title={'Atualizar'} />
                 </ButtonsWrapper>
               </form>
             </ModalContent>
+          </Modal>
+          <Modal
+            isOpen={isModalBlockOpen}
+            style={customStyleModalBlock}
+          >
+            <ModalBlockContent>
+              <h2>Confirmação de bloqueio</h2>
+              <p>Tem certeza que deseja bloquear a empresa <b>{currentCompany.fantasy_name}</b> ?</p>
+              <Button small type="button" onClick={handleBlockCompany} customColor="red" title={'Bloquear'} />
+              <Button small type="button" onClick={handleOpenModalBlock} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
+            </ModalBlockContent>
           </Modal>
       <Wrapper>
         <div className="container">
@@ -178,7 +209,7 @@ export function Customers() {
               expandableIcon={{collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" />}}
             />
             <AddButtonWrapper>
-              <AddButton onClick={() => navigate(ROUTES.REGISTER)} />
+              <AddButton onClick={() => navigate(ROUTES.REGISTER_COMPANY)} />
             </AddButtonWrapper>
           </Content>
         </div>

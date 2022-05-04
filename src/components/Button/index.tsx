@@ -1,5 +1,6 @@
 import { MyButton } from './styled'
 
+type ButtonTypeProp = "button" | "submit" | "reset" | undefined
 interface IProps {
   title?: string;
   disabled?: boolean;
@@ -9,9 +10,10 @@ interface IProps {
   customColor?: string;
   customStyles?: string;
   small?: boolean;
+  type?: ButtonTypeProp;
 }
 
-export function Button({ title, disabled, onClick, outlined, small, customSize, customColor, customStyles }: IProps) {
+export function Button({ title, disabled, onClick, outlined, small, customSize, customColor, customStyles, type }: IProps) {
   return (
     <>
       {
@@ -20,7 +22,7 @@ export function Button({ title, disabled, onClick, outlined, small, customSize, 
           {title}
         </MyButton>
         :
-        <MyButton type="button" small={small} customStyles={customStyles} customColor={customColor} customSize={customSize} outlined={outlined} onClick={onClick}>
+        <MyButton small={small} customStyles={customStyles} customColor={customColor} customSize={customSize} outlined={outlined} onClick={onClick} type={type}>
           {title}
         </MyButton>
       }

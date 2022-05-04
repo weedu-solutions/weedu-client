@@ -8,6 +8,7 @@ import { AppProvider } from "../contexts"
 import { ROUTES } from "../constants/routes"
 import { RegisterCompany } from "../pages/RegisterCompany"
 import { LoginPage, Customers } from '../pages'
+import { RegisterUserCompany } from "../pages/RegisterUserCompany"
 
 export function MyRoutes() {
   return (
@@ -21,8 +22,11 @@ export function MyRoutes() {
             element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<Customers />} />}
           />
           {/* <Route path={ROUTES.CUSTOMERS} element={<Customers />} /> */}
-          <Route path={ROUTES.REGISTER}
-            element={<RequireAuth fallbackAuth={<LoginPage />} element={<RegisterCompany />} />}
+          <Route path={ROUTES.REGISTER_COMPANY}
+            element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<RegisterCompany />} />}
+          />
+          <Route path={`${ROUTES.REGISTER_USER_COMPANY}/:id`}
+            element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<RegisterUserCompany />} />}
           />
           <Route path="*" element={<h1>Página não encontrada!</h1>} />
         </Routes>
