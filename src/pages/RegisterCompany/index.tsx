@@ -35,16 +35,13 @@ export function RegisterCompany() {
   }
 
   const [ dataForm, setDataForm ] = useState<IDataForm>(initialForm)
+  const [ isError, setIsError ] = useState<boolean>(false)
   const navigate = useNavigate()
 
   async function handleCreateCompany() {
-    try {
-      await CustomerServices.createCustomer(dataForm)
-      navigate(ROUTES.CUSTOMERS)
-    } catch (error) {
-      
-    }
-    
+    const { data } = await CustomerServices.createCustomer(dataForm)
+    if(data === "cpf_cnpj invalid") return setIsError(true)
+    navigate(ROUTES.CUSTOMERS)
   }
 
   return (
@@ -54,13 +51,12 @@ export function RegisterCompany() {
         <InputText
           type="name"
           value={dataForm.company_name ?? ''} 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, company_name: String(event.target.value) })}
           title="Razão Social" 
           placeholder="Informe a razão social"
         />
-        <InputText 
+        <InputText
+          value={dataForm.fantasy_name ?? ''} 
           onChange={(event: any) => setDataForm({ ...dataForm, fantasy_name: String(event.target.value) })}
           title="Nome Fantasia" 
           placeholder="Informe o nome fantasia"
@@ -68,48 +64,44 @@ export function RegisterCompany() {
         />
         <InputText 
           title="CPF/CNPJ" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
+          isInvalid={!!isError}
+          value={dataForm.cpf_cnpj ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, cpf_cnpj: String(event.target.value) })}
           placeholder="Digite um CPF ou CNPJ"
           type="text"
         />
+        {isError && <span>Documento inválido, tente novamente!</span>}
         <InputText 
           title="Nome do Gestor" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
+          value={dataForm.maneger_name ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, maneger_name: String(event.target.value) })}
           placeholder="Agora digite o nome do Gestor"
           type="text"
         />
         <InputText 
           title="E-mail do Gestor" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
+          value={dataForm.maneger_email ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, maneger_email: String(event.target.value) })}
           placeholder="Agora digite o e-mail do Gestor"
           type="email"
         />
         <InputText 
           title="Telefone do Gestor" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
+          value={dataForm.maneger_telephone ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, maneger_telephone: String(event.target.value) })}
           placeholder="Digite o telefone do Gestor"
           type="email"
         />
         <InputText 
           title="E-mail do Financeiro" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
+          value={dataForm.financial_email ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, financial_email: String(event.target.value) })}
           placeholder="Agora digite o e-mail do Financeiro"
           type="email"
         />
         <InputText 
           title="Número máximo de usuários" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
+          value={dataForm.number_of_users ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, number_of_users: String(event.target.value) })}
           placeholder="Escolha um número máximo de usuários"
           type="text"

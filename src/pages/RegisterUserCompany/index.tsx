@@ -3,33 +3,21 @@ import { InputText } from '../../components/InputText'
 import { LayoutRegister } from '../../components/LayoutRegister'
 import { Button } from '../../components/Button'
 import Select from 'react-select'
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { UserServices } from '../../services/user'
+import { ROUTES } from '../../constants/routes'
+import { useUser } from '../../hooks/user'
 
 export function RegisterUserCompany() {
-
-  const initialForm = {
-    company_name: '',
-    fantasy_name: '',
-    cpf_cnpj: '',
-    maneger_name: '',
-    maneger_email: '',
-    maneger_telephone: '',
-    financial_email: '',
-    status: 'ok',
-    number_of_users: '',
-  }
-
   interface IDataForm {
-    company_name: string;
-    fantasy_name: string;
-    cpf_cnpj: string;
-    maneger_name: string;
-    maneger_email: string;
-    maneger_telephone: string;
-    financial_email: string;
-    status: string;
-    number_of_users: string;
+    name: string;
+    suname: string;
+    email: string;
+    user_type_id: string;
+    password: string;
+    is_active: string;
+    customer_id: Array<number>;
   }
 
   const selectCustomStyles = {
@@ -43,7 +31,35 @@ export function RegisterUserCompany() {
   }
 
   const navigate = useNavigate()
+  const { id } = useParams()
+  const { userDataForm } = useUser()
+
+  const initialForm = {
+    name: "",
+    suname: "",
+    email: "",
+    user_type_id: "",
+    password: "",
+    is_active: "1",
+    customer_id: []
+  }
+
+  const options = [
+    { label: 'Colaborador', value: '1' },
+    { label: 'Gestor', value: '2' }
+  ] as any
+
   const [ dataForm, setDataForm ] = useState<IDataForm>(initialForm)
+
+  useEffect(() => {
+    setDataForm({ ...userDataForm, customer_id: [Number(id)] })
+  }, [])
+
+  async function handleCreateUserCompany() {
+    const { data } = await UserServices.createUserCustomer(dataForm)    
+    // if(data === "cpf_cnpj invalid") return setIsError(true)
+    navigate(ROUTES.CUSTOMERS)
+  }
 
   return (
     <LayoutRegister>
@@ -51,33 +67,22 @@ export function RegisterUserCompany() {
       <Wrapper>
         <InputText 
           title="Nome" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
-          // onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
+          value={dataForm.name ?? ''}
+          onChange={(event: any) => setDataForm({ ...dataForm, name: String(event.target.value) })}
           placeholder="Digite seu nome"
           type="text"
         />
         <InputText 
           title="Sobrenome" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
-          // onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
+          value={dataForm.suname ?? ''}
+          onChange={(event: any) => setDataForm({ ...dataForm, suname: String(event.target.value) })}
           placeholder="Agora seu sobrenome"
           type="text"
         />
         <InputText 
-          title="Telefone" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
-          // onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
-          placeholder="Digite seu telefone"
-          type="tel"
-        />
-        <InputText 
           title="E-mail" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
-          // onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
+          value={dataForm.email ?? ''}
+          onChange={(event: any) => setDataForm({ ...dataForm, email: String(event.target.value) })}
           placeholder="Agora digite seu e-mail"
           type="email"
         />
@@ -85,32 +90,28 @@ export function RegisterUserCompany() {
         <CustomInput>
           <Select
             styles={selectCustomStyles}
-            options={[
-              { value: 1, label: 'Colaborador' },
-              { value: 2, label: 'Gestor' },
-            ]}
+            options={options}
+            defaultValue={dataForm.user_type_id}
+            onChange={(value: any) => setDataForm({ ...dataForm, user_type_id: value.value })}
+            placeholder="Selecione um tipo de usuário"
           />
         </CustomInput>
         <InputText 
           title="Senha" 
-          // isInvalid={error ? true : false}
-          // value={values.email ?? ''}
-          // onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
+          value={dataForm.password ?? ''}
+          onChange={(event: any) => setDataForm({ ...dataForm, password: String(event.target.value) })}
           placeholder="Escolha uma senha"
-          type="email"
-        />
+          type="password"
+        />        
         <InputText
           isDisabled
           title="ID da empresa" 
-          // isInvalid={error ? true : false}
-          value={10}
-          // onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
-          placeholder="Escolha uma senha"
-          type="email"
+          value={id}
+          type="text"
         />
         <ButtonWrapper>
           <Button customColor="#646170" onClick={() => navigate(-1)} customSize="40%" title={'Cancelar'} />
-          <Button customStyles="margin-left:30px;" customSize="40%" title={'Cadastrar'} />
+          <Button onClick={handleCreateUserCompany} customStyles="margin-left:30px;" customSize="40%" title={'Cadastrar'} />
         </ButtonWrapper>
       </Wrapper>
     </LayoutRegister>

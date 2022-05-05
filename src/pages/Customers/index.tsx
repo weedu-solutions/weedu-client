@@ -110,11 +110,17 @@ export function Customers() {
     },
   ]
 
+  function compare(a: any, b: any) {
+    if(a.id < b.id) return -1;
+    if(a.id > b.id) return 1;
+    return 0;
+  }
+
   const getData = async () => {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllCustomers()
     setPending(pending => !pending)
-    setCustomers(data.data)
+    setCustomers(data.data.sort(compare))
   }
 
   function handleModal(currentCompanyRow: any) {

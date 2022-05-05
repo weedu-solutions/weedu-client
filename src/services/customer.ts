@@ -20,7 +20,8 @@ export class CustomerServices {
 	}
 
 	static async createCustomer(formData: any) {
-		await Api.post(`auth/customer`, formData)
+		const { data } = await Api.post(`auth/customer`, formData)
+		return data
 	}
 
 	static async blockCustomer(CompanyId: number) {

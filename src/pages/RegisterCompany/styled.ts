@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { colors } from '../../theme'
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -7,6 +8,16 @@ export const Wrapper = styled.div`
   strong {
     font-size: 32px;
     text-align: center;
+  }
+
+  span {
+    color: ${colors.error.ligth};
+    font-weight: 600;
+    font-size: 12px;
+    align-self: flex-start;
+    margin-top: -10px;
+    margin-bottom: 20px;
+    display: block;
   }
 `
 

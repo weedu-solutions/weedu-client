@@ -14,7 +14,7 @@ export const Wrapper = styled.div`
   span {
     color: ${colors.error.ligth};
     font-weight: 600;
-    font-size: 11px;
+    font-size: 12px;
     align-self: flex-start;
     margin-top: -15px;
     margin-bottom: 20px;
