@@ -9,7 +9,7 @@ import { UserServices } from '../../services/user'
 import { ROUTES } from '../../constants/routes'
 import { useUser } from '../../hooks/user'
 
-export function RegisterUserCompany() {
+export function UpdateUserCompany() {
   interface IDataForm {
     name: string;
     suname: string;
@@ -18,7 +18,7 @@ export function RegisterUserCompany() {
     password: string;
     is_active: string;
     customer_id: Array<number>;
-    manager_id: string;
+    maneger_id: string;
   }
 
   const selectCustomStyles = {
@@ -33,7 +33,7 @@ export function RegisterUserCompany() {
 
   const navigate = useNavigate()
   const { id } = useParams()
-  const { userDataList, setUserDataList } = useUser()
+  const { userDataForm, userDataList } = useUser()
 
   const initialForm = {
     name: "",
@@ -43,26 +43,28 @@ export function RegisterUserCompany() {
     password: "",
     is_active: "1",
     customer_id: [],
-    manager_id: ""
+    maneger_id: ""
   }
 
   const options = [
-    { label: 'Colaborador', value: '1', },
+    { label: 'Colaborador', value: '1' },
     { label: 'Gestor', value: '2' }
   ] as any
-
-  const [ dataForm, setDataForm ] = useState<IDataForm>(initialForm)
-
 
   const manegerOptions = userDataList.map((user) => {
     return { label: user.name, value: String(user.user_type_id), id: user.id }
   }) as any
 
+  const [ dataForm, setDataForm ] = useState<IDataForm>(initialForm)
+
   useEffect(() => {
-    setDataForm({ ...dataForm, customer_id: [Number(id)] })
+    setDataForm({ ...userDataForm, customer_id: [Number(id)] })
   }, [])
 
   async function handleCreateUserCompany() {
+    if(!!userDataForm.user_type_id) {
+
+    }
     await UserServices.createUserCustomer(dataForm)    
     // if(data === "cpf_cnpj invalid") return setIsError(true)
     navigate(ROUTES.CUSTOMERS)
@@ -110,7 +112,7 @@ export function RegisterUserCompany() {
               styles={selectCustomStyles}
               options={manegerOptions}
               defaultValue={dataForm.user_type_id}
-              onChange={(value: any) => setDataForm({ ...dataForm, manager_id: value.id })}
+              onChange={(value: any) => setDataForm({ ...dataForm, maneger_id: value.id })}
               placeholder="Selecione um Gestor"
             />
           </CustomInput>

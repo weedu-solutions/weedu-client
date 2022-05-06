@@ -6,7 +6,6 @@ import LayoutLogged from "../../components/LayoutLogged"
 import { Content, Wrapper, MyButton, ModalContent, WrapperInputs, AddButtonWrapper, ButtonsWrapper, ModalBlockContent } from "./styled"
 import { useEffect, useState } from "react"
 import { CustomerServices } from "../../services/customer"
-import { useAuth } from '../../hooks/auth'
 import { AddButton } from '../../components/AddButton'
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti'
 import { colors } from "../../theme"
@@ -15,6 +14,8 @@ import { ROUTES } from "../../constants/routes"
 import { InputSelected } from "../../components/InputSelected"
 import { MdClose } from "react-icons/md"
 import { Button } from '../../components/Button'
+import { IUserData } from "../../contexts/user"
+import { useUser } from '../../hooks/user'
 
 const conditionalRowStyles = [
   {
@@ -63,13 +64,14 @@ const customStyleModalBlock = {
 }
 
 export function Customers() {
-  const [customers, setCustomers] = useState<any>([]);
-  const [currentCompany, setCurrentCompany] = useState<any>({});
-  const [pending, setPending] = useState<boolean>(false);
-  const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalBlockOpen, setIsModalBlockOpen] = useState(false);
-  const { user } = useAuth();
+  const [customers, setCustomers] = useState<any>([])
+  const [currentCompany, setCurrentCompany] = useState<any>({})
+  const [pending, setPending] = useState<boolean>(false)
+  const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
+
+  const { setUserDataList, userDataList } = useUser()
   const navigate = useNavigate()
 
   const headers = [
@@ -123,7 +125,14 @@ export function Customers() {
     setCustomers(data.data.sort(compare))
   }
 
-  function handleModal(currentCompanyRow: any) {
+  const getUserList = async (currentCompanyRow: any) => {
+    const { data } = await CustomerServices.getAllUserCustomer(currentCompanyRow.id)
+    const filteredData =  data.data[0].user.filter((user: IUserData) => user.user_type_id === 2)
+    setUserDataList(filteredData)
+  }
+
+  async function handleModal(currentCompanyRow: any) {
+    getUserList(currentCompanyRow)
     setCurrentCompany(currentCompanyRow)
     setIsModalOpen(value => !value)
   }
@@ -210,7 +219,7 @@ export function Customers() {
               defaultSortFieldId={1}
               expandableRows
               customStyles={styles}
-			        expandableRowsComponent={({ data }) =><DataTableUserCustomer id={data.id} />}
+			        expandableRowsComponent={({ data }) =><DataTableUserCustomer userRow={data} />}
               progressPending={pending}
               expandableIcon={{collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" />}}
             />

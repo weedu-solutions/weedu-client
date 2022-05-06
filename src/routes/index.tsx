@@ -9,6 +9,7 @@ import { ROUTES } from "../constants/routes"
 import { RegisterCompany } from "../pages/RegisterCompany"
 import { LoginPage, Customers } from '../pages'
 import { RegisterUserCompany } from "../pages/RegisterUserCompany"
+import { UpdateUserCompany } from "../pages/UpdateUserCompany"
 
 export function MyRoutes() {
   return (
@@ -27,6 +28,9 @@ export function MyRoutes() {
           />
           <Route path={`${ROUTES.REGISTER_USER_COMPANY}/:id`}
             element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<RegisterUserCompany />} />}
+          />
+          <Route path={`${ROUTES.UPDATE_USER_COMPANY}/:id`}
+            element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<UpdateUserCompany />} />}
           />
           <Route path="*" element={<h1>Página não encontrada!</h1>} />
         </Routes>

@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import DataTable from "react-data-table-component"
 import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../../../../constants/routes"
 import { CustomerServices } from "../../../../services/customer"
 import { colors } from "../../../../theme"
 import { ModalBlockContent, Wrapper } from "./styled"
-import { MdMoreVert } from 'react-icons/md'
 import { More } from '../More'
 import Modal from 'react-modal'
 import { Button } from "../../../../components/Button"
 import { UserServices } from "../../../../services/user"
 import { useUser } from '../../../../hooks/user'
+import { IUserData } from "../../../../contexts/user"
 
 const styles = {
   rows: {
@@ -38,10 +38,10 @@ const customStyleModalBlock = {
   }
 }
 
-export function DataTableUserCustomer({ id }: any) {
+export function DataTableUserCustomer({ userRow }: any) {
 
   const navigate = useNavigate()
-  const { setUserDataForm } = useUser()
+  const { setUserDataForm, setUserDataList } = useUser()
 
   const [ userData, setUserData ] = useState([])
   const [ currentUser, setCurrentUser ] = useState({} as any)
@@ -56,7 +56,7 @@ export function DataTableUserCustomer({ id }: any) {
 
   const getUserCustomer = async () => {
     setPending(pending => !pending)
-    const { data } = await CustomerServices.getAllUserCustomer(id)
+    const { data } = await CustomerServices.getAllUserCustomer(userRow.id)
     setUserData(data.data[0].user.sort(compare))
     setPending(pending => !pending)
   }
@@ -65,7 +65,14 @@ export function DataTableUserCustomer({ id }: any) {
   function onEdit(user: any) {
     setCurrentUser(user)
     setUserDataForm(user)
-    navigate(`${ROUTES.REGISTER_USER_COMPANY}/${id}`)
+    navigate(`${ROUTES.UPDATE_USER_COMPANY}/${userRow.id}`)
+  }
+
+  
+  function onAddEmployer() {
+    const filteredData =  userData.filter((user: IUserData) => user.user_type_id === 2)
+    setUserDataList(filteredData)
+    navigate(`${ROUTES.REGISTER_USER_COMPANY}/${userRow.id}`)
   }
 
   function onBlock(user: any) {
@@ -141,7 +148,7 @@ export function DataTableUserCustomer({ id }: any) {
       <div className="container">
         <div className="headers">
           <strong>Funcionários</strong>
-          <button onClick={() => navigate(`${ROUTES.REGISTER_USER_COMPANY}/${id}`)}>Adicionar novo funcionários</button>
+          { !pending && <button onClick={onAddEmployer}>Adicionar novo funcionários</button>}
         </div>
         <DataTable 
           data={userData}
