@@ -105,7 +105,7 @@ export function Customers() {
     },
     {
       id: 5,
-      name: 'Ações',
+      name: '',
       sortable: true,
       selector: (row: any) => <MyButton onClick={() => handleModal(row)}>Ver detalhes</MyButton>,
       reorder: true
@@ -166,48 +166,48 @@ export function Customers() {
 
   return (
     <LayoutLogged>
-          <Modal
-            style={customStyleModal}
-            isOpen={isModalOpen}
-            ariaHideApp={false}
-          >
-            <ModalContent>
-              <h2>Editar empresa</h2>
-              <button className="closeButton" onClick={handleModal}><MdClose size="18" /></button>
-              <div className="hr"></div>
-              <form>
-                <WrapperInputs style={{ marginTop: '30px' }}>
-                  <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Razão social" name="company_name" onChange={(event: any) => handleChange(event)} value={currentCompany.company_name ?? ''} />
-                  <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Nome fantasia" name="fantasy_name" onChange={(event: any) => handleChange(event)} value={currentCompany.fantasy_name ?? ''} />
-                </WrapperInputs>
-                <InputSelected disabled={!!isAbleToEdit} style={{ marginTop: '10px' }} label="CNPJ" name="cpf_cnpj" onChange={(event: any) => handleChange(event)} value={currentCompany.cpf_cnpj ?? ''}/>
-                <WrapperInputs style={{ marginTop: '10px' }}>
-                  <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Nome do Gestor" name="maneger_name" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_name ?? ''} />
-                  <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="E-mail financeiro" name="financial_email" onChange={(event: any) => handleChange(event)} value={currentCompany.financial_email ?? ''} />
-                </WrapperInputs>
-                <WrapperInputs style={{ marginTop: '10px' }}>
-                  <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Telefone do Gestor" name="maneger_telephone" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_telephone ?? ''} />
-                  <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Número máximo de usuários" name="number_of_users" onChange={(event: any) => handleChange(event)} value={currentCompany.number_of_users ?? ''} />
-                </WrapperInputs>
-                <ButtonsWrapper>
-                  <Button small type="button" customColor="red" onClick={handleOpenModalBlock} customSize="30%" title={'Bloquear'} />
-                  <Button small type="button" onClick={() => navigate(`${ROUTES.REGISTER_USER_COMPANY}/${currentCompany.id}`)} customSize="60%" customStyles="margin-left:40px;margin-right:10px;" outlined title={'Adicionar novo funcionário'} />
-                  <Button small type="button" customSize="40%" onClick={handleUpdateCompany} title={'Atualizar'} />
-                </ButtonsWrapper>
-              </form>
-            </ModalContent>
-          </Modal>
-          <Modal
-            isOpen={isModalBlockOpen}
-            style={customStyleModalBlock}
-          >
-            <ModalBlockContent>
-              <h2>Confirmação de bloqueio</h2>
-              <p>Tem certeza que deseja bloquear a empresa <b>{currentCompany.fantasy_name}</b> ?</p>
-              <Button small type="button" onClick={handleBlockCompany} customColor="red" title={'Bloquear'} />
-              <Button small type="button" onClick={handleOpenModalBlock} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
-            </ModalBlockContent>
-          </Modal>
+      <Modal
+        style={customStyleModal}
+        isOpen={isModalOpen}
+        ariaHideApp={false}
+      >
+        <ModalContent>
+          <h2>Editar empresa</h2>
+          <button className="closeButton" onClick={handleModal}><MdClose size="18" /></button>
+          <div className="hr"></div>
+          <form>
+            <WrapperInputs style={{ marginTop: '30px' }}>
+              <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Razão social" name="company_name" onChange={(event: any) => handleChange(event)} value={currentCompany.company_name ?? ''} />
+              <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Nome fantasia" name="fantasy_name" onChange={(event: any) => handleChange(event)} value={currentCompany.fantasy_name ?? ''} />
+            </WrapperInputs>
+            <InputSelected disabled={!!isAbleToEdit} style={{ marginTop: '10px' }} label="CNPJ" name="cpf_cnpj" onChange={(event: any) => handleChange(event)} value={currentCompany.cpf_cnpj ?? ''}/>
+            <WrapperInputs style={{ marginTop: '10px' }}>
+              <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Nome do Gestor" name="maneger_name" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_name ?? ''} />
+              <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="E-mail financeiro" name="financial_email" onChange={(event: any) => handleChange(event)} value={currentCompany.financial_email ?? ''} />
+            </WrapperInputs>
+            <WrapperInputs style={{ marginTop: '10px' }}>
+              <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Telefone do Gestor" name="maneger_telephone" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_telephone ?? ''} />
+              <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Número máximo de usuários" name="number_of_users" onChange={(event: any) => handleChange(event)} value={currentCompany.number_of_users ?? ''} />
+            </WrapperInputs>
+            <ButtonsWrapper>
+              <Button small type="button" customColor="red" onClick={handleOpenModalBlock} customSize="30%" title={'Bloquear'} />
+              <Button small type="button" onClick={() => navigate(`${ROUTES.REGISTER_USER_COMPANY}/${currentCompany.id}`)} customSize="60%" customStyles="margin-left:40px;margin-right:10px;" outlined title={'Adicionar novo funcionário'} />
+              <Button small type="button" customSize="40%" onClick={handleUpdateCompany} title={'Atualizar'} />
+            </ButtonsWrapper>
+          </form>
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={isModalBlockOpen}
+        style={customStyleModalBlock}
+      >
+        <ModalBlockContent>
+          <h2>Confirmação de bloqueio</h2>
+          <p>Tem certeza que deseja bloquear a empresa <b>{currentCompany.fantasy_name}</b> ?</p>
+          <Button small type="button" onClick={handleBlockCompany} customColor="red" title={'Bloquear'} />
+          <Button small type="button" onClick={handleOpenModalBlock} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
+        </ModalBlockContent>
+      </Modal>
       <Wrapper>
         <div className="container">
           <Content>
@@ -223,11 +223,11 @@ export function Customers() {
               progressPending={pending}
               expandableIcon={{collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" />}}
             />
-            <AddButtonWrapper>
-              <AddButton onClick={() => navigate(ROUTES.REGISTER_COMPANY)} />
-            </AddButtonWrapper>
           </Content>
         </div>
+        <AddButtonWrapper>
+          <AddButton onClick={() => navigate(ROUTES.REGISTER_COMPANY)} />
+        </AddButtonWrapper>
       </Wrapper>
     </LayoutLogged>
   )

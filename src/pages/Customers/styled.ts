@@ -4,6 +4,7 @@ import { colors } from '../../theme'
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+  padding: 80px 0;
 `
 
 export const Content = styled.div`
@@ -13,12 +14,10 @@ export const Content = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  position: relative; 
-  padding-top: 60px;
+  position: relative;
 
   h1 {
     font-weight: 900;
-    margin-bottom: 40px;
   }
 `
 
@@ -33,7 +32,7 @@ export const ButtonsWrapper = styled.div`
 
 export const AddButtonWrapper = styled.div`
   position: absolute;
-  right: 20px;
+  right: 180px;
   bottom: 30px;
 `
 
