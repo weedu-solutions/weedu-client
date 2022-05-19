@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colors } from '../../../../theme'
+import { colors } from '../../theme'
 
 export const Wrapper = styled.div`
   width: 100vw;
@@ -33,7 +33,7 @@ export const HeaderRight = styled.nav`
       color: ${colors.primary.medium};
       font-weight: 700;
       position: relative;
-      
+
       &:hover {
         &::after {
           content: '';

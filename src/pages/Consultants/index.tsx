@@ -64,7 +64,7 @@ const customStyleModalBlock = {
   }
 }
 
-export function Customers() {
+export function Consultants() {
   const [customers, setCustomers] = useState<any>([])
   const [currentCompany, setCurrentCompany] = useState<any>({})
   const [pending, setPending] = useState<boolean>(false)
@@ -85,21 +85,28 @@ export function Customers() {
     },
     {
       id: 2,
-      name: 'NOME FANTASIA',
+      name: 'NOME',
       selector: (row: any) => row.fantasy_name,
       sortable: true,
       reorder: true
     },
     {
       id: 3,
-      name: 'E-MAIL DO FINANCEIRO',
+      name: 'SOBRENOME',
       selector: (row: any) => row.financial_email,
       sortable: true,
       reorder: true
     },
     {
       id: 4,
-      name: 'N.º DE USUÁRIOS',
+      name: 'E-MAIL',
+      selector: (row: any) => row.maneger_name,
+      sortable: true,
+      reorder: true
+    },
+    {
+      id: 4,
+      name: 'TIPO DE PERFIL',
       selector: (row: any) => row.maneger_name,
       sortable: true,
       reorder: true
@@ -213,7 +220,7 @@ export function Customers() {
       <Wrapper>
         <div className="container">
           <Content>
-            <h1>Empresas</h1>
+            <h1>Colaboradores</h1>
             <DataTable
               columns={headers}
               data={customers}

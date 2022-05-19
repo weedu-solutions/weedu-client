@@ -1,20 +1,27 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom"
+import { ToastContainer } from 'react-toastify'
 
-import '../styles.css'
 import { RequireAuth } from "./components/RequireAuth"
-import { InactivePage } from "../pages/Inactive"
-import { RecoverMessagePage } from "../pages/RecoverMessage"
 import { AppProvider } from "../contexts"
 import { ROUTES } from "../constants/routes"
-import { RegisterCompany } from "../pages/RegisterCompany"
-import { LoginPage, Customers } from '../pages'
-import { RegisterUserCompany } from "../pages/RegisterUserCompany"
-import { UpdateUserCompany } from "../pages/UpdateUserCompany"
+import {
+  LoginPage,
+  Customers,
+  RegisterUserCompany,
+  UpdateUserCompany,
+  Consultants,
+  RegisterCompany,
+  RecoverMessagePage,
+  InactivePage
+} from '../pages'
+
+import '../styles.css'
 
 export function MyRoutes() {
   return (
     <BrowserRouter>
       <AppProvider>
+        <ToastContainer closeButton={false} />
         <Routes>
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path={ROUTES.INACTIVE} element={<InactivePage />} />
@@ -22,7 +29,9 @@ export function MyRoutes() {
           <Route path={ROUTES.CUSTOMERS}
             element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<Customers />} />}
           />
-          {/* <Route path={ROUTES.CUSTOMERS} element={<Customers />} /> */}
+          <Route path={ROUTES.CONSULTANTS}
+            element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<Consultants />} />}
+          />
           <Route path={ROUTES.REGISTER_COMPANY}
             element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<RegisterCompany />} />}
           />

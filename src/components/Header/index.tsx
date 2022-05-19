@@ -1,6 +1,7 @@
 import { Content, HeaderRight, Wrapper } from "./styled";
-import logo from '../../../../assets/logo-min.svg'
-import profile from '../../../../assets/profile.svg'
+import logo from '../../assets/logo-min.svg'
+import avatar from '../../assets/avatar.svg'
+import { ROUTES } from "../../constants/routes";
 
 export function Header() {
   return (
@@ -10,10 +11,10 @@ export function Header() {
           <img src={logo} alt="logo da empresa" />
           <HeaderRight>
             <ul>
-              <li><a href="">Consultores</a></li>
-              <li><a href="">Empresas</a></li>
+              <li><a href={ROUTES.CONSULTANTS}>Consultores</a></li>
+              <li><a href={ROUTES.CUSTOMERS}>Empresas</a></li>
             </ul>
-            <img src={profile} alt="" />
+            <img src={avatar} alt="" />
           </HeaderRight>
         </Content>
       </div>

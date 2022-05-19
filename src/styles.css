@@ -23,3 +23,31 @@ button {
   padding: 0 10px;
   position: relative;
 }
+
+.notify_progress_error, .notify_progress_success {
+  visibility: hidden;
+}
+
+.notify_error {
+  background: #ED5669 !important;
+  border: 3px solid #E71D36 !important;
+}
+.notify_body_error {
+  flex-direction: row-reverse;
+  color: #fff;
+  font-weight: 500;
+}
+
+.notify_success {
+  background: #41CBBE !important;
+  border: 3px solid #158378 !important;
+}
+.notify_body_success {
+  flex-direction: row-reverse;
+  color: #fff;
+  font-weight: 500;
+}
+
+
+
+
