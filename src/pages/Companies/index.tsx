@@ -64,8 +64,8 @@ const customStyleModalBlock = {
   }
 }
 
-export function Customers() {
-  const [customers, setCustomers] = useState<any>([])
+export function Companies() {
+  const [companies, setCompanies] = useState<any>([])
   const [currentCompany, setCurrentCompany] = useState<any>({})
   const [pending, setPending] = useState<boolean>(false)
   const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false)
@@ -79,7 +79,7 @@ export function Customers() {
     {
       id: 1,
       name: 'STATUS',
-      selector: (row: any) => row.status,
+      selector: (row: any) => row.status === "ok" ? "Ativo" : <p style={{ color: colors.error.medium }}>Bloqueado</p>,
       sortable: true,
       reorder: true
     },
@@ -123,7 +123,7 @@ export function Customers() {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllCustomers()
     setPending(pending => !pending)
-    setCustomers(data.data.sort(compare))
+    setCompanies(data.data.sort(compare))
   }
 
   const getUserList = async (currentCompanyRow: any) => {
@@ -216,7 +216,7 @@ export function Customers() {
             <h1>Empresas</h1>
             <DataTable
               columns={headers}
-              data={customers}
+              data={companies}
               conditionalRowStyles={conditionalRowStyles}
               defaultSortFieldId={1}
               expandableRows

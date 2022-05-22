@@ -33,7 +33,7 @@ const customStyleModalBlock = {
   },
   content: {
     maxWidth: '400px',
-    height: '300px', 
+    height: '300px',
     margin: 'auto',
   }
 }
@@ -47,6 +47,7 @@ export function DataTableUserCustomer({ userRow }: any) {
   const [ currentUser, setCurrentUser ] = useState({} as any)
   const [pending, setPending] = useState<boolean>(false)
   const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
+  const [isModalUnblockOpen, setIsModalUnblockOpen] = useState(false)
 
   function compare(a: any, b: any) {
     if(a.id < b.id) return -1;
@@ -68,7 +69,7 @@ export function DataTableUserCustomer({ userRow }: any) {
     navigate(`${ROUTES.UPDATE_USER_COMPANY}/${userRow.id}`)
   }
 
-  
+
   function onAddEmployer() {
     const filteredData =  userData.filter((user: IUserData) => user.user_type_id === 2)
     setUserDataList(filteredData)
@@ -77,15 +78,24 @@ export function DataTableUserCustomer({ userRow }: any) {
 
   function onBlock(user: any) {
     setCurrentUser(user)
+    if(user.is_active === 0) {
+      setIsModalUnblockOpen(oldValue => !oldValue)
+      return
+    }
     setIsModalBlockOpen(oldValue => !oldValue)
   }
 
   async function handleCloseModal() {
     setIsModalBlockOpen(false)
+    setIsModalUnblockOpen(false)
   }
 
   async function handleBlockUser() {
     await UserServices.blockUserCustomer(currentUser.id, {is_active: "0"})
+    navigate(0)
+  }
+  async function handleUnblockUser() {
+    await UserServices.blockUserCustomer(currentUser.id, {is_active: "1"})
     navigate(0)
   }
 
@@ -122,7 +132,7 @@ export function DataTableUserCustomer({ userRow }: any) {
       id: 5,
       name: 'Ações',
       sortable: true,
-      selector: (row: any) => <More onBlock={() => onBlock(row)} onEdit={() => onEdit(row)} />,
+      selector: (row: any) => <More userRow={row} onBlock={() => onBlock(row)} onEdit={() => onEdit(row)} />,
       reorder: true
     },
   ]
@@ -130,7 +140,7 @@ export function DataTableUserCustomer({ userRow }: any) {
   useEffect(() => {
     getUserCustomer()
   }, [])
-  
+
 
   return (
     <Wrapper>
@@ -145,12 +155,23 @@ export function DataTableUserCustomer({ userRow }: any) {
           <Button small type="button" onClick={handleCloseModal} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
         </ModalBlockContent>
       </Modal>
+      <Modal
+        isOpen={isModalUnblockOpen}
+        style={customStyleModalBlock}
+      >
+        <ModalBlockContent>
+          <h2>Desbloquear funcionário</h2>
+          <p>Tem certeza que deseja desbloquear o funcionario <b>{currentUser.name}</b> ?</p>
+          <Button small type="button" onClick={handleUnblockUser} customColor={colors.primary.medium} title={'Desbloquear'} />
+          <Button small type="button" onClick={handleCloseModal} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
+        </ModalBlockContent>
+      </Modal>
       <div className="container">
         <div className="headers">
           <strong>Funcionários</strong>
           { !pending && <button onClick={onAddEmployer}>Adicionar novo funcionários</button>}
         </div>
-        <DataTable 
+        <DataTable
           data={userData}
           columns={headers}
           progressPending={pending}

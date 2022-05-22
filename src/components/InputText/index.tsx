@@ -1,13 +1,13 @@
 import { Box, Text, Input, IInputProps } from "native-base";
-import { colors } from '../../theme';
 
 interface IProps extends IInputProps {
   title?: string;
+  customWidth?: string;
 }
 
 export function InputText(props: IProps) {
   return (
-    <Box w="100%" alignItems="flex-start" marginBottom={4}>
+    <Box w={props.customWidth ?? '100%'} alignItems="flex-start" marginBottom={4}>
       <Text color="neutral.darker" fontFamily="Inter" fontSize="16px" fontWeight="700" marginBottom={2}>{props.title}</Text>
         <Input
         borderColor="#EFF0F1"
