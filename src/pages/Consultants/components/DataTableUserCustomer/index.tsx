@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import DataTable from "react-data-table-component"
 import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../../../../constants/routes"
@@ -33,7 +33,7 @@ const customStyleModalBlock = {
   },
   content: {
     maxWidth: '400px',
-    height: '300px', 
+    height: '300px',
     margin: 'auto',
   }
 }
@@ -68,7 +68,7 @@ export function DataTableUserCustomer({ userRow }: any) {
     navigate(`${ROUTES.UPDATE_USER_COMPANY}/${userRow.id}`)
   }
 
-  
+
   function onAddEmployer() {
     const filteredData =  userData.filter((user: IUserData) => user.user_type_id === 2)
     setUserDataList(filteredData)
@@ -130,7 +130,7 @@ export function DataTableUserCustomer({ userRow }: any) {
   useEffect(() => {
     getUserCustomer()
   }, [])
-  
+
 
   return (
     <Wrapper>
@@ -150,7 +150,7 @@ export function DataTableUserCustomer({ userRow }: any) {
           <strong>Funcionários</strong>
           { !pending && <button onClick={onAddEmployer}>Adicionar novo funcionários</button>}
         </div>
-        <DataTable 
+        <DataTable
           data={userData}
           columns={headers}
           progressPending={pending}

@@ -4,6 +4,7 @@ import { loginRedirect } from '../utils/loginRedirect';
 import { ROUTES } from '../constants/routes';
 import ICredentials from '../interfaces/credentials';
 import { Api } from '../services/api';
+import { Notify, NotifyTypes } from '../components/Notify';
 
 interface IUser {
   id: string;
@@ -42,11 +43,11 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [data, setData] = useState<IAuthState>(() => {
   const token = localStorage.getItem('token');
   const user = localStorage.getItem('user');
-    
+
     if (token && user) {
       return { token, user: JSON.parse(user) };
     }
-    
+
     return {} as IAuthState;
   });
 
@@ -64,10 +65,14 @@ export const AuthProvider: React.FC = ({ children }) => {
           token: access_token,
           user,
         });
-        const route = loginRedirect(user.user_type_id)
-        navigate(route);
-        window.location.reload();
+        Notify(NotifyTypes.SUCCESS, 'Login realizado com sucesso')
+        setTimeout(() => {
+          const route = loginRedirect(user.user_type_id)
+          navigate(route);
+          window.location.reload();
+        }, 2000)
       } catch (error: any) {
+        Notify(NotifyTypes.ERROR, 'Erro ao efetuar login, por favor tente novamente ou fale com o suporte')
         setLoading(loading => !loading);
         setError(error.response.data.error);
         if(error.response.data.error === "Usuário inativo") {

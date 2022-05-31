@@ -2,8 +2,13 @@ import { toast } from 'react-toastify';
 import { AiOutlineCloseCircle, AiOutlineCheckCircle } from 'react-icons/ai'
 import 'react-toastify/dist/ReactToastify.css';
 
-export const Notify = (notificationType: string, message: string) => {
-  if(notificationType === "ERROR") {
+ export enum NotifyTypes {
+  ERROR = 'ERROR',
+  SUCCESS = 'SUCCESS',
+}
+
+export const Notify = (notificationType: NotifyTypes, message: string) => {
+  if(notificationType === NotifyTypes.ERROR) {
     toast.error(message, {
       position: toast.POSITION.TOP_RIGHT,
       className: 'notify_error',
@@ -13,7 +18,7 @@ export const Notify = (notificationType: string, message: string) => {
     });
     return
   }
-  if(notificationType === "SUCCESS") {
+  if(notificationType === NotifyTypes.SUCCESS) {
     toast.success(message, {
       position: toast.POSITION.TOP_RIGHT,
       className: 'notify_success',

@@ -9,7 +9,7 @@ import { CustomerServices } from "../../services/customer"
 import { AddButton } from '../../components/AddButton'
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti'
 import { colors } from "../../theme"
-import { DataTableUserCustomer } from "./components/DataTableUserCustomer"
+import { EmployersCompany } from "./components/EmployersCompany"
 import { ROUTES } from "../../constants/routes"
 import { InputSelected } from "../../components/InputSelected"
 import { MdClose } from "react-icons/md"
@@ -100,7 +100,7 @@ export function Companies() {
     {
       id: 4,
       name: 'N.º DE USUÁRIOS',
-      selector: (row: any) => row.maneger_name,
+      selector: (row: any) => `${row.number_of_users}/10`,
       sortable: true,
       reorder: true
     },
@@ -123,6 +123,7 @@ export function Companies() {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllCustomers()
     setPending(pending => !pending)
+    console.log(data)
     setCompanies(data.data.sort(compare))
   }
 
@@ -134,7 +135,6 @@ export function Companies() {
 
   async function handleModal(currentCompanyRow: any) {
     getUserList(currentCompanyRow)
-    console.log(currentCompanyRow)
     setCurrentCompany(currentCompanyRow)
     setIsModalOpen(value => !value)
   }
@@ -175,7 +175,7 @@ export function Companies() {
       >
         <ModalContent>
           <h2>Editar empresa</h2>
-          <button className="closeButton" onClick={handleModal}><MdClose size="18" /></button>
+          <button className="closeButton" onClick={() => setIsModalOpen(value => !value)}><MdClose size="18" /></button>
           <div className="hr"></div>
           <form>
             <WrapperInputs style={{ marginTop: '30px' }}>
@@ -221,7 +221,7 @@ export function Companies() {
               defaultSortFieldId={1}
               expandableRows
               customStyles={styles}
-			        expandableRowsComponent={({ data }) =><DataTableUserCustomer userRow={data} />}
+			        expandableRowsComponent={({ data }) =><EmployersCompany userRow={data} />}
               progressPending={pending}
               expandableIcon={{collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" />}}
             />

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { UserServices } from '../../services/user'
 import { ROUTES } from '../../constants/routes'
 import { useUser } from '../../hooks/user'
+import { convertAbsoluteToRem } from 'native-base/lib/typescript/theme/tools'
 
 export function UpdateUserCompany() {
   interface IDataForm {
@@ -58,14 +59,16 @@ export function UpdateUserCompany() {
   const [ dataForm, setDataForm ] = useState<IDataForm>(initialForm)
 
   useEffect(() => {
+    console.log('Gestores', manegerOptions)
     setDataForm({ ...userDataForm, customer_id: [Number(id)] })
+    console.log('user type' , userDataForm.user_type_id)
   }, [])
 
   async function handleCreateUserCompany() {
     if(!!userDataForm.user_type_id) {
 
     }
-    await UserServices.createUserCustomer(dataForm)    
+    await UserServices.createUserCustomer(dataForm)
     // if(data === "cpf_cnpj invalid") return setIsError(true)
     navigate(ROUTES.CUSTOMERS)
   }
@@ -74,22 +77,22 @@ export function UpdateUserCompany() {
     <LayoutRegister>
       <strong>Cadastrar usuário da empresa</strong>
       <Wrapper>
-        <InputText 
-          title="Nome" 
+        <InputText
+          title="Nome"
           value={dataForm.name ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, name: String(event.target.value) })}
           placeholder="Digite seu nome"
           type="text"
         />
-        <InputText 
-          title="Sobrenome" 
+        <InputText
+          title="Sobrenome"
           value={dataForm.suname ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, suname: String(event.target.value) })}
           placeholder="Agora seu sobrenome"
           type="text"
         />
-        <InputText 
-          title="E-mail" 
+        <InputText
+          title="E-mail"
           value={dataForm.email ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, email: String(event.target.value) })}
           placeholder="Agora digite seu e-mail"
@@ -100,12 +103,12 @@ export function UpdateUserCompany() {
           <Select
             styles={selectCustomStyles}
             options={options}
-            defaultValue={dataForm.user_type_id}
+            defaultValue={() => Number(userDataForm.user_type_id) === 1 ? {label: 'Colaborador', value: '1'} : {label: 'Gestor', value: '2'}}
             onChange={(value: any) => setDataForm({ ...dataForm, user_type_id: value.value })}
             placeholder="Selecione um tipo de usuário"
           />
         </CustomInput>
-        { dataForm.user_type_id === "1" && <>
+        { (Number(userDataForm.user_type_id) === 1 || dataForm.user_type_id === '1') && <>
           <Label htmlFor="">Gestor</Label>
           <CustomInput>
             <Select
@@ -117,16 +120,16 @@ export function UpdateUserCompany() {
             />
           </CustomInput>
         </>}
-        <InputText 
-          title="Senha" 
+        <InputText
+          title="Senha"
           value={dataForm.password ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, password: String(event.target.value) })}
           placeholder="Escolha uma senha"
           type="password"
-        />        
+        />
         <InputText
           isDisabled
-          title="ID da empresa" 
+          title="ID da empresa"
           value={id}
           type="text"
         />

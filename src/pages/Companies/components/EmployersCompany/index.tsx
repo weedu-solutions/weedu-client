@@ -11,6 +11,7 @@ import { Button } from "../../../../components/Button"
 import { UserServices } from "../../../../services/user"
 import { useUser } from '../../../../hooks/user'
 import { IUserData } from "../../../../contexts/user"
+import { Notify, NotifyTypes } from "../../../../components/Notify"
 
 const styles = {
   rows: {
@@ -38,7 +39,7 @@ const customStyleModalBlock = {
   }
 }
 
-export function DataTableUserCustomer({ userRow }: any) {
+export function EmployersCompany({ userRow }: any) {
 
   const navigate = useNavigate()
   const { setUserDataForm, setUserDataList } = useUser()
@@ -58,6 +59,7 @@ export function DataTableUserCustomer({ userRow }: any) {
   const getUserCustomer = async () => {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllUserCustomer(userRow.id)
+    console.log(data)
     setUserData(data.data[0].user.sort(compare))
     setPending(pending => !pending)
   }
@@ -66,13 +68,17 @@ export function DataTableUserCustomer({ userRow }: any) {
   function onEdit(user: any) {
     setCurrentUser(user)
     setUserDataForm(user)
+    setGestors()
     navigate(`${ROUTES.UPDATE_USER_COMPANY}/${userRow.id}`)
   }
 
-
-  function onAddEmployer() {
+  function setGestors() {
     const filteredData =  userData.filter((user: IUserData) => user.user_type_id === 2)
     setUserDataList(filteredData)
+  }
+
+  function onAddEmployer() {
+    setGestors()
     navigate(`${ROUTES.REGISTER_USER_COMPANY}/${userRow.id}`)
   }
 
@@ -91,12 +97,24 @@ export function DataTableUserCustomer({ userRow }: any) {
   }
 
   async function handleBlockUser() {
-    await UserServices.blockUserCustomer(currentUser.id, {is_active: "0"})
-    navigate(0)
+    try {
+      await UserServices.blockUserCustomer(currentUser.id, {is_active: "0"})
+      setIsModalBlockOpen(oldValue => !oldValue)
+      Notify(NotifyTypes.SUCCESS, 'Usuário bloqueado com sucesso')
+    } catch (error) {
+      setIsModalBlockOpen(oldValue => !oldValue)
+      Notify(NotifyTypes.ERROR, 'Algo deu errado, por favor tente novamente')
+    }
   }
   async function handleUnblockUser() {
-    await UserServices.blockUserCustomer(currentUser.id, {is_active: "1"})
-    navigate(0)
+    try {
+      await UserServices.blockUserCustomer(currentUser.id, {is_active: "1"})
+      setIsModalUnblockOpen(oldValue => !oldValue)
+      Notify(NotifyTypes.SUCCESS, 'Usuário desbloqueado com sucesso')
+    } catch (error) {
+      setIsModalUnblockOpen(oldValue => !oldValue)
+      Notify(NotifyTypes.ERROR, 'Algo deu errado, por favor tente novamente')
+    }
   }
 
   const headers = [
@@ -130,6 +148,13 @@ export function DataTableUserCustomer({ userRow }: any) {
     },
     {
       id: 5,
+      name: 'Perfil',
+      sortable: true,
+      selector: (row: any) => row.user_type_id === 1 ? 'Colaborador' : 'Gestor',
+      reorder: true
+    },
+    {
+      id: 6,
       name: 'Ações',
       sortable: true,
       selector: (row: any) => <More userRow={row} onBlock={() => onBlock(row)} onEdit={() => onEdit(row)} />,

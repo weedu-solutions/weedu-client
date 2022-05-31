@@ -10,9 +10,9 @@ export const Wrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    padding-top: 10px;
+    padding: 10px;
     top: 0;
-    width: 180px;
+    width: 100%;
     height: 100%;
     z-index: 99;
     background-color: ${colors.neutral.ligth};
@@ -20,10 +20,11 @@ export const Wrapper = styled.div`
     border: 2px solid ${colors.neutral.dark};
 
     button {
+      font-size: 12px;
       margin-bottom: 10px;
       background-color: transparent;
       border: none;
-      font-weight: 400;
+      font-weight: 500;
 
       &:hover {
         text-decoration: underline;

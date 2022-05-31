@@ -220,7 +220,7 @@ export function Consultants() {
       <Wrapper>
         <div className="container">
           <Content>
-            <h1>Colaboradores</h1>
+            <h1>Consultores</h1>
             <DataTable
               columns={headers}
               data={customers}

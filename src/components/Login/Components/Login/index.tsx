@@ -24,8 +24,8 @@ export function Login({onClick}: Props) {
   return (
     <Wrapper>
       <strong>Bem vindo de volta!</strong>
-      <InputText 
-        title="E-mail" 
+      <InputText
+        title="E-mail"
         isInvalid={error ? true : false}
         value={values.email ?? ''}
         onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
