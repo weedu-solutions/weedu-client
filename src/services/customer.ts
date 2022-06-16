@@ -1,6 +1,6 @@
 import { Api } from './api'
 export class CustomerServices {
-  static async getAllCustomers() {
+	static async getAllCustomers() {
 		var { data } = await Api.get('auth/customer/')
 		return data
 	}
@@ -24,7 +24,13 @@ export class CustomerServices {
 		return data
 	}
 
-	static async blockCustomer(CompanyId: number) {
-		await Api.post(`auth/block_customer/${CompanyId}`)
+	static async blockConsutants(CompanyId: number) {
+		const { data } = await Api.post(`auth/block_customer/${CompanyId}`)
+		return data
+	}
+
+	static async blockCustomer(CompanyId: number, formData: any) {
+		const { data } = await Api.post(`auth/block_customer/${CompanyId}`, formData)
+		return data
 	}
 }
