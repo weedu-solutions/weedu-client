@@ -197,22 +197,96 @@ export function Companies() {
           <div className="hr"></div>
           <form>
             <WrapperInputs style={{ marginTop: '30px' }}>
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Razão social" name="company_name" onChange={(event: any) => handleChange(event)} value={currentCompany.company_name ?? ''} />
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Nome fantasia" name="fantasy_name" onChange={(event: any) => handleChange(event)} value={currentCompany.fantasy_name ?? ''} />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginRight: '10px' }}
+                label="Razão social"
+                name="company_name"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.company_name ?? ''}
+              />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginLeft: '10px' }}
+                label="Nome fantasia"
+                name="fantasy_name"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.fantasy_name ?? ''}
+              />
             </WrapperInputs>
-            <InputSelected disabled={!!isAbleToEdit} style={{ marginTop: '10px' }} label="CNPJ" name="cpf_cnpj" onChange={(event: any) => handleChange(event)} value={currentCompany.cpf_cnpj ?? ''} />
+            <InputSelected
+              disabled={!!isAbleToEdit}
+              style={{ marginTop: '10px' }}
+              label="CNPJ"
+              name="cpf_cnpj"
+              onChange={(event: any) => handleChange(event)}
+              value={currentCompany.cpf_cnpj ?? ''}
+            />
             <WrapperInputs style={{ marginTop: '10px' }}>
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Nome do Gestor" name="maneger_name" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_name ?? ''} />
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="E-mail financeiro" name="financial_email" onChange={(event: any) => handleChange(event)} value={currentCompany.financial_email ?? ''} />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginRight: '10px' }}
+                label="Nome do Gestor"
+                name="maneger_name"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.maneger_name ?? ''}
+              />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginLeft: '10px' }}
+                label="E-mail financeiro"
+                name="financial_email"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.financial_email ?? ''}
+              />
             </WrapperInputs>
             <WrapperInputs style={{ marginTop: '10px' }}>
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Telefone do Gestor" name="maneger_telephone" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_telephone ?? ''} />
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Número máximo de usuários" name="number_of_users" onChange={(event: any) => handleChange(event)} value={currentCompany.number_of_users ?? ''} />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginRight: '10px' }}
+                label="Telefone do Gestor"
+                name="maneger_telephone"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.maneger_telephone ?? ''}
+              />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginLeft: '10px' }}
+                label="Número máximo de usuários"
+                name="number_of_users"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.number_of_users ?? ''}
+              />
             </WrapperInputs>
+
             <ButtonsWrapper>
-              <Button small type="button" customColor="red" onClick={handleOpenModalBlock} customSize="30%" title={'Bloquear'} />
-              <Button small type="button" onClick={() => navigate(`${ROUTES.REGISTER_USER_COMPANY}/${currentCompany.id}`)} customSize="60%" customStyles="margin-left:40px;margin-right:10px;" outlined title={'Adicionar novo funcionário'} />
-              <Button small type="button" customSize="40%" onClick={handleUpdateCompany} title={'Atualizar'} />
+              <Button
+                small
+                type="button"
+                customColor="red"
+                onClick={handleOpenModalBlock}
+                customSize="30%"
+                title={
+                  currentCompany.status === 1 ?
+                    'Bloquear'
+                    : 'Desbloquear'
+                }
+              />
+              <Button
+                small
+                type="button"
+                onClick={() => navigate(`${ROUTES.REGISTER_USER_COMPANY}/${currentCompany.id}`)}
+                customSize="60%"
+                customStyles="margin-left:40px;margin-right:10px;"
+                outlined title={'Adicionar novo funcionário'}
+              />
+              <Button
+                small
+                type="button"
+                customSize="40%"
+                onClick={handleUpdateCompany}
+                title={'Atualizar'}
+              />
             </ButtonsWrapper>
           </form>
         </ModalContent>
@@ -227,15 +301,27 @@ export function Companies() {
               <>
                 <h2>Confirmação de bloqueio</h2>
                 <p>Tem certeza que deseja bloquear a empresa <b>{currentCompany.fantasy_name}</b> ?
-                </p><Button small type="button" onClick={handleBlockCompany} customColor="red" title={'Bloquear'} />
+                </p>
               </>
               :
               <>
-                <h2>Confirmação de Desbloqueio</h2>
+                <h2>Confirmação de desbloqueio</h2>
                 <p>Tem certeza que deseja desbloqueio a empresa <b>{currentCompany.fantasy_name}</b> ?
-                </p><Button small type="button" onClick={handleBlockCompany} customColor="red" title={'Desbloquear'} />
+                </p>
               </>
           }
+
+          <Button
+            small
+            type="button"
+            onClick={handleBlockCompany}
+            customColor="red"
+            title={
+              currentCompany.status === 1 ?
+                'Bloquear'
+                : 'Desbloquear'
+            }
+          />
           <Button small type="button" onClick={handleOpenModalBlock} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
         </ModalBlockContent>
       </Modal>
