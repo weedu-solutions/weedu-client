@@ -93,6 +93,7 @@ export const ModalBlockContent = styled.div`
 
   h2 {
     margin-bottom: 10px;
+    font-size: 1.4rem;
   }
   p {
     margin-bottom: 20px;

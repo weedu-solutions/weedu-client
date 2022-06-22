@@ -30,8 +30,8 @@ const conditionalRowStyles = [
 const styles = {
   rows: {
     style: {
-        color: colors.primary.darker,
-        fontWeight: '500',
+      color: colors.primary.darker,
+      fontWeight: '500',
     },
   },
   headCells: {
@@ -44,7 +44,7 @@ const styles = {
 
 const customStyleModal = {
   overlay: {
-    backgroundColor:'rgba(0,0,0,0.50)'
+    backgroundColor: 'rgba(0,0,0,0.50)'
   },
   content: {
     maxWidth: '650px',
@@ -55,7 +55,7 @@ const customStyleModal = {
 
 const customStyleModalBlock = {
   overlay: {
-    backgroundColor:'rgba(0,0,0,0.50)'
+    backgroundColor: 'rgba(0,0,0,0.50)'
   },
   content: {
     maxWidth: '400px',
@@ -121,8 +121,8 @@ export function Consultants() {
   ]
 
   function compare(a: any, b: any) {
-    if(a.id < b.id) return -1;
-    if(a.id > b.id) return 1;
+    if (a.id < b.id) return -1;
+    if (a.id > b.id) return 1;
     return 0;
   }
 
@@ -135,7 +135,7 @@ export function Consultants() {
 
   const getUserList = async (currentCompanyRow: any) => {
     const { data } = await CustomerServices.getAllUserCustomer(currentCompanyRow.id)
-    const filteredData =  data.data[0].user.filter((user: IUserData) => user.user_type_id === 2)
+    const filteredData = data.data[0].user.filter((user: IUserData) => user.user_type_id === 2)
     setUserDataList(filteredData)
   }
 
@@ -165,7 +165,7 @@ export function Consultants() {
   }
 
   async function handleBlockCompany() {
-    await CustomerServices.blockCustomer(currentCompany.id)
+    await CustomerServices.blockConsutants(currentCompany.id)
     navigate(0)
   }
 
@@ -189,7 +189,7 @@ export function Consultants() {
               <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Razão social" name="company_name" onChange={(event: any) => handleChange(event)} value={currentCompany.company_name ?? ''} />
               <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Nome fantasia" name="fantasy_name" onChange={(event: any) => handleChange(event)} value={currentCompany.fantasy_name ?? ''} />
             </WrapperInputs>
-            <InputSelected disabled={!!isAbleToEdit} style={{ marginTop: '10px' }} label="CNPJ" name="cpf_cnpj" onChange={(event: any) => handleChange(event)} value={currentCompany.cpf_cnpj ?? ''}/>
+            <InputSelected disabled={!!isAbleToEdit} style={{ marginTop: '10px' }} label="CNPJ" name="cpf_cnpj" onChange={(event: any) => handleChange(event)} value={currentCompany.cpf_cnpj ?? ''} />
             <WrapperInputs style={{ marginTop: '10px' }}>
               <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Nome do Gestor" name="maneger_name" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_name ?? ''} />
               <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="E-mail financeiro" name="financial_email" onChange={(event: any) => handleChange(event)} value={currentCompany.financial_email ?? ''} />
@@ -228,9 +228,9 @@ export function Consultants() {
               defaultSortFieldId={1}
               expandableRows
               customStyles={styles}
-			        expandableRowsComponent={({ data }) =><DataTableUserCustomer userRow={data} />}
+              expandableRowsComponent={({ data }) => <DataTableUserCustomer userRow={data} />}
               progressPending={pending}
-              expandableIcon={{collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" />}}
+              expandableIcon={{ collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" /> }}
             />
           </Content>
         </div>

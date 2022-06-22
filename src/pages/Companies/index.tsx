@@ -16,7 +16,7 @@ import { MdClose } from "react-icons/md"
 import { Button } from '../../components/Button'
 import { IUserData } from "../../contexts/user"
 import { useUser } from '../../hooks/user'
-import { Notify } from "../../components/Notify"
+import { Notify, NotifyTypes } from "../../components/Notify"
 
 const conditionalRowStyles = [
   {
@@ -30,8 +30,8 @@ const conditionalRowStyles = [
 const styles = {
   rows: {
     style: {
-        color: colors.primary.darker,
-        fontWeight: '500',
+      color: colors.primary.darker,
+      fontWeight: '500',
     },
   },
   headCells: {
@@ -44,7 +44,7 @@ const styles = {
 
 const customStyleModal = {
   overlay: {
-    backgroundColor:'rgba(0,0,0,0.50)'
+    backgroundColor: 'rgba(0,0,0,0.50)'
   },
   content: {
     maxWidth: '650px',
@@ -55,7 +55,7 @@ const customStyleModal = {
 
 const customStyleModalBlock = {
   overlay: {
-    backgroundColor:'rgba(0,0,0,0.50)'
+    backgroundColor: 'rgba(0,0,0,0.50)'
   },
   content: {
     maxWidth: '400px',
@@ -72,14 +72,14 @@ export function Companies() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
 
-  const { setUserDataList, userDataList } = useUser()
+  const { setUserDataList } = useUser()
   const navigate = useNavigate()
 
   const headers = [
     {
       id: 1,
       name: 'STATUS',
-      selector: (row: any) => row.status === "ok" ? "Ativo" : <p style={{ color: colors.error.medium }}>Bloqueado</p>,
+      selector: (row: any) => row.status === 1 ? "Desbloqueado" : "Bloqueado",
       sortable: true,
       reorder: true
     },
@@ -114,8 +114,8 @@ export function Companies() {
   ]
 
   function compare(a: any, b: any) {
-    if(a.id < b.id) return -1;
-    if(a.id > b.id) return 1;
+    if (a.id < b.id) return -1;
+    if (a.id > b.id) return 1;
     return 0;
   }
 
@@ -123,13 +123,12 @@ export function Companies() {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllCustomers()
     setPending(pending => !pending)
-    console.log(data)
     setCompanies(data.data.sort(compare))
   }
 
   const getUserList = async (currentCompanyRow: any) => {
     const { data } = await CustomerServices.getAllUserCustomer(currentCompanyRow.id)
-    const filteredData =  data.data[0].user.filter((user: IUserData) => user.user_type_id === 2)
+    const filteredData = data.data[0].user.filter((user: IUserData) => user.user_type_id === 2)
     setUserDataList(filteredData)
   }
 
@@ -158,8 +157,26 @@ export function Companies() {
   }
 
   async function handleBlockCompany() {
-    await CustomerServices.blockCustomer(currentCompany.id)
-    navigate(0)
+    if (currentCompany.status === 1) {
+      try {
+        await CustomerServices.blockCustomer(currentCompany.id, { active: 0 })
+        setIsModalBlockOpen(oldValue => !oldValue)
+        Notify(NotifyTypes.SUCCESS, 'Usuário Bloqueado com sucesso!')
+      } catch (error) {
+        setIsModalBlockOpen(oldValue => !oldValue)
+        Notify(NotifyTypes.ERROR, 'Algo deu errado, por favor tente novamente.')
+      }
+    } else {
+      try {
+        await CustomerServices.blockCustomer(currentCompany.id, { active: 1 })
+        setIsModalBlockOpen(oldValue => !oldValue)
+        Notify(NotifyTypes.SUCCESS, 'Usuário Desbloqueado com sucesso!')
+      } catch (error) {
+        setIsModalBlockOpen(oldValue => !oldValue)
+        Notify(NotifyTypes.ERROR, 'Algo deu errado, por favor tente novamente.')
+      }
+    }
+
   }
 
   useEffect(() => {
@@ -179,22 +196,96 @@ export function Companies() {
           <div className="hr"></div>
           <form>
             <WrapperInputs style={{ marginTop: '30px' }}>
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Razão social" name="company_name" onChange={(event: any) => handleChange(event)} value={currentCompany.company_name ?? ''} />
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Nome fantasia" name="fantasy_name" onChange={(event: any) => handleChange(event)} value={currentCompany.fantasy_name ?? ''} />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginRight: '10px' }}
+                label="Razão social"
+                name="company_name"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.company_name ?? ''}
+              />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginLeft: '10px' }}
+                label="Nome fantasia"
+                name="fantasy_name"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.fantasy_name ?? ''}
+              />
             </WrapperInputs>
-            <InputSelected disabled={!!isAbleToEdit} style={{ marginTop: '10px' }} label="CNPJ" name="cpf_cnpj" onChange={(event: any) => handleChange(event)} value={currentCompany.cpf_cnpj ?? ''}/>
+            <InputSelected
+              disabled={!!isAbleToEdit}
+              style={{ marginTop: '10px' }}
+              label="CNPJ"
+              name="cpf_cnpj"
+              onChange={(event: any) => handleChange(event)}
+              value={currentCompany.cpf_cnpj ?? ''}
+            />
             <WrapperInputs style={{ marginTop: '10px' }}>
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Nome do Gestor" name="maneger_name" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_name ?? ''} />
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="E-mail financeiro" name="financial_email" onChange={(event: any) => handleChange(event)} value={currentCompany.financial_email ?? ''} />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginRight: '10px' }}
+                label="Nome do Gestor"
+                name="maneger_name"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.maneger_name ?? ''}
+              />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginLeft: '10px' }}
+                label="E-mail financeiro"
+                name="financial_email"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.financial_email ?? ''}
+              />
             </WrapperInputs>
             <WrapperInputs style={{ marginTop: '10px' }}>
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginRight: '10px' }} label="Telefone do Gestor" name="maneger_telephone" onChange={(event: any) => handleChange(event)} value={currentCompany.maneger_telephone ?? ''} />
-              <InputSelected disabled={!!isAbleToEdit} style={{ marginLeft: '10px' }} label="Número máximo de usuários" name="number_of_users" onChange={(event: any) => handleChange(event)} value={currentCompany.number_of_users ?? ''} />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginRight: '10px' }}
+                label="Telefone do Gestor"
+                name="maneger_telephone"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.maneger_telephone ?? ''}
+              />
+              <InputSelected
+                disabled={!!isAbleToEdit}
+                style={{ marginLeft: '10px' }}
+                label="Número máximo de usuários"
+                name="number_of_users"
+                onChange={(event: any) => handleChange(event)}
+                value={currentCompany.number_of_users ?? ''}
+              />
             </WrapperInputs>
+
             <ButtonsWrapper>
-              <Button small type="button" customColor="red" onClick={handleOpenModalBlock} customSize="30%" title={'Bloquear'} />
-              <Button small type="button" onClick={() => navigate(`${ROUTES.REGISTER_USER_COMPANY}/${currentCompany.id}`)} customSize="60%" customStyles="margin-left:40px;margin-right:10px;" outlined title={'Adicionar novo funcionário'} />
-              <Button small type="button" customSize="40%" onClick={handleUpdateCompany} title={'Atualizar'} />
+              <Button
+                small
+                type="button"
+                customColor="red"
+                onClick={handleOpenModalBlock}
+                customSize="30%"
+                title={
+                  currentCompany.status === 1 ?
+                    'Bloquear'
+                    : 'Desbloquear'
+                }
+              />
+              <Button
+                small
+                type="button"
+                onClick={() => navigate(`${ROUTES.REGISTER_USER_COMPANY}/${currentCompany.id}`)}
+                customSize="60%"
+                customStyles="margin-left:40px;margin-right:10px;"
+                outlined title={'Adicionar novo funcionário'}
+              />
+              <Button
+                small
+                type="button"
+                customSize="40%"
+                onClick={handleUpdateCompany}
+                title={'Atualizar'}
+              />
             </ButtonsWrapper>
           </form>
         </ModalContent>
@@ -204,9 +295,32 @@ export function Companies() {
         style={customStyleModalBlock}
       >
         <ModalBlockContent>
-          <h2>Confirmação de bloqueio</h2>
-          <p>Tem certeza que deseja bloquear a empresa <b>{currentCompany.fantasy_name}</b> ?</p>
-          <Button small type="button" onClick={handleBlockCompany} customColor="red" title={'Bloquear'} />
+          {
+            currentCompany.status === 1 ?
+              <>
+                <h2>Confirmação de bloqueio</h2>
+                <p>Tem certeza que deseja bloquear a empresa <b>{currentCompany.fantasy_name}</b> ?
+                </p>
+              </>
+              :
+              <>
+                <h2>Confirmação de desbloqueio</h2>
+                <p>Tem certeza que deseja desbloqueio a empresa <b>{currentCompany.fantasy_name}</b> ?
+                </p>
+              </>
+          }
+
+          <Button
+            small
+            type="button"
+            onClick={handleBlockCompany}
+            customColor="red"
+            title={
+              currentCompany.status === 1 ?
+                'Bloquear'
+                : 'Desbloquear'
+            }
+          />
           <Button small type="button" onClick={handleOpenModalBlock} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
         </ModalBlockContent>
       </Modal>
@@ -221,9 +335,9 @@ export function Companies() {
               defaultSortFieldId={1}
               expandableRows
               customStyles={styles}
-			        expandableRowsComponent={({ data }) =><EmployersCompany userRow={data} />}
+              expandableRowsComponent={({ data }) => <EmployersCompany userRow={data} />}
               progressPending={pending}
-              expandableIcon={{collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" />}}
+              expandableIcon={{ collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" /> }}
             />
           </Content>
         </div>
