@@ -60,10 +60,12 @@ export function UpdateUserCompany() {
 
   useEffect(() => {
     setDataForm({ ...userDataForm, customer_id: [Number(id)] })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
   async function handleUpdateUserCompany() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data } = await UserServices.updateUserCustomer(id, dataForm);
 
     Notify(NotifyTypes.SUCCESS, 'Dados alterados com sucesso!')

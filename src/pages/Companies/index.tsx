@@ -68,6 +68,7 @@ export function Companies() {
   const [companies, setCompanies] = useState<any>([])
   const [currentCompany, setCurrentCompany] = useState<any>({})
   const [pending, setPending] = useState<boolean>(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
@@ -138,9 +139,7 @@ export function Companies() {
     setIsModalOpen(value => !value)
   }
 
-  function handleEdit() {
-    setIsAbleToEdit(oldValue => !oldValue)
-  }
+
 
   async function handleUpdateCompany() {
     await CustomerServices.updateCustomer(currentCompany.id, currentCompany)
@@ -181,6 +180,7 @@ export function Companies() {
 
   useEffect(() => {
     getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
