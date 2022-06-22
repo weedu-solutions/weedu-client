@@ -33,7 +33,7 @@ export function RegisterUserCompany() {
 
   const navigate = useNavigate()
   const { id } = useParams()
-  const { userDataList, setUserDataList } = useUser()
+  const { userDataList } = useUser()
 
   const initialForm = {
     name: "",
@@ -51,7 +51,7 @@ export function RegisterUserCompany() {
     { label: 'Gestor', value: '2' }
   ] as any
 
-  const [ dataForm, setDataForm ] = useState<IDataForm>(initialForm)
+  const [dataForm, setDataForm] = useState<IDataForm>(initialForm)
 
 
   const manegerOptions = userDataList.map((user) => {
@@ -60,10 +60,11 @@ export function RegisterUserCompany() {
 
   useEffect(() => {
     setDataForm({ ...dataForm, customer_id: [Number(id)] })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function handleCreateUserCompany() {
-    await UserServices.createUserCustomer(dataForm)    
+    await UserServices.createUserCustomer(dataForm)
     // if(data === "cpf_cnpj invalid") return setIsError(true)
     navigate(ROUTES.CUSTOMERS)
   }
@@ -72,22 +73,22 @@ export function RegisterUserCompany() {
     <LayoutRegister>
       <strong>Cadastrar usuário da empresa</strong>
       <Wrapper>
-        <InputText 
-          title="Nome" 
+        <InputText
+          title="Nome"
           value={dataForm.name ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, name: String(event.target.value) })}
           placeholder="Digite seu nome"
           type="text"
         />
-        <InputText 
-          title="Sobrenome" 
+        <InputText
+          title="Sobrenome"
           value={dataForm.suname ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, suname: String(event.target.value) })}
           placeholder="Agora seu sobrenome"
           type="text"
         />
-        <InputText 
-          title="E-mail" 
+        <InputText
+          title="E-mail"
           value={dataForm.email ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, email: String(event.target.value) })}
           placeholder="Agora digite seu e-mail"
@@ -103,7 +104,7 @@ export function RegisterUserCompany() {
             placeholder="Selecione um tipo de usuário"
           />
         </CustomInput>
-        { dataForm.user_type_id === "1" && <>
+        {dataForm.user_type_id === "1" && <>
           <Label htmlFor="">Gestor</Label>
           <CustomInput>
             <Select
@@ -115,16 +116,16 @@ export function RegisterUserCompany() {
             />
           </CustomInput>
         </>}
-        <InputText 
-          title="Senha" 
+        <InputText
+          title="Senha"
           value={dataForm.password ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, password: String(event.target.value) })}
           placeholder="Escolha uma senha"
           type="password"
-        />        
+        />
         <InputText
           isDisabled
-          title="ID da empresa" 
+          title="ID da empresa"
           value={id}
           type="text"
         />

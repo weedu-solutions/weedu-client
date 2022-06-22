@@ -43,23 +43,24 @@ export const RequireAuth = ({
 
     if (!hasRoles) return true;
 
-    if(!userRole) return ['COLABORADOR']
+    if (!userRole) return ['COLABORADOR']
 
     if (exactRoles) {
       return roles.every(role => userRoles().includes(role));
     }
 
     return roles.some(role => userRoles().includes(role));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userRoles, exactRoles, roles]);
 
-  if (!token) {  
+  if (!token) {
     return fallbackAuth;
   }
-  
-  const tokenDecoded = decode(token) as any
-  const isTokenExpired = tokenDecoded.exp <= Number(todayTimeStamp) ? false : true  
 
-  if(!isTokenExpired) {
+  const tokenDecoded = decode(token) as any
+  const isTokenExpired = tokenDecoded.exp <= Number(todayTimeStamp) ? false : true
+
+  if (!isTokenExpired) {
     localStorage.removeItem('user')
     localStorage.removeItem('token')
     return fallbackAuth;

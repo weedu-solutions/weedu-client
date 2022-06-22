@@ -46,9 +46,10 @@ export function RegisterAction() {
     number_of_users: string;
   }
 
-  const [ dataForm, setDataForm ] = useState<IDataForm>(initialForm)
-  const [ isError, setIsError ] = useState<boolean>(false)
-  const { userDataList, setUserDataList } = useUser()
+  const [dataForm, setDataForm] = useState<IDataForm>(initialForm)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isError, setIsError] = useState<boolean>(false)
+  const { userDataList } = useUser()
   const navigate = useNavigate()
 
   const manegerOptions = userDataList.map((user) => {
@@ -57,7 +58,7 @@ export function RegisterAction() {
 
   async function handleCreateCompany() {
     const { data } = await CustomerServices.createCustomer(dataForm)
-    if(data === "cpf_cnpj invalid") return setIsError(true)
+    if (data === "cpf_cnpj invalid") return setIsError(true)
     navigate(ROUTES.CUSTOMERS)
   }
 

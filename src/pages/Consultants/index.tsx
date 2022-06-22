@@ -16,7 +16,6 @@ import { MdClose } from "react-icons/md"
 import { Button } from '../../components/Button'
 import { IUserData } from "../../contexts/user"
 import { useUser } from '../../hooks/user'
-import { Notify } from "../../components/Notify"
 
 const conditionalRowStyles = [
   {
@@ -68,11 +67,12 @@ export function Consultants() {
   const [customers, setCustomers] = useState<any>([])
   const [currentCompany, setCurrentCompany] = useState<any>({})
   const [pending, setPending] = useState<boolean>(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
 
-  const { setUserDataList, userDataList } = useUser()
+  const { setUserDataList } = useUser()
   const navigate = useNavigate()
 
   const headers = [
@@ -146,9 +146,7 @@ export function Consultants() {
     setIsModalOpen(value => !value)
   }
 
-  function handleEdit() {
-    setIsAbleToEdit(oldValue => !oldValue)
-  }
+
 
   async function handleUpdateCompany() {
     await CustomerServices.updateCustomer(currentCompany.id, currentCompany)
@@ -171,6 +169,7 @@ export function Consultants() {
 
   useEffect(() => {
     getData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

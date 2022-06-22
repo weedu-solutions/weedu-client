@@ -15,21 +15,21 @@ import { IUserData } from "../../../../contexts/user"
 const styles = {
   rows: {
     style: {
-        color: colors.primary.darker,
-        fontWeight: '500',
-      },
+      color: colors.primary.darker,
+      fontWeight: '500',
     },
-    headCells: {
-      style: {
-        color: colors.primary.darker,
-        fontWeight: '800',
-      },
+  },
+  headCells: {
+    style: {
+      color: colors.primary.darker,
+      fontWeight: '800',
+    },
   }
 }
 
 const customStyleModalBlock = {
   overlay: {
-    backgroundColor:'rgba(0,0,0,0.50)'
+    backgroundColor: 'rgba(0,0,0,0.50)'
   },
   content: {
     maxWidth: '400px',
@@ -43,14 +43,14 @@ export function DataTableUserCustomer({ userRow }: any) {
   const navigate = useNavigate()
   const { setUserDataForm, setUserDataList } = useUser()
 
-  const [ userData, setUserData ] = useState([])
-  const [ currentUser, setCurrentUser ] = useState({} as any)
+  const [userData, setUserData] = useState([])
+  const [currentUser, setCurrentUser] = useState({} as any)
   const [pending, setPending] = useState<boolean>(false)
   const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
 
   function compare(a: any, b: any) {
-    if(a.id < b.id) return -1;
-    if(a.id > b.id) return 1;
+    if (a.id < b.id) return -1;
+    if (a.id > b.id) return 1;
     return 0;
   }
 
@@ -70,7 +70,7 @@ export function DataTableUserCustomer({ userRow }: any) {
 
 
   function onAddEmployer() {
-    const filteredData =  userData.filter((user: IUserData) => user.user_type_id === 2)
+    const filteredData = userData.filter((user: IUserData) => user.user_type_id === 2)
     setUserDataList(filteredData)
     navigate(`${ROUTES.REGISTER_USER_COMPANY}/${userRow.id}`)
   }
@@ -85,7 +85,7 @@ export function DataTableUserCustomer({ userRow }: any) {
   }
 
   async function handleBlockUser() {
-    await UserServices.blockUserCustomer(currentUser.id, {is_active: "0"})
+    await UserServices.blockUserCustomer(currentUser.id, { is_active: "0" })
     navigate(0)
   }
 
@@ -129,6 +129,7 @@ export function DataTableUserCustomer({ userRow }: any) {
 
   useEffect(() => {
     getUserCustomer()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -148,7 +149,7 @@ export function DataTableUserCustomer({ userRow }: any) {
       <div className="container">
         <div className="headers">
           <strong>Funcionários</strong>
-          { !pending && <button onClick={onAddEmployer}>Adicionar novo funcionários</button>}
+          {!pending && <button onClick={onAddEmployer}>Adicionar novo funcionários</button>}
         </div>
         <DataTable
           data={userData}
