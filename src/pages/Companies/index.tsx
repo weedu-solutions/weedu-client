@@ -72,7 +72,7 @@ export function Companies() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
 
-  const { setUserDataList, userDataList } = useUser()
+  const { setUserDataList } = useUser()
   const navigate = useNavigate()
 
   const headers = [
@@ -123,7 +123,6 @@ export function Companies() {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllCustomers()
     setPending(pending => !pending)
-    console.log(data)
     setCompanies(data.data.sort(compare))
   }
 
@@ -160,7 +159,7 @@ export function Companies() {
   async function handleBlockCompany() {
     if (currentCompany.status === 1) {
       try {
-        await CustomerServices.blockCustomer(currentCompany.id, { status: "0" })
+        await CustomerServices.blockCustomer(currentCompany.id, { active: 0 })
         setIsModalBlockOpen(oldValue => !oldValue)
         Notify(NotifyTypes.SUCCESS, 'Usuário Bloqueado com sucesso!')
       } catch (error) {
@@ -169,7 +168,7 @@ export function Companies() {
       }
     } else {
       try {
-        await CustomerServices.blockCustomer(currentCompany.id, { status: "1" })
+        await CustomerServices.blockCustomer(currentCompany.id, { active: 1 })
         setIsModalBlockOpen(oldValue => !oldValue)
         Notify(NotifyTypes.SUCCESS, 'Usuário Desbloqueado com sucesso!')
       } catch (error) {

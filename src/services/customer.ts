@@ -5,7 +5,7 @@ export class CustomerServices {
 		return data
 	}
 
-	static async getAllUserCustomer(id: number) {
+	static async getAllUserCustomer(id: number | string) {
 		var { data } = await Api.get(`auth/user-customer/${id}`)
 		return data
 	}
