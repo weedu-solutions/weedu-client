@@ -20,6 +20,7 @@ export function UpdateUserCompany() {
     is_active: string;
     customer_id: Array<number>;
     maneger_id: string;
+    id?: string;
   }
 
   const selectCustomStyles = {
@@ -66,10 +67,12 @@ export function UpdateUserCompany() {
 
   async function handleUpdateUserCompany() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { data } = await UserServices.updateUserCustomer(id, dataForm);
+    const { data } = await UserServices.updateUserCustomer(dataForm.id, dataForm);
 
-    Notify(NotifyTypes.SUCCESS, 'Dados alterados com sucesso!')
-    navigate(ROUTES.CUSTOMERS)
+    if (data) {
+      Notify(NotifyTypes.SUCCESS, 'Dados alterados com sucesso!')
+      navigate(ROUTES.CUSTOMERS)
+    }
 
   }
 

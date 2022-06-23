@@ -16,7 +16,8 @@ export class CustomerServices {
 	}
 
 	static async updateCustomer(CompanyId: number, body: any) {
-		await Api.post(`auth/customer/${CompanyId}`, body)
+		var { data } = await Api.post(`auth/customer/${CompanyId}`, body)
+		return data;
 	}
 
 	static async createCustomer(formData: any) {

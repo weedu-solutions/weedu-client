@@ -142,8 +142,11 @@ export function Companies() {
 
 
   async function handleUpdateCompany() {
-    await CustomerServices.updateCustomer(currentCompany.id, currentCompany)
-    navigate(0)
+    const data = await CustomerServices.updateCustomer(currentCompany.id, { ...currentCompany, status: '1' })
+    if (data) {
+      navigate(0)
+      Notify(NotifyTypes.SUCCESS, 'Empresa alterada com sucesso!')
+    }
   }
 
   function handleChange(event: any) {
