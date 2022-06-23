@@ -46,7 +46,18 @@ export const MyButton = styled.button`
 
   &:hover {
     filter: brightness(0.9);
-  }
+  } 
+`
+
+
+export const TextBlock = styled.p`
+  color: #E71D36;;
+  font-weight: 700; 
+`
+
+export const TextUnBlock = styled.p`
+  color: #3D2B7C;;
+  font-weight: 700;
 `
 
 export const ModalContent = styled.div`
