@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
 
 import LayoutLogged from "../../components/LayoutLogged"
-import { Content, Wrapper, MyButton, ModalContent, WrapperInputs, AddButtonWrapper, ButtonsWrapper, ModalBlockContent } from "./styled"
+import { Content, Wrapper, MyButton, ModalContent, WrapperInputs, AddButtonWrapper, ButtonsWrapper, ModalBlockContent, TextUnBlock, TextBlock } from "./styled"
 import { useEffect, useState } from "react"
 import { CustomerServices } from "../../services/customer"
 import { AddButton } from '../../components/AddButton'
@@ -80,7 +80,7 @@ export function Companies() {
     {
       id: 1,
       name: 'STATUS',
-      selector: (row: any) => row.status === 1 ? "Desbloqueado" : "Bloqueado",
+      selector: (row: any) => row.status === 1 ? <TextUnBlock>Desbloqueado</TextUnBlock> : <TextBlock>Bloqueado</TextBlock>,
       sortable: true,
       reorder: true
     },
