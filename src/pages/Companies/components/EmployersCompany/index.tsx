@@ -4,14 +4,20 @@ import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../../../../constants/routes"
 import { CustomerServices } from "../../../../services/customer"
 import { colors } from "../../../../theme"
-import { ModalBlockContent, Wrapper } from "./styled"
-import { More } from '../More'
 import Modal from 'react-modal'
 import { Button } from "../../../../components/Button"
 import { UserServices } from "../../../../services/user"
 import { useUser } from '../../../../hooks/user'
 import { IUserData } from "../../../../contexts/user"
 import { Notify, NotifyTypes } from "../../../../components/Notify"
+import { MdMoreVert } from "react-icons/md"
+import {
+  Box,
+  ModalBlockContent,
+  Wrapper,
+  ButtonTooltip
+} from "./styled"
+import { useAuth } from "../../../../hooks/auth"
 
 const styles = {
   rows: {
@@ -43,6 +49,7 @@ export function EmployersCompany({ userRow }: any) {
 
   const navigate = useNavigate()
   const { setUserDataForm, setUserDataList } = useUser()
+  const { user } = useAuth();
 
   const [userData, setUserData] = useState([])
   const [currentUser, setCurrentUser] = useState({} as any)
@@ -59,11 +66,9 @@ export function EmployersCompany({ userRow }: any) {
   const getUserCustomer = async () => {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllUserCustomer(userRow.id)
-    console.log(data)
     setUserData(data.data[0].user.sort(compare))
     setPending(pending => !pending)
   }
-
 
   function onEdit(user: any) {
     setCurrentUser(user)
@@ -106,6 +111,7 @@ export function EmployersCompany({ userRow }: any) {
       Notify(NotifyTypes.ERROR, 'Algo deu errado, por favor tente novamente')
     }
   }
+
   async function handleUnblockUser() {
     try {
       await UserServices.blockUserCustomer(currentUser.id, { is_active: "1" })
@@ -157,7 +163,19 @@ export function EmployersCompany({ userRow }: any) {
       id: 6,
       name: 'Ações',
       sortable: true,
-      selector: (row: any) => <More userRow={row} onBlock={() => onBlock(row)} onEdit={() => onEdit(row)} />,
+      selector: (row: any) =>
+        <Box>
+          <ButtonTooltip><MdMoreVert /></ButtonTooltip>
+          <div className="dropdown">
+            <button onClick={() => onEdit(row)}>Editar detalhes</button>
+            {
+              user.id !== userRow.id ?
+                <button onClick={() => onBlock(row)}>{userRow.is_active === 1 ? 'Bloquear funcionário' : 'Desbloquear funcionário'}</button>
+                :
+                ''
+            }
+          </div>
+        </Box>,
       reorder: true
     },
   ]
@@ -207,3 +225,5 @@ export function EmployersCompany({ userRow }: any) {
     </Wrapper>
   )
 }
+
+

@@ -77,8 +77,6 @@ export function Companies() {
   const { setUserDataList } = useUser()
   const { user } = useAuth();
 
-
-
   const navigate = useNavigate()
 
   const headers = [
@@ -144,8 +142,6 @@ export function Companies() {
     setIsModalOpen(value => !value)
   }
 
-
-
   async function handleUpdateCompany() {
     const data = await CustomerServices.updateCustomer(currentCompany.id, { ...currentCompany, status: '1' })
     if (data) {
@@ -162,7 +158,6 @@ export function Companies() {
   function handleOpenModalBlock() {
     setIsModalBlockOpen((oldValue) => !oldValue)
   }
-
 
   async function handleBlockCompany() {
     if (currentCompany.status === 1) {

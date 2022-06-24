@@ -174,7 +174,7 @@ export function Consultants() {
 
   return (
     <LayoutLogged>
-      <Modal
+      {/* <Modal
         style={customStyleModal}
         isOpen={isModalOpen}
         ariaHideApp={false}
@@ -215,12 +215,12 @@ export function Consultants() {
           <Button small type="button" onClick={handleBlockCompany} customColor="red" title={'Bloquear'} />
           <Button small type="button" onClick={handleOpenModalBlock} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
         </ModalBlockContent>
-      </Modal>
+      </Modal> */}
       <Wrapper>
         <div className="container">
           <Content>
             <h1>Consultores</h1>
-            <DataTable
+            {/* <DataTable
               columns={headers}
               data={customers}
               conditionalRowStyles={conditionalRowStyles}
@@ -230,7 +230,10 @@ export function Consultants() {
               expandableRowsComponent={({ data }) => <DataTableUserCustomer userRow={data} />}
               progressPending={pending}
               expandableIcon={{ collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" /> }}
-            />
+            /> */}
+            <Content>
+              <p>Página em construção 👩‍💻</p>
+            </Content>
           </Content>
         </div>
         <AddButtonWrapper>
