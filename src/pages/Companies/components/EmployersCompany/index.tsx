@@ -169,7 +169,7 @@ export function EmployersCompany({ userRow }: any) {
           <div className="dropdown">
             <button onClick={() => onEdit(row)}>Editar detalhes</button>
             {
-              user.id !== userRow.id ?
+              user.id !== row.id ?
                 <button onClick={() => onBlock(row)}>{userRow.is_active === 1 ? 'Bloquear funcionário' : 'Desbloquear funcionário'}</button>
                 :
                 ''
