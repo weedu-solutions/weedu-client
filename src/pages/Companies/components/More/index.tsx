@@ -7,8 +7,7 @@ interface Props {
   userRow: any;
 }
 
-export function More({ onEdit, onBlock, userRow}: Props) {
-  console.log(userRow)
+export function More({ onEdit, onBlock, userRow }: Props) {
   return (
     <Wrapper>
       <Button><MdMoreVert /></Button>

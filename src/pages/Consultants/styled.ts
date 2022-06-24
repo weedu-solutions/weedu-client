@@ -16,6 +16,11 @@ export const Content = styled.div`
   flex-direction: column;
   position: relative;
 
+  p {
+    margin-top: 20px;
+    font-size: 30px;
+  }
+
   h1 {
     font-weight: 900;
   }

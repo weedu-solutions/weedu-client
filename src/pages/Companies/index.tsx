@@ -17,6 +17,7 @@ import { Button } from '../../components/Button'
 import { IUserData } from "../../contexts/user"
 import { useUser } from '../../hooks/user'
 import { Notify, NotifyTypes } from "../../components/Notify"
+import { useAuth } from "../../hooks/auth"
 
 const conditionalRowStyles = [
   {
@@ -74,6 +75,8 @@ export function Companies() {
   const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
 
   const { setUserDataList } = useUser()
+  const { user } = useAuth();
+
   const navigate = useNavigate()
 
   const headers = [
@@ -138,8 +141,6 @@ export function Companies() {
     setCurrentCompany(currentCompanyRow)
     setIsModalOpen(value => !value)
   }
-
-
 
   async function handleUpdateCompany() {
     const data = await CustomerServices.updateCustomer(currentCompany.id, { ...currentCompany, status: '1' })
@@ -262,18 +263,28 @@ export function Companies() {
             </WrapperInputs>
 
             <ButtonsWrapper>
-              <Button
-                small
-                type="button"
-                customColor="red"
-                onClick={handleOpenModalBlock}
-                customSize="30%"
-                title={
+              {
+                user.id !== currentCompany.id ?
                   currentCompany.status === 1 ?
-                    'Bloquear'
-                    : 'Desbloquear'
-                }
-              />
+                    <Button
+                      small
+                      type="button"
+                      customColor={"#E71D36"}
+                      onClick={handleOpenModalBlock}
+                      customSize="30%"
+                      title={'Bloquear'}
+                    />
+                    :
+                    <Button
+                      small
+                      type="button"
+                      onClick={handleOpenModalBlock}
+                      customSize="30%"
+                      outlined
+                      title={'Desbloquear'}
+                    />
+                  : ''
+              }
               <Button
                 small
                 type="button"
@@ -312,7 +323,6 @@ export function Companies() {
                 </p>
               </>
           }
-
           <Button
             small
             type="button"
