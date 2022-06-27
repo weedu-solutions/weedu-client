@@ -28,6 +28,7 @@ export const ButtonWrapper = styled.div`
   justify-content: center;
   margin-top: 20px;
   padding-bottom: 30px;
+  justify-content: space-around;
 `
 
 export const Label = styled.label`

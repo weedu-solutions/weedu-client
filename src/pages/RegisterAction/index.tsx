@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -47,7 +48,7 @@ export function RegisterAction() {
   }
 
   const [dataForm, setDataForm] = useState<IDataForm>(initialForm)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const [isError, setIsError] = useState<boolean>(false)
   const { userDataList } = useUser()
   const navigate = useNavigate()

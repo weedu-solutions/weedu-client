@@ -18,6 +18,9 @@ import {
   ButtonTooltip
 } from "./styled"
 import { useAuth } from "../../../../hooks/auth"
+import { ButtonDefault } from "../../../../components/FormChakra/Button"
+import TableChildLoader from "../../../../components/Loaders/TableChildLoader"
+import { Center } from "@chakra-ui/react"
 
 const styles = {
   rows: {
@@ -51,11 +54,12 @@ export function EmployersCompany({ userRow }: any) {
   const { setUserDataForm, setUserDataList } = useUser()
   const { user } = useAuth();
 
-  const [userData, setUserData] = useState([])
-  const [currentUser, setCurrentUser] = useState({} as any)
-  const [pending, setPending] = useState<boolean>(false)
-  const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
-  const [isModalUnblockOpen, setIsModalUnblockOpen] = useState(false)
+  const [userData, setUserData] = useState([]);
+  const [currentUser, setCurrentUser] = useState({} as any);
+  const [pending, setPending] = useState<boolean>(false);
+  const [isModalBlockOpen, setIsModalBlockOpen] = useState(false);
+  const [isModalUnblockOpen, setIsModalUnblockOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   function compare(a: any, b: any) {
     if (a.id < b.id) return -1;
@@ -102,23 +106,30 @@ export function EmployersCompany({ userRow }: any) {
   }
 
   async function handleBlockUser() {
+    setIsLoading(true);
+
     try {
       await UserServices.blockUserCustomer(currentUser.id, { is_active: "0" })
       setIsModalBlockOpen(oldValue => !oldValue)
       Notify(NotifyTypes.SUCCESS, 'Usuário bloqueado com sucesso')
+      setIsLoading(false);
     } catch (error) {
       setIsModalBlockOpen(oldValue => !oldValue)
+      setIsLoading(false);
       Notify(NotifyTypes.ERROR, 'Algo deu errado, por favor tente novamente')
     }
   }
 
   async function handleUnblockUser() {
+    setIsLoading(true);
     try {
       await UserServices.blockUserCustomer(currentUser.id, { is_active: "1" })
       setIsModalUnblockOpen(oldValue => !oldValue)
+      setIsLoading(false);
       Notify(NotifyTypes.SUCCESS, 'Usuário desbloqueado com sucesso')
     } catch (error) {
       setIsModalUnblockOpen(oldValue => !oldValue)
+      setIsLoading(false);
       Notify(NotifyTypes.ERROR, 'Algo deu errado, por favor tente novamente')
     }
   }
@@ -170,7 +181,7 @@ export function EmployersCompany({ userRow }: any) {
             <button onClick={() => onEdit(row)}>Editar detalhes</button>
             {
               user.id !== row.id ?
-                <button onClick={() => onBlock(row)}>{userRow.is_active === 1 ? 'Bloquear funcionário' : 'Desbloquear funcionário'}</button>
+                <button onClick={() => onBlock(row)}>{row.is_active === 1 ? 'Bloquear funcionário' : 'Desbloquear funcionário'}</button>
                 :
                 ''
             }
@@ -195,8 +206,23 @@ export function EmployersCompany({ userRow }: any) {
         <ModalBlockContent>
           <h2>Bloquear funcionário</h2>
           <p>Tem certeza que deseja bloquear o funcionario <b>{currentUser.name}</b> ?</p>
-          <Button small type="button" onClick={handleBlockUser} customColor="red" title={'Bloquear'} />
-          <Button small type="button" onClick={handleCloseModal} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
+          <ButtonDefault
+            onClick={handleBlockUser}
+            backgroundColor={"#E71D36"}
+            width={'100%'}
+            height={'40px'}
+            loading={isLoading}
+            loadingText={'Bloquear'}
+            title={'Bloquear'}
+          />
+          <Button
+            small
+            type="button"
+            onClick={handleCloseModal}
+            customStyles="margin-top:20px;"
+            customColor="#646170"
+            title={'Cancelar'}
+          />
         </ModalBlockContent>
       </Modal>
       <Modal
@@ -206,21 +232,45 @@ export function EmployersCompany({ userRow }: any) {
         <ModalBlockContent>
           <h2>Desbloquear funcionário</h2>
           <p>Tem certeza que deseja desbloquear o funcionario <b>{currentUser.name}</b> ?</p>
-          <Button small type="button" onClick={handleUnblockUser} customColor={colors.primary.medium} title={'Desbloquear'} />
-          <Button small type="button" onClick={handleCloseModal} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
+          <ButtonDefault
+            onClick={handleUnblockUser}
+            backgroundColor={"#E71D36"}
+            width={'100%'}
+            height={'40px'}
+            loading={isLoading}
+            loadingText={'Desbloquear'}
+            title={'Desbloquear'}
+          />
+          <Button
+            small
+            type="button"
+            onClick={handleCloseModal}
+            customStyles="margin-top:20px;"
+            customColor="#646170"
+            title={'Cancelar'}
+          />
         </ModalBlockContent>
       </Modal>
       <div className="container">
         <div className="headers">
           <strong>Funcionários</strong>
-          {!pending && <button onClick={onAddEmployer}>Adicionar novo funcionários</button>}
+          {!pending && <button onClick={onAddEmployer}>Adicionar novo funcionário</button>}
         </div>
-        <DataTable
-          data={userData}
-          columns={headers}
-          progressPending={pending}
-          customStyles={styles}
-        />
+
+        {
+          !pending ?
+            userData.length > 1 ?
+              <DataTable
+                data={userData}
+                columns={headers}
+                customStyles={styles}
+              />
+              : <Center height='50px'>
+                <p>Você não possui funcionários cadastrados!</p>
+              </Center>
+            : <TableChildLoader />
+        }
+
       </div>
     </Wrapper>
   )

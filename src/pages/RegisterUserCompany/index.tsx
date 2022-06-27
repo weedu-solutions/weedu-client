@@ -1,13 +1,13 @@
 import { Label, CustomInput, Wrapper, ButtonWrapper } from './styled'
 import { InputText } from '../../components/InputText'
 import { LayoutRegister } from '../../components/LayoutRegister'
-import { Button } from '../../components/Button'
 import Select from 'react-select'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { UserServices } from '../../services/user'
 import { ROUTES } from '../../constants/routes'
 import { useUser } from '../../hooks/user'
+import { ButtonDefault } from '../../components/FormChakra/Button'
 
 export function RegisterUserCompany() {
   interface IDataForm {
@@ -34,6 +34,8 @@ export function RegisterUserCompany() {
   const navigate = useNavigate()
   const { id } = useParams()
   const { userDataList } = useUser()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const initialForm = {
     name: "",
@@ -65,7 +67,6 @@ export function RegisterUserCompany() {
 
   async function handleCreateUserCompany() {
     await UserServices.createUserCustomer(dataForm)
-    // if(data === "cpf_cnpj invalid") return setIsError(true)
     navigate(ROUTES.CUSTOMERS)
   }
 
@@ -129,9 +130,24 @@ export function RegisterUserCompany() {
           value={id}
           type="text"
         />
+
         <ButtonWrapper>
-          <Button customColor="#646170" onClick={() => navigate(-1)} customSize="40%" title={'Cancelar'} />
-          <Button onClick={handleCreateUserCompany} customStyles="margin-left:30px;" customSize="40%" title={'Cadastrar'} />
+          <ButtonDefault
+            onClick={() => navigate(-1)}
+            backgroundColor={'#646170'}
+            width={'40%'}
+            height={'50px'}
+            title={'Cancelar'}
+          />
+          <ButtonDefault
+            onClick={handleCreateUserCompany}
+            backgroundColor={'#7956F7'}
+            width={'40%'}
+            height={'50px'}
+            loading={isLoading}
+            loadingText={'Cadastrar'}
+            title={'Cadastrar'}
+          />
         </ButtonWrapper>
       </Wrapper>
     </LayoutRegister>

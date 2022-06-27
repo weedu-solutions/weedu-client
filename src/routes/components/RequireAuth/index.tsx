@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useMemo } from 'react'
 import decode from 'jwt-decode'
 
@@ -50,7 +51,7 @@ export const RequireAuth = ({
     }
 
     return roles.some(role => userRoles().includes(role));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [userRoles, exactRoles, roles]);
 
   if (!token) {

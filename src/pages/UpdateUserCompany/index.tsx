@@ -1,7 +1,6 @@
 import { Label, CustomInput, Wrapper, ButtonWrapper } from './styled'
 import { InputText } from '../../components/InputText'
 import { LayoutRegister } from '../../components/LayoutRegister'
-import { Button } from '../../components/Button'
 import Select from 'react-select'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -9,6 +8,7 @@ import { UserServices } from '../../services/user'
 import { ROUTES } from '../../constants/routes'
 import { useUser } from '../../hooks/user'
 import { Notify, NotifyTypes } from '../../components/Notify'
+import { ButtonDefault } from '../../components/FormChakra/Button'
 
 export function UpdateUserCompany() {
   interface IDataForm {
@@ -33,10 +33,6 @@ export function UpdateUserCompany() {
     }),
   }
 
-  const navigate = useNavigate()
-  const { id } = useParams()
-  const { userDataForm, userDataList } = useUser()
-
   const initialForm = {
     name: "",
     suname: "",
@@ -48,6 +44,15 @@ export function UpdateUserCompany() {
     maneger_id: ""
   }
 
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const { userDataForm, userDataList } = useUser()
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [dataForm, setDataForm] = useState<IDataForm>(initialForm)
+
+
+
   const options = [
     { label: 'Colaborador', value: '1' },
     { label: 'Gestor', value: '2' }
@@ -57,7 +62,6 @@ export function UpdateUserCompany() {
     return { label: user.name, value: String(user.user_type_id), id: user.id }
   }) as any
 
-  const [dataForm, setDataForm] = useState<IDataForm>(initialForm)
 
   useEffect(() => {
     setDataForm({ ...userDataForm, customer_id: [Number(id)] })
@@ -68,6 +72,8 @@ export function UpdateUserCompany() {
   async function handleUpdateUserCompany() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data } = await UserServices.updateUserCustomer(dataForm.id, dataForm);
+
+    setIsLoading(true);
 
     if (data) {
       Notify(NotifyTypes.SUCCESS, 'Dados alterados com sucesso!')
@@ -145,8 +151,22 @@ export function UpdateUserCompany() {
         />
 
         <ButtonWrapper>
-          <Button customColor="#646170" onClick={() => navigate(-1)} customSize="40%" title={'Cancelar'} />
-          <Button onClick={handleUpdateUserCompany} customStyles="margin-left:30px;" customSize="40%" title={'Editar'} />
+          <ButtonDefault
+            onClick={() => navigate(-1)}
+            backgroundColor={'#646170'}
+            width={'40%'}
+            height={'50px'}
+            title={'Cancelar'}
+          />
+          <ButtonDefault
+            onClick={handleUpdateUserCompany}
+            backgroundColor={'#7956F7'}
+            width={'40%'}
+            height={'50px'}
+            loading={isLoading}
+            loadingText={'Editar'}
+            title={'Editar'}
+          />
         </ButtonWrapper>
       </Wrapper>
     </LayoutRegister>
