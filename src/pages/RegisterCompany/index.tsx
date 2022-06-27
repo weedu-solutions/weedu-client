@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import { Wrapper, ButtonWrapper } from './styled'
 import { InputText } from '../../components/InputText'
 import { LayoutRegister } from '../../components/LayoutRegister'
-import { Button } from '../../components/Button'
 import { CustomerServices } from '../../services/customer'
 import { ROUTES } from '../../constants/routes'
 import { Notify, NotifyTypes } from '../../components/Notify'
+import { ButtonDefault } from '../../components/FormChakra/Button'
 
 export function RegisterCompany() {
 
@@ -35,16 +35,23 @@ export function RegisterCompany() {
     number_of_users: string;
   }
 
-  const [dataForm, setDataForm] = useState<IDataForm>(initialForm)
-  const [isError, setIsError] = useState<boolean>(false)
-  const navigate = useNavigate()
+  const [dataForm, setDataForm] = useState<IDataForm>(initialForm);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   async function handleCreateCompany() {
     const { data } = await CustomerServices.createCustomer(dataForm)
-    if (data === "cpf_cnpj invalid") return setIsError(true)
+    setIsLoading(true);
+
+    if (data === "cpf_cnpj invalid") {
+      setIsLoading(false);
+      return setIsError(true)
+    }
 
     if (data) {
       navigate(ROUTES.CUSTOMERS)
+      setIsLoading(false);
       Notify(NotifyTypes.SUCCESS, 'Empresa cadastrada com sucesso!')
     }
 
@@ -113,8 +120,22 @@ export function RegisterCompany() {
           type="text"
         />
         <ButtonWrapper>
-          <Button customColor="#646170" customSize="40%" onClick={() => navigate(-1)} title={'Cancelar'} />
-          <Button customStyles="margin-left:30px;" onClick={handleCreateCompany} customSize="40%" title={'Cadastrar'} />
+          <ButtonDefault
+            onClick={() => navigate(-1)}
+            backgroundColor={'#646170'}
+            width={'40%'}
+            height={'50px'}
+            title={'Cancelar'}
+          />
+          <ButtonDefault
+            onClick={handleCreateCompany}
+            backgroundColor={'#7956F7'}
+            width={'40%'}
+            height={'50px'}
+            loading={isLoading}
+            loadingText={'Cadastrar'}
+            title={'Cadastrar'}
+          />
         </ButtonWrapper>
       </Wrapper>
     </LayoutRegister>

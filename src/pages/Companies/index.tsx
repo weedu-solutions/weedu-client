@@ -18,6 +18,8 @@ import { IUserData } from "../../contexts/user"
 import { useUser } from '../../hooks/user'
 import { Notify, NotifyTypes } from "../../components/Notify"
 import { useAuth } from "../../hooks/auth"
+import { ButtonDefault } from "../../components/FormChakra/Button"
+import TableLoader from "../../components/Loaders/TableLoader"
 
 const conditionalRowStyles = [
   {
@@ -66,13 +68,14 @@ const customStyleModalBlock = {
 }
 
 export function Companies() {
-  const [companies, setCompanies] = useState<any>([])
-  const [currentCompany, setCurrentCompany] = useState<any>({})
-  const [pending, setPending] = useState<boolean>(false)
+  const [companies, setCompanies] = useState<any>([]);
+  const [currentCompany, setCurrentCompany] = useState<any>({});
+  const [pending, setPending] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isModalBlockOpen, setIsModalBlockOpen] = useState(false)
+  const [isAbleToEdit, setIsAbleToEdit] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalBlockOpen, setIsModalBlockOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { setUserDataList } = useUser()
   const { user } = useAuth();
@@ -161,21 +164,31 @@ export function Companies() {
 
   async function handleBlockCompany() {
     if (currentCompany.status === 1) {
+      setIsLoading(true);
+
       try {
-        await CustomerServices.blockCustomer(currentCompany.id, { active: 0 })
+        await CustomerServices.blockCustomer(currentCompany.id, { active: "0" })
         setIsModalBlockOpen(oldValue => !oldValue)
+        setIsModalOpen(value => !value)
+        setIsLoading(false);
         Notify(NotifyTypes.SUCCESS, 'Usuário Bloqueado com sucesso!')
       } catch (error) {
         setIsModalBlockOpen(oldValue => !oldValue)
+        setIsModalOpen(value => !value)
         Notify(NotifyTypes.ERROR, 'Algo deu errado, por favor tente novamente.')
       }
     } else {
+      setIsLoading(true);
+
       try {
         await CustomerServices.blockCustomer(currentCompany.id, { active: 1 })
         setIsModalBlockOpen(oldValue => !oldValue)
+        setIsModalOpen(value => !value)
+        setIsLoading(false);
         Notify(NotifyTypes.SUCCESS, 'Usuário Desbloqueado com sucesso!')
       } catch (error) {
         setIsModalBlockOpen(oldValue => !oldValue)
+        setIsModalOpen(value => !value)
         Notify(NotifyTypes.ERROR, 'Algo deu errado, por favor tente novamente.')
       }
     }
@@ -266,12 +279,12 @@ export function Companies() {
               {
                 user.id !== currentCompany.id ?
                   currentCompany.status === 1 ?
-                    <Button
-                      small
-                      type="button"
-                      customColor={"#E71D36"}
+                    <ButtonDefault
                       onClick={handleOpenModalBlock}
-                      customSize="30%"
+                      backgroundColor={"#E71D36"}
+                      width={'30%'}
+                      height={'40px'}
+                      loadingText={'Bloquear'}
                       title={'Bloquear'}
                     />
                     :
@@ -323,35 +336,55 @@ export function Companies() {
                 </p>
               </>
           }
-          <Button
-            small
-            type="button"
+          <ButtonDefault
             onClick={handleBlockCompany}
-            customColor="red"
-            title={
+            backgroundColor={
+              currentCompany.status === 1 ?
+                "#E71D36"
+                : '#7956F7'
+            }
+            loading={isLoading}
+            width={'100%'}
+            height={'40px'}
+            loadingText={
               currentCompany.status === 1 ?
                 'Bloquear'
                 : 'Desbloquear'
             }
+            title={currentCompany.status === 1 ?
+              'Bloquear'
+              : 'Desbloquear'}
           />
-          <Button small type="button" onClick={handleOpenModalBlock} customStyles="margin-top:20px;" customColor="#646170" title={'Cancelar'} />
+          <Button
+            small
+            type="button"
+            onClick={handleOpenModalBlock}
+            customStyles="margin-top:20px;"
+            customColor="#646170"
+            title={'Cancelar'}
+          />
         </ModalBlockContent>
       </Modal>
       <Wrapper>
         <div className="container">
           <Content>
             <h1>Empresas</h1>
-            <DataTable
-              columns={headers}
-              data={companies}
-              conditionalRowStyles={conditionalRowStyles}
-              defaultSortFieldId={1}
-              expandableRows
-              customStyles={styles}
-              expandableRowsComponent={({ data }) => <EmployersCompany userRow={data} />}
-              progressPending={pending}
-              expandableIcon={{ collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" /> }}
-            />
+            {
+              !pending ?
+                <DataTable
+                  columns={headers}
+                  data={companies}
+                  conditionalRowStyles={conditionalRowStyles}
+                  defaultSortFieldId={1}
+                  expandableRows
+                  customStyles={styles}
+                  expandableRowsComponent={({ data }) => <EmployersCompany userRow={data} />}
+                  expandableIcon={{ collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" /> }}
+                />
+                :
+                <TableLoader />
+            }
+
           </Content>
         </div>
         <AddButtonWrapper>

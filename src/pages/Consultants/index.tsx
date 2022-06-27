@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import DataTable from "react-data-table-component"
 import { useNavigate } from 'react-router-dom'
 import Modal from 'react-modal'
