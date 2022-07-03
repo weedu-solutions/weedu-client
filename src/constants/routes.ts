@@ -9,4 +9,5 @@ export enum ROUTES {
   REGISTER_USER_COMPANY = '/register-user-company',
   UPDATE_USER_COMPANY = '/update-user-company',
   ACTIONS = '/actions',
+  CREATE_ACTION = '/create-action',
 }

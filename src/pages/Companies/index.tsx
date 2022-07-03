@@ -20,6 +20,7 @@ import { Notify, NotifyTypes } from "../../components/Notify"
 import { useAuth } from "../../hooks/auth"
 import { ButtonDefault } from "../../components/FormChakra/Button"
 import TableLoader from "../../components/Loaders/TableLoader"
+import { FormLabel } from "@chakra-ui/react"
 
 const conditionalRowStyles = [
   {
@@ -208,7 +209,12 @@ export function Companies() {
         ariaHideApp={false}
       >
         <ModalContent>
-          <h2>Editar empresa</h2>
+          <FormLabel
+            fontWeight="700"
+            fontSize="24px"
+          >
+            Editar empresa
+          </FormLabel>
           <button className="closeButton" onClick={() => setIsModalOpen(value => !value)}><MdClose size="18" /></button>
           <div className="hr"></div>
           <form>
@@ -282,37 +288,40 @@ export function Companies() {
                     <ButtonDefault
                       onClick={handleOpenModalBlock}
                       backgroundColor={"#E71D36"}
-                      width={'30%'}
+                      width={'25%'}
                       height={'40px'}
                       loadingText={'Bloquear'}
                       title={'Bloquear'}
                     />
                     :
-                    <Button
-                      small
-                      type="button"
+                    <ButtonDefault
                       onClick={handleOpenModalBlock}
-                      customSize="30%"
-                      outlined
+                      backgroundColor={"#7956F7"}
+                      width={'25%'}
+                      height={'40px'}
+                      loadingText={'Desbloquear'}
                       title={'Desbloquear'}
                     />
                   : ''
               }
-              <Button
-                small
-                type="button"
+
+              <ButtonDefault
+                title={'Adicionar novo funcionário'}
                 onClick={() => navigate(`${ROUTES.REGISTER_USER_COMPANY}/${currentCompany.id}`)}
-                customSize="60%"
-                customStyles="margin-left:40px;margin-right:10px;"
-                outlined title={'Adicionar novo funcionário'}
+                backgroundColor={" #DDD5FD"}
+                color={"#7956F7"}
+                border="2px solid #7956F7"
+                width={'50%'}
+                height={'40px'}
               />
-              <Button
-                small
-                type="button"
-                customSize="40%"
+              <ButtonDefault
                 onClick={handleUpdateCompany}
+                backgroundColor={"#7956F7"}
+                width={'20%'}
+                height={'40px'}
                 title={'Atualizar'}
               />
+
             </ButtonsWrapper>
           </form>
         </ModalContent>
@@ -368,7 +377,12 @@ export function Companies() {
       <Wrapper>
         <div className="container">
           <Content>
-            <h1>Empresas</h1>
+            <FormLabel
+              fontWeight="700"
+              fontSize="32px"
+            >
+              Empresas
+            </FormLabel>
             {
               !pending ?
                 <DataTable

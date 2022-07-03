@@ -17,6 +17,7 @@ import { MdClose } from "react-icons/md"
 import { Button } from '../../components/Button'
 import { IUserData } from "../../contexts/user"
 import { useUser } from '../../hooks/user'
+import { FormLabel } from "@chakra-ui/react"
 
 const conditionalRowStyles = [
   {
@@ -220,7 +221,12 @@ export function Consultants() {
       <Wrapper>
         <div className="container">
           <Content>
-            <h1>Consultores</h1>
+            <FormLabel
+              fontWeight="700"
+              fontSize="32px"
+            >
+              Consultores
+            </FormLabel>
             {/* <DataTable
               columns={headers}
               data={customers}
