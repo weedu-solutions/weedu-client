@@ -15,6 +15,7 @@ interface IUser {
   updated_at: Date | string;
   user_type_id: number;
   suname: string;
+  is_active: number;
 }
 
 interface IAuthState {

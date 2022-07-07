@@ -45,7 +45,8 @@ export function ButtonDefault({
             fontWeight='700'
             letterSpacing='0.5px'
             type={type}
-            transition="0.5"
+            transition="0.1"
+
         >
             {title}
         </Button>

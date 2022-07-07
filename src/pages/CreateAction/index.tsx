@@ -6,16 +6,18 @@ import { useForm } from 'react-hook-form'
 import { Api } from "../../services/api";
 import { AxiosResponse } from "axios";
 import { useAuth } from "../../hooks/auth";
+import { Notify, NotifyTypes } from "../../components/Notify";
+import { ROUTES } from "../../constants/routes";
 
 import {
     FormLabel,
     FormControl,
     Input,
     Stack,
-    Box,
+    Box
 } from '@chakra-ui/react'
-import { Notify, NotifyTypes } from "../../components/Notify";
-import { ROUTES } from "../../constants/routes";
+
+
 interface IRequest {
     problem?: string;
     why_1?: string;
@@ -34,6 +36,7 @@ interface IRequest {
 
 export function CreateAction() {
     const { user } = useAuth();
+
     const navigate = useNavigate()
     const {
         handleSubmit,
@@ -55,20 +58,26 @@ export function CreateAction() {
         preview_end_date,
         observation
     }: IRequest) => {
-        await Api.post('/api/auth/plan', {
+        await Api.post('/auth/plan', {
             problem,
+            what,
+            how,
+            who,
             why_1,
             why_2,
             why_3,
             why_4,
             why_5,
-            what,
-            how,
-            who,
             preview_init_date,
             preview_end_date,
+            init_date: "",
+            end_date: "",
             observation,
-            user_id: user.user_type_id
+            user_id: user.id,
+            customer_id: user.user_type_id,
+            where: "O",
+            status: 1,
+            is_active: user.is_active
         })
             .then((res: AxiosResponse) => {
                 Notify(NotifyTypes.SUCCESS, 'Plano de ação criado com sucesso!')
@@ -78,6 +87,7 @@ export function CreateAction() {
                 Notify(NotifyTypes.ERROR, 'Não foi possível criar um Plano de ação.')
             });
     }
+
 
     return (
         <LayoutRegister>
@@ -111,9 +121,7 @@ export function CreateAction() {
                             <Input
                                 id='why_1'
                                 placeholder='Informe o que será feito'
-                                {...register('why_1', {
-                                    required: 'O campo "Porque 1" não pode ser vazio.',
-                                })}
+                                {...register('why_1')}
                                 focusBorderColor={errors.why_1 ? "#E71D36" : "#7956F7"}
                                 h="56px"
                                 fontSize="16px"
@@ -268,7 +276,6 @@ export function CreateAction() {
 
                         <Box mt="20px">
                             <Stack direction={['column', 'row']}>
-
                                 <Box w="50%">
                                     <FormLabel htmlFor='preview_init_date'>Início Previsto (When?)</FormLabel>
                                     <Input
@@ -276,6 +283,10 @@ export function CreateAction() {
                                         placeholder='00/00/0000'
                                         {...register('preview_init_date', {
                                             required: 'O campo "Início previsto" nao pode ser vazio.',
+                                            pattern: {
+                                                value: /^\d{2}\/\d{2}\/\d{4}$/,
+                                                message: "A data precisa ser no formato DD/MM/AAAA."
+                                            }
                                         })}
                                         focusBorderColor={errors.preview_init_date ? "#E71D36" : "#7956F7"}
                                         h="56px"
@@ -297,7 +308,11 @@ export function CreateAction() {
                                         id='preview_end_date'
                                         placeholder='00/00/0000'
                                         {...register('preview_end_date', {
-                                            required: 'O campo "Fim previsto" não pode ser vazio.'
+                                            required: 'O campo "Fim previsto" não pode ser vazio.',
+                                            pattern: {
+                                                value: /^\d{2}\/\d{2}\/\d{4}$/,
+                                                message: "A data precisa ser no formato DD/MM/AAAA."
+                                            }
                                         })}
                                         focusBorderColor={errors.preview_end_date ? "#E71D36" : "#7956F7"}
                                         h="56px"
@@ -357,7 +372,6 @@ export function CreateAction() {
 
                     </ButtonWrapper>
                 </form>
-
             </Wrapper>
         </LayoutRegister >
     );
