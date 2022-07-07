@@ -17,7 +17,11 @@ export const Content = styled.div`
   position: relative;
 
   h1 {
-    font-weight: 900;
+    font-weight: 600;
+    font-family: 'Inter';
+    font-style: normal;
+    font-size: 32px;
+    color: #1E163E;
   }
 `
 
@@ -28,7 +32,6 @@ export const ButtonsWrapper = styled.div`
   justify-content: center;
   margin-top: 20px;
   padding-bottom: 30px;
-  justify-content: space-between;
 `
 
 export const AddButtonWrapper = styled.div`
@@ -64,6 +67,7 @@ export const TextUnBlock = styled.p`
 export const ModalContent = styled.div`
   padding: 15px;
   display: flex;
+  max-width: 500px;
   justify-content: center;
   align-items: center;
   flex-direction: column;

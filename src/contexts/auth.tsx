@@ -13,6 +13,9 @@ interface IUser {
   active: string;
   created_at: Date | string;
   updated_at: Date | string;
+  user_type_id: number;
+  suname: string;
+  is_active: number;
 }
 
 interface IAuthState {
@@ -41,8 +44,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<IAuthState>(() => {
-  const token = localStorage.getItem('token');
-  const user = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
 
     if (token && user) {
       return { token, user: JSON.parse(user) };
@@ -52,35 +55,35 @@ export const AuthProvider: React.FC = ({ children }) => {
   });
 
   const signIn = async (credentials: ICredentials) => {
-      try {
-        setLoading(loading => !loading);
-        const { data } = await Api.post('/login', credentials);
-        setLoading(loading => !loading);
-        if(data.error) return setError(data.error);
-        setError("");
-        const { access_token, user } = data;
-        localStorage.setItem('token', access_token);
-        localStorage.setItem('user', JSON.stringify(user));
-        setData({
-          token: access_token,
-          user,
-        });
-        Notify(NotifyTypes.SUCCESS, 'Login realizado com sucesso')
-        setTimeout(() => {
-          const route = loginRedirect(user.user_type_id)
-          navigate(route);
-          window.location.reload();
-        }, 2000)
-      } catch (error: any) {
-        Notify(NotifyTypes.ERROR, 'Erro ao efetuar login, por favor tente novamente ou fale com o suporte')
-        setLoading(loading => !loading);
-        setError(error.response.data.error);
-        if(error.response.data.error === "Usuário inativo") {
-          navigate(ROUTES.INACTIVE);
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-        }
+    try {
+      setLoading(loading => !loading);
+      const { data } = await Api.post('/login', credentials);
+      setLoading(loading => !loading);
+      if (data.error) return setError(data.error);
+      setError("");
+      const { access_token, user } = data;
+      localStorage.setItem('token', access_token);
+      localStorage.setItem('user', JSON.stringify(user));
+      setData({
+        token: access_token,
+        user,
+      });
+      Notify(NotifyTypes.SUCCESS, 'Login realizado com sucesso')
+      setTimeout(() => {
+        const route = loginRedirect(user.user_type_id)
+        navigate(route);
+        window.location.reload();
+      }, 2000)
+    } catch (error: any) {
+      Notify(NotifyTypes.ERROR, 'Erro ao efetuar login, por favor tente novamente ou fale com o suporte')
+      setLoading(loading => !loading);
+      setError(error.response.data.error);
+      if (error.response.data.error === "Usuário inativo") {
+        navigate(ROUTES.INACTIVE);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
       }
+    }
   };
 
   const recover = async (email: ICredentials) => {
@@ -88,7 +91,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       setLoading(loading => !loading);
       const { data } = await Api.post('/password/email', email);
       console.log(data)
-      if(data.error) return setRecoverError(data.error);
+      if (data.error) return setRecoverError(data.error);
       navigate(ROUTES.RECOVER);
     } catch (error: any) {
       setLoading(loading => !loading);

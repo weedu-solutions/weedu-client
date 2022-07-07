@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/react'
 
 interface IButtonDefaultProps {
     color?: string;
-    onClick: any;
+    onClick?: any;
     backgroundColor: string;
     border?: string;
     borderColor?: string;
@@ -11,6 +11,7 @@ interface IButtonDefaultProps {
     loading?: boolean;
     title: string;
     loadingText?: string;
+    type?: "button" | "submit" | "reset" | undefined;
 }
 
 
@@ -24,7 +25,8 @@ export function ButtonDefault({
     height,
     loading,
     title,
-    loadingText
+    loadingText,
+    type
 }: IButtonDefaultProps) {
 
     return (
@@ -40,8 +42,11 @@ export function ButtonDefault({
             w={width}
             h={height}
             fontSize='14px'
-            fontWeight='500'
+            fontWeight='700'
             letterSpacing='0.5px'
+            type={type}
+            transition="0.1"
+
         >
             {title}
         </Button>

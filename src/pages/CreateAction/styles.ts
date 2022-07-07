@@ -28,21 +28,7 @@ export const ButtonWrapper = styled.div`
   justify-content: center;
   margin-top: 20px;
   padding-bottom: 30px;
+  justify-content: space-around;
 `
 
-export const InputWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
 
-export const Label = styled.label`
-  font-weight: 600;
-  margin-bottom: 10px;
-  display: block;
-`
-
-export const CustomInput = styled.div`
-  margin-bottom: 20px;
-`
