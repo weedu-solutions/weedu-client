@@ -8,6 +8,7 @@ import { AxiosResponse } from "axios";
 import { useAuth } from "../../hooks/auth";
 import { Notify, NotifyTypes } from "../../components/Notify";
 import { ROUTES } from "../../constants/routes";
+import IActions from "../../interfaces/actions";
 
 import {
     FormLabel,
@@ -16,22 +17,6 @@ import {
     Stack,
     Box
 } from '@chakra-ui/react'
-
-
-interface IRequest {
-    problem?: string;
-    why_1?: string;
-    why_2?: string;
-    why_3?: string;
-    why_4?: string;
-    why_5?: string;
-    what?: string;
-    how?: string;
-    who?: string;
-    preview_init_date?: string;
-    preview_end_date?: string;
-    observation?: string;
-}
 
 
 export function CreateAction() {
@@ -57,7 +42,7 @@ export function CreateAction() {
         preview_init_date,
         preview_end_date,
         observation
-    }: IRequest) => {
+    }: IActions) => {
         await Api.post('/auth/plan', {
             problem,
             what,
