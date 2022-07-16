@@ -19,7 +19,7 @@ export function Actions() {
             <h1>{user.name} {user.suname}</h1>
           </Content>
           <Divider orientation='horizontal' bgColor="#7A778A" />
-          <TableActions></TableActions>
+          <TableActions />
         </div>
 
         <AddButtonWrapper>

@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { ButtonDefault } from "../../components/FormChakra/Button";
-import { LayoutRegister } from "../../components/LayoutRegister";
+import { ButtonDefault } from "../../../components/FormChakra/Button";
+import { LayoutRegister } from "../../../components/LayoutRegister";
 import { Wrapper, ButtonWrapper } from "./styles";
 import { useForm } from 'react-hook-form'
-import { Api } from "../../services/api";
+import { Api } from "../../../services/api";
 import { AxiosResponse } from "axios";
-import { useAuth } from "../../hooks/auth";
-import { Notify, NotifyTypes } from "../../components/Notify";
-import { ROUTES } from "../../constants/routes";
-import IActions from "../../interfaces/actions";
+import { useAuth } from "../../../hooks/auth";
+import { Notify, NotifyTypes } from "../../../components/Notify";
+import { ROUTES } from "../../../constants/routes";
+import IActions from "../../../interfaces/actions";
 
 import {
     FormLabel,
@@ -27,7 +27,7 @@ export function CreateAction() {
         handleSubmit,
         register,
         formState: { errors, isSubmitting },
-    } = useForm()
+    } = useForm();
 
     const onSubmit = async ({
         problem,
@@ -354,7 +354,6 @@ export function CreateAction() {
                             title={'Confirmar'}
                             type="submit"
                         />
-
                     </ButtonWrapper>
                 </form>
             </Wrapper>

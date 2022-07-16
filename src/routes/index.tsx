@@ -18,8 +18,9 @@ import {
 } from '../pages'
 
 import '../styles.css'
-import { CreateAction } from "../pages/CreateAction"
+import { CreateAction } from "../pages/Actions/CreateAction"
 import { ChakraProvider } from '@chakra-ui/react'
+import { ModalSeeDetails } from "../pages/Actions/Modals/ModalSeeDetails"
 
 export function MyRoutes() {
   return (
