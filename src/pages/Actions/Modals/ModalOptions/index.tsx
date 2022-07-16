@@ -27,7 +27,7 @@ export function ModalOptions({
             </Button>
             <Button mt="10px" width="100%" onClick={handleOpenModalDisableAction}>
                 {
-                    action?.is_active === 0 ?
+                    action?.is_active === 1 ?
                         "Desativar ação"
                         : "Ativar ação"
                 }

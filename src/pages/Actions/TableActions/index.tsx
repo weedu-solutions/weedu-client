@@ -6,12 +6,9 @@ import { TagTable } from "../../../components/TagTable";
 import Modal from 'react-modal'
 import { ModalBlockContent, MyButton } from "../styles";
 import moreIcon from "../../../assets/more.svg";
-import { Button } from "@chakra-ui/react"
 import { ModalDisableAction } from "../Modals/ModalDisableAction";
 import { ModalSeeDetails } from "../Modals/ModalSeeDetails";
 import { ModalStartAction } from "../Modals/ModalStartAction";
-import { act } from "react-dom/test-utils";
-import { AnyAaaaRecord } from "dns";
 import IActions from "../../../interfaces/actions";
 import { ModalOptions } from "../Modals/ModalOptions";
 
@@ -100,15 +97,18 @@ export function TableActions() {
     }
 
     function handleOpenModalStartAction() {
-        setIsModalStartAction((oldValue) => !oldValue)
+        setIsModalStartAction((oldValue) => !oldValue);
+        setIsModalOpen(false);
     }
 
     function handleOpenModalSeeDetails() {
-        setIsSeDetails((oldValue) => !oldValue)
+        setIsSeDetails((oldValue) => !oldValue);
+        setIsModalOpen(false);
     }
 
     function handleOpenModalDisableAction() {
-        setIsModalDisableAction((oldValue) => !oldValue)
+        setIsModalDisableAction((oldValue) => !oldValue);
+        setIsModalOpen(false);
     }
 
     const headers = [
@@ -171,7 +171,7 @@ export function TableActions() {
         }
 
         getData()
-    }, []);
+    }, [setAction, action]);
 
     return (
         <>
