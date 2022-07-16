@@ -43,10 +43,9 @@ export function ButtonDefault({
             h={height}
             fontSize='14px'
             fontWeight='700'
-            letterSpacing='0.5px'
+            // letterSpacing='0.5px'
             type={type}
             transition="0.1"
-
         >
             {title}
         </Button>
