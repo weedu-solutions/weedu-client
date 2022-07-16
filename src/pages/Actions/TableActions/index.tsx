@@ -6,13 +6,11 @@ import { TagTable } from "../../../components/TagTable";
 import Modal from 'react-modal'
 import { ModalBlockContent, MyButton } from "../styles";
 import moreIcon from "../../../assets/more.svg";
-import { Button } from "@chakra-ui/react"
 import { ModalDisableAction } from "../Modals/ModalDisableAction";
 import { ModalSeeDetails } from "../Modals/ModalSeeDetails";
 import { ModalStartAction } from "../Modals/ModalStartAction";
-import { act } from "react-dom/test-utils";
-import { AnyAaaaRecord } from "dns";
 import IActions from "../../../interfaces/actions";
+import { ModalOptions } from "../Modals/ModalOptions";
 
 const conditionalRowStyles = [
     {
@@ -99,15 +97,18 @@ export function TableActions() {
     }
 
     function handleOpenModalStartAction() {
-        setIsModalStartAction((oldValue) => !oldValue)
+        setIsModalStartAction((oldValue) => !oldValue);
+        setIsModalOpen(false);
     }
 
     function handleOpenModalSeeDetails() {
-        setIsSeDetails((oldValue) => !oldValue)
+        setIsSeDetails((oldValue) => !oldValue);
+        setIsModalOpen(false);
     }
 
     function handleOpenModalDisableAction() {
-        setIsModalDisableAction((oldValue) => !oldValue)
+        setIsModalDisableAction((oldValue) => !oldValue);
+        setIsModalOpen(false);
     }
 
     const headers = [
@@ -170,7 +171,7 @@ export function TableActions() {
         }
 
         getData()
-    }, []);
+    }, [setAction, action]);
 
     return (
         <>
@@ -180,18 +181,13 @@ export function TableActions() {
                 ariaHideApp={false}
             >
                 <ModalBlockContent>
-                    <Button mt="10px" width="100%" onClick={handleOpenModalStartAction}>
-                        Começar ação
-                    </Button>
-                    <Button mt="10px" width="100%" onClick={handleOpenModalSeeDetails}>
-                        Ver detalhes
-                    </Button>
-                    <Button mt="10px" width="100%" onClick={handleOpenModalDisableAction}>
-                        Desativar ação
-                    </Button>
-                    <Button mt="10px" width="100%" colorScheme='red' onClick={handleModal}>
-                        Cancel
-                    </Button>
+                    <ModalOptions
+                        handleOpenModalStartAction={handleOpenModalStartAction}
+                        handleOpenModalSeeDetails={handleOpenModalSeeDetails}
+                        handleModal={handleModal}
+                        handleOpenModalDisableAction={handleOpenModalDisableAction}
+                        action={actionInfo}
+                    />
                 </ModalBlockContent>
             </Modal>
 
@@ -200,7 +196,10 @@ export function TableActions() {
                 style={styleModalStartAction}
             >
                 <ModalBlockContent>
-                    <ModalStartAction closeModal={handleOpenModalStartAction} />
+                    <ModalStartAction
+                        action={actionInfo}
+                        closeModal={handleOpenModalStartAction}
+                    />
                 </ModalBlockContent>
             </Modal>
 
@@ -221,7 +220,10 @@ export function TableActions() {
                 style={styleModalDisableAction}
             >
                 <ModalBlockContent>
-                    <ModalDisableAction closeModal={handleOpenModalDisableAction} />
+                    <ModalDisableAction
+                        action={actionInfo}
+                        closeModal={handleOpenModalDisableAction}
+                    />
                 </ModalBlockContent>
             </Modal>
             {

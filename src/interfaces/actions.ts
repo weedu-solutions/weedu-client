@@ -15,6 +15,7 @@ export default interface IActions {
     end_date?: string;
     status?: number;
     id?: string | number;
+    is_active?: number;
 }
 
 

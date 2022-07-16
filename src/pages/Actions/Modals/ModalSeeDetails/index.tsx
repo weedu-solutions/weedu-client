@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Footer, Form, Separator, SubTitle, Title, Wrapper, Toggle, Margin, ContainerButtons } from "./styles";
 import {
     FormLabel,
@@ -19,6 +20,7 @@ import { Notify, NotifyTypes } from "../../../../components/Notify";
 import { ROUTES } from "../../../../constants/routes";
 import { useNavigate } from "react-router-dom";
 import { ButtonDefault } from "../../../../components/FormChakra/Button";
+import { useEffect, useState } from "react";
 
 
 type ModalSeeDetailsProps = {
@@ -29,6 +31,19 @@ type ModalSeeDetailsProps = {
 export function ModalSeeDetails({ click, action }: ModalSeeDetailsProps) {
     const { user } = useAuth();
     const navigate = useNavigate()
+    const [isActiveAction, setIsActiveAction] = useState<boolean>(false);
+
+    function IsActiveAction() {
+        if (action?.is_active === 1) {
+            setIsActiveAction(true);
+        } else {
+            setIsActiveAction(false);
+        }
+    }
+
+    useEffect(() => {
+        IsActiveAction()
+    }, []);
 
     const {
         handleSubmit,
@@ -453,18 +468,22 @@ export function ModalSeeDetails({ click, action }: ModalSeeDetailsProps) {
                         <Footer>
                             <Margin>
                                 <Toggle>
+                                    <Switch
+                                        colorScheme='purple'
+                                        size='md'
+                                        isChecked={isActiveAction}
+                                    />
                                     {
-                                        action?.status === 1 ?
+                                        action?.is_active === 0 ?
                                             <>
-                                                <Switch colorScheme='purple' size='md' />
                                                 <span>Ação desativada</span>
                                             </>
 
                                             : <>
-                                                <Switch colorScheme='purple' size='md' />
                                                 <span>Ação ativada</span>
                                             </>
                                     }
+
                                 </Toggle>
                             </Margin>
 
