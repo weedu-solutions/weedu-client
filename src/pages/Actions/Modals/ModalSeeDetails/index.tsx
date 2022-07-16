@@ -454,7 +454,7 @@ export function ModalSeeDetails({ click, action }: ModalSeeDetailsProps) {
                             <Margin>
                                 <Toggle>
                                     {
-                                        action?.status === 1 ?
+                                        action?.is_active === 1 ?
                                             <>
                                                 <Switch colorScheme='purple' size='md' />
                                                 <span>Ação desativada</span>

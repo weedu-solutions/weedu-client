@@ -1,11 +1,13 @@
 import { Button } from "@chakra-ui/react";
 import { Separator, SubTitle, Title, Wrapper } from "./styles";
 import closeModalIcon from "../../../../assets/icon-close.svg";
+import IActions from "../../../../interfaces/actions";
 
 type ModalDisableActionProps = {
     closeModal: any;
+    action: IActions | undefined;
 }
-export function ModalStartAction({ closeModal }: ModalDisableActionProps) {
+export function ModalStartAction({ closeModal, action }: ModalDisableActionProps) {
 
 
     return (
