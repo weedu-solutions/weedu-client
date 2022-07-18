@@ -105,7 +105,7 @@ export function CreateAction() {
                             <FormLabel htmlFor='why_1'>Porque 1</FormLabel>
                             <Input
                                 id='why_1'
-                                placeholder='Informe o que será feito'
+                                placeholder='Informe o porque 1'
                                 {...register('why_1')}
                                 focusBorderColor={errors.why_1 ? "#E71D36" : "#7956F7"}
                                 h="56px"
@@ -124,7 +124,7 @@ export function CreateAction() {
                             <FormLabel htmlFor='why_2'>Porque 2</FormLabel>
                             <Input
                                 id='why_2'
-                                placeholder='Informe o que será feito'
+                                placeholder='Informe o porque 2'
                                 {...register('why_2')}
                                 focusBorderColor={errors.why_2 ? "#E71D36" : "#7956F7"}
                                 h="56px"
@@ -143,7 +143,7 @@ export function CreateAction() {
                             <FormLabel htmlFor='why_3'>Porque 3</FormLabel>
                             <Input
                                 id='why_3'
-                                placeholder='Informe o que será feito'
+                                placeholder='Informe o porque 3'
                                 {...register('why_3')}
                                 focusBorderColor={errors.why_3 ? "#E71D36" : "#7956F7"}
                                 h="56px"
@@ -162,7 +162,7 @@ export function CreateAction() {
                             <FormLabel htmlFor='why_4'>Porque 4</FormLabel>
                             <Input
                                 id='why_4'
-                                placeholder='Informe o que será feito'
+                                placeholder='Informe o porque 4'
                                 {...register('why_4')}
                                 focusBorderColor={errors.why_4 ? "#E71D36" : "#7956F7"}
                                 h="56px"
@@ -181,7 +181,7 @@ export function CreateAction() {
                             <FormLabel htmlFor='why_5'>Porque 5</FormLabel>
                             <Input
                                 id='why_5'
-                                placeholder='Informe o que será feito'
+                                placeholder='Informe o porque 5'
                                 {...register('why_5')}
                                 focusBorderColor={errors.why_5 ? "#E71D36" : "#7956F7"}
                                 h="56px"
@@ -221,7 +221,7 @@ export function CreateAction() {
                             <FormLabel htmlFor='how'>Como irá realizar esta ação (passo a passo)? (How?)</FormLabel>
                             <Input
                                 id='how'
-                                placeholder='Informe o que será feito'
+                                placeholder='Informe o passo a passo'
                                 {...register('how', {
                                     required: 'O campo "How?" não pode ser vazio.',
                                 })}
@@ -242,7 +242,7 @@ export function CreateAction() {
                             <FormLabel htmlFor='name'>Responsável pela ação (Who?)</FormLabel>
                             <Input
                                 id='who'
-                                placeholder='Informe o que será feito'
+                                placeholder='Informe o responsável pela ação'
                                 {...register('who', {
                                     required: 'O campo "Who?" não pode ser vazio.',
                                 })}
@@ -320,9 +320,7 @@ export function CreateAction() {
                             <Input
                                 id='observation'
                                 placeholder='Informe observações relevantes para execução do projeto'
-                                {...register('observation', {
-                                    // required: 'O campo Observações não pode ser vazio.',
-                                })}
+                                {...register('observation')}
                                 focusBorderColor={errors.observation ? "#E71D36" : "#7956F7"}
                                 h="56px"
                                 fontSize="16px"
