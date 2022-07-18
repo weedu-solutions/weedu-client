@@ -487,24 +487,15 @@ export function ModalSeeDetails({ click, action }: ModalSeeDetailsProps) {
                                 </Toggle>
                             </Margin>
 
-                            <ContainerButtons>
-                                <ButtonDefault
-                                    onClick={() => navigate(-1)}
-                                    backgroundColor={'#E71D36'}
-                                    width={'35%'}
-                                    height={'50px'}
-                                    title={'Recusar alteração'}
-                                />
-                                <ButtonDefault
-                                    backgroundColor={'#7956F7'}
-                                    width={'35%'}
-                                    height={'50px'}
-                                    loadingText={'Aprovar alteração'}
-                                    loading={isSubmitting}
-                                    title={'Aprovar alteração'}
-                                    type="submit"
-                                />
-                            </ContainerButtons>
+                            <ButtonDefault
+                                backgroundColor={'#7956F7'}
+                                width={'35%'}
+                                height={'50px'}
+                                loadingText={'Salvar alterações'}
+                                loading={isSubmitting}
+                                title={'Salvar alterações'}
+                                type="submit"
+                            />
                         </Footer>
                     </form>
 
