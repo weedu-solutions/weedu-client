@@ -11,6 +11,7 @@ import { ModalSeeDetails } from "../Modals/ModalSeeDetails";
 import { ModalStartAction } from "../Modals/ModalStartAction";
 import IActions from "../../../interfaces/actions";
 import { ModalOptions } from "../Modals/ModalOptions";
+import TableLoader from "../../../components/Loaders/TableLoader";
 
 const conditionalRowStyles = [
     {
@@ -88,7 +89,7 @@ export function TableActions() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState<any>([]);
     const [actionInfo, setActionInfo] = useState<IActions | undefined>();
-
+    const [pending, setPending] = useState<boolean>(false);
 
     const handleModal = async (row: any) => {
         setIsModalOpen(value => !value);
@@ -164,14 +165,15 @@ export function TableActions() {
     }
 
     useEffect(() => {
-
+        setPending(pending => !pending);
         const getData = async () => {
             const { data } = await ActionsServices.getAllActions()
+            setPending(pending => !pending);
             return setAction(data.data.sort(compare));
         }
 
         getData()
-    }, [setAction, action]);
+    }, [setAction]);
 
     return (
         <>
@@ -227,13 +229,15 @@ export function TableActions() {
                 </ModalBlockContent>
             </Modal>
             {
-                <DataTable
-                    columns={headers}
-                    data={action}
-                    conditionalRowStyles={conditionalRowStyles}
-                    defaultSortFieldId={1}
-                    customStyles={stylesTable}
-                />
+                !pending ?
+                    <DataTable
+                        columns={headers}
+                        data={action}
+                        conditionalRowStyles={conditionalRowStyles}
+                        defaultSortFieldId={1}
+                        customStyles={stylesTable}
+                    />
+                    : <TableLoader />
             }
         </>
     )
