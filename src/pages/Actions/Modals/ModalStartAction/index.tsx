@@ -1,7 +1,10 @@
 import { Button } from "@chakra-ui/react";
-import { Separator, SubTitle, Title, Wrapper } from "./styles";
+import { Separator, SubTitle, Title, Wrapper, CalendarCss } from "./styles";
 import closeModalIcon from "../../../../assets/icon-close.svg";
 import IActions from "../../../../interfaces/actions";
+import Calendar from 'react-calendar';
+import { useState } from "react";
+import 'react-calendar/dist/Calendar.css';
 
 type ModalDisableActionProps = {
     closeModal: any;
@@ -9,15 +12,16 @@ type ModalDisableActionProps = {
 }
 export function ModalStartAction({ closeModal, action }: ModalDisableActionProps) {
 
+    const [value, onChange] = useState(new Date());
 
     return (
         <>
             <Wrapper>
                 <Title>
-                    <div></div>
                     <div>
                         <h1>Começar ação</h1>
                     </div>
+
                     <div>
                         <Button colorScheme='#FFFFFF' onClick={closeModal}>
                             <img src={closeModalIcon} alt="Mais detalhes" />
@@ -32,6 +36,15 @@ export function ModalStartAction({ closeModal, action }: ModalDisableActionProps
                         Defina a data de início real da ação
                     </h1>
                 </SubTitle>
+
+                <CalendarCss>
+                    <Calendar
+                        onChange={onChange}
+                        value={value}
+                        activeStartDate={new Date(value)}
+
+                    />
+                </CalendarCss>
 
                 <Separator />
 
