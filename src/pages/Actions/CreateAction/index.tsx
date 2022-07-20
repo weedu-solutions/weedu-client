@@ -9,6 +9,7 @@ import { useAuth } from "../../../hooks/auth";
 import { Notify, NotifyTypes } from "../../../components/Notify";
 import { ROUTES } from "../../../constants/routes";
 import IActions from "../../../interfaces/actions";
+import moment from "moment";
 
 import {
     FormLabel,
@@ -28,6 +29,9 @@ export function CreateAction() {
 
     const handlePreviewInitDate = (event: any) => setPreview_init_date(event.target.value);
     const handlePreviewEndDate = (event: any) => setPreview_end_date(event.target.value);
+
+    let chosenInitDate = moment(preview_init_date).format('DD/MM/YYYY');
+    let chosenEndDate = moment(preview_end_date).format('DD/MM/YYYY');
 
     const navigate = useNavigate()
     const {
@@ -58,15 +62,14 @@ export function CreateAction() {
             why_3,
             why_4,
             why_5,
-            preview_init_date: preview_init_date,
-            preview_end_date: preview_end_date,
-            init_date: "",
-            end_date: "",
+            preview_init_date: chosenInitDate,
+            preview_end_date: chosenEndDate,
+            init_date: null,
+            end_date: null,
             observation,
             user_id: user.id,
             customer_id: user.user_type_id,
             where: "O",
-            status: 1,
             is_active: user.is_active
         })
             .then((res: AxiosResponse) => {
@@ -318,8 +321,10 @@ export function CreateAction() {
 
                             <AttentionMessage>
                                 {
-                                    preview_end_date < preview_init_date ?
-                                        "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
+                                    preview_end_date && preview_init_date ?
+                                        preview_end_date < preview_init_date ?
+                                            "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
+                                            : ""
                                         : ""
                                 }
                             </AttentionMessage>

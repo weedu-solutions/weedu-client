@@ -16,6 +16,7 @@ interface IUser {
   user_type_id: number;
   suname: string;
   is_active: number;
+  fantasy_name?: string;
 }
 
 interface IAuthState {
@@ -24,7 +25,7 @@ interface IAuthState {
 }
 
 export interface IAuthContextState {
-  user: IUser;
+  user: any;
   token: string;
   signIn(credentials: ICredentials): Promise<void>;
   signOut(): void;

@@ -36,10 +36,11 @@ export function TagTable({ prop }: ITagTable) {
                 {
                     prop === 1 ? "A iniciar" :
                         prop === 2 ? "Em execução" :
-                            prop === 2 ? "Executada" :
-                                prop === 2 ? "Atrasada - A iniciar" :
-                                    prop === 2 ? "Atrasada - A terminar" :
-                                        prop
+                            prop === 3 ? "Executada" :
+                                prop === 4 ? "Atrasada - A iniciar" :
+                                    prop === 5 ? "Atrasada - A terminar" :
+                                        prop === 6 ? "Desa" :
+                                            prop
                 }
             </Text>
         </Tag>

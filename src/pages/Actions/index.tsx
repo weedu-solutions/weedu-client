@@ -5,7 +5,7 @@ import { ROUTES } from "../../constants/routes";
 import { useAuth } from "../../hooks/auth";
 import { AddButtonWrapper, Content, Wrapper } from "./styles";
 import { TableActions } from "./TableActions";
-import { Divider } from '@chakra-ui/react'
+import { Divider, Tooltip } from '@chakra-ui/react'
 
 export function Actions() {
   const { user } = useAuth();
@@ -16,15 +16,16 @@ export function Actions() {
       <Wrapper>
         <div className="container">
           <Content>
-            <h1>{user.name} {user.suname}</h1>
+            <h1>{user.name} {user.suname} - {user.customer[0].fantasy_name}</h1>
           </Content>
           <Divider orientation='horizontal' bgColor="#7A778A" />
           <TableActions />
         </div>
-
-        <AddButtonWrapper>
-          <AddButton onClick={() => navigate(ROUTES.CREATE_ACTION)} />
-        </AddButtonWrapper>
+        <Tooltip label='Criar plano de ação' placement='top-end' hasArrow>
+          <AddButtonWrapper>
+            <AddButton onClick={() => navigate(ROUTES.CREATE_ACTION)} />
+          </AddButtonWrapper>
+        </Tooltip>
       </Wrapper>
     </LayoutLogged>
   )

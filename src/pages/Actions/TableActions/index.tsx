@@ -12,6 +12,7 @@ import { ModalStartAction } from "../Modals/ModalStartAction";
 import IActions from "../../../interfaces/actions";
 import { ModalOptions } from "../Modals/ModalOptions";
 import TableLoader from "../../../components/Loaders/TableLoader";
+import { Tooltip } from "@chakra-ui/react";
 
 
 const conditionalRowStyles = [
@@ -154,7 +155,8 @@ export function TableActions() {
             id: 6,
             name: '',
             sortable: true,
-            selector: (row: any) => <MyButton onClick={() => handleModal(row)}><img src={moreIcon} alt="Mais detalhes" /></MyButton>,
+            selector: (row: any) => <Tooltip label='Ver mais sobre o plano de ação' placement='right-end' hasArrow>
+                <MyButton onClick={() => handleModal(row)}><img src={moreIcon} alt="Mais detalhes" /></MyButton></Tooltip>,
             reorder: true
         }
     ]

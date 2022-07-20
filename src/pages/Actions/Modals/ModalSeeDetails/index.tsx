@@ -7,6 +7,7 @@ import { AxiosResponse } from "axios";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
 import { ButtonDefault } from "../../../../components/FormChakra/Button";
 import { useEffect, useState } from "react";
+import moment from "moment";
 
 import { Footer, Form, Separator, SubTitle, Title, Wrapper, Toggle, Margin } from "./styles";
 import {
@@ -19,6 +20,7 @@ import {
     Textarea,
     Switch
 } from '@chakra-ui/react'
+import { AttentionMessage } from "../../CreateAction/styles";
 
 type ModalSeeDetailsProps = {
     closeModal: any;
@@ -30,6 +32,16 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
     const [isActiveAction, setIsActiveAction] = useState<boolean>(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [iscloseModal, setIsCloseModal] = useState<any>();
+
+    const [preview_init_date, setPreview_init_date] = useState(action?.preview_init_date);
+    const [preview_end_date, setPreview_end_date] = useState(action?.preview_end_date);
+
+    const handlePreviewInitDate = (event: any) => setPreview_init_date(event.target.value);
+    const handlePreviewEndDate = (event: any) => setPreview_end_date(event.target.value);
+
+    let chosenInitDate = moment(preview_init_date).format('DD/MM/YYYY');
+    let chosenEndDate = moment(preview_end_date).format('DD/MM/YYYY');
+
 
     function IsActiveAction() {
         if (action?.is_active === 1) {
@@ -59,8 +71,8 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
         what,
         how,
         who,
-        preview_init_date,
-        preview_end_date,
+        // preview_init_date,
+        // preview_end_date,
         observation,
         init_date,
         end_date
@@ -75,15 +87,14 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
             why_3,
             why_4,
             why_5,
-            preview_init_date,
-            preview_end_date,
-            init_date,
-            end_date,
+            preview_init_date: chosenInitDate,
+            preview_end_date: chosenEndDate,
+            // init_date,
+            // end_date,
             observation,
             user_id: user.id,
             customer_id: user.user_type_id,
-            where: "O",
-            status: action?.status,
+            // where: "O",
             is_active: user.is_active
         })
             .then((res: AxiosResponse) => {
@@ -336,17 +347,16 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                             backgroundColor="#F4F2FC"
                                             borderColor="#F4F2FC"
                                             id='preview_init_date'
+                                            type="date"
                                             placeholder='00/00/0000'
                                             {...register('preview_init_date', {
                                                 required: 'O campo "Início previsto" nao pode ser vazio.',
-                                                pattern: {
-                                                    value: /^\d{2}\/\d{2}\/\d{4}$/,
-                                                    message: "A data precisa ser no formato DD/MM/AAAA."
-                                                }
                                             })}
                                             focusBorderColor={errors.preview_init_date ? "#E71D36" : "#7956F7"}
                                             h="56px"
                                             defaultValue={action?.preview_init_date}
+                                            value={preview_init_date}
+                                            onChange={handlePreviewInitDate}
                                             fontSize="16px"
                                         />
                                         <FormLabel
@@ -364,14 +374,12 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                             backgroundColor="#F4F2FC"
                                             borderColor="#F4F2FC"
                                             id='preview_end_date'
-                                            placeholder='00/00/0000'
+                                            type="date"
                                             {...register('preview_end_date', {
                                                 required: 'O campo "Fim previsto" não pode ser vazio.',
-                                                pattern: {
-                                                    value: /^\d{2}\/\d{2}\/\d{4}$/,
-                                                    message: "A data precisa ser no formato DD/MM/AAAA."
-                                                }
                                             })}
+                                            value={preview_end_date}
+                                            onChange={handlePreviewEndDate}
                                             focusBorderColor={errors.preview_end_date ? "#E71D36" : "#7956F7"}
                                             h="56px"
                                             defaultValue={action?.preview_end_date}
@@ -386,6 +394,16 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                         </FormLabel>
                                     </Box>
                                 </Stack>
+
+                                <AttentionMessage>
+                                    {
+                                        preview_end_date && preview_init_date ?
+                                            preview_end_date < preview_init_date ?
+                                                "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
+                                                : ""
+                                            : ""
+                                    }
+                                </AttentionMessage>
                             </Box>
 
                             <Box mt="20px">
@@ -400,7 +418,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                             {...register('init_date')}
                                             focusBorderColor={errors.init_date ? "#E71D36" : "#7956F7"}
                                             h="56px"
-                                            defaultValue={action?.init_date}
+                                            value={action?.init_date}
                                             fontSize="16px"
                                             color="black"
                                             isDisabled

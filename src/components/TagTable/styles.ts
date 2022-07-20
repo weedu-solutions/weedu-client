@@ -9,7 +9,7 @@ export const Tag = styled.div`
     align-items: center;
     justify-content: center;
 
-    width: 110px;
+    width: 155px;
     height: 35px;
 
     border-radius: 25px;
