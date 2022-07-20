@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { ButtonDefault } from "../../../components/FormChakra/Button";
 import { LayoutRegister } from "../../../components/LayoutRegister";
-import { Wrapper, ButtonWrapper } from "./styles";
+import { Wrapper, ButtonWrapper, AttentionMessage } from "./styles";
 import { useForm } from 'react-hook-form'
 import { Api } from "../../../services/api";
 import { AxiosResponse } from "axios";
@@ -17,10 +17,17 @@ import {
     Stack,
     Box
 } from '@chakra-ui/react'
+import { useState } from "react";
 
 
 export function CreateAction() {
     const { user } = useAuth();
+
+    const [preview_init_date, setPreview_init_date] = useState("");
+    const [preview_end_date, setPreview_end_date] = useState("");
+
+    const handlePreviewInitDate = (event: any) => setPreview_init_date(event.target.value);
+    const handlePreviewEndDate = (event: any) => setPreview_end_date(event.target.value);
 
     const navigate = useNavigate()
     const {
@@ -39,8 +46,6 @@ export function CreateAction() {
         what,
         how,
         who,
-        preview_init_date,
-        preview_end_date,
         observation
     }: IActions) => {
         await Api.post('/auth/plan', {
@@ -53,8 +58,8 @@ export function CreateAction() {
             why_3,
             why_4,
             why_5,
-            preview_init_date,
-            preview_end_date,
+            preview_init_date: preview_init_date,
+            preview_end_date: preview_end_date,
             init_date: "",
             end_date: "",
             observation,
@@ -73,7 +78,7 @@ export function CreateAction() {
             });
     }
 
-
+    console.log(preview_init_date)
     return (
         <LayoutRegister>
             <strong>Adicionar uma nova ação</strong>
@@ -268,14 +273,12 @@ export function CreateAction() {
                                         placeholder='00/00/0000'
                                         {...register('preview_init_date', {
                                             required: 'O campo "Início previsto" nao pode ser vazio.',
-                                            pattern: {
-                                                value: /^\d{2}\/\d{2}\/\d{4}$/,
-                                                message: "A data precisa ser no formato DD/MM/AAAA."
-                                            }
                                         })}
+                                        value={preview_init_date}
+                                        onChange={handlePreviewInitDate}
                                         focusBorderColor={errors.preview_init_date ? "#E71D36" : "#7956F7"}
                                         h="56px"
-
+                                        type="date"
                                         fontSize="16px"
                                     />
                                     <FormLabel
@@ -292,16 +295,14 @@ export function CreateAction() {
                                     <Input
                                         id='preview_end_date'
                                         placeholder='00/00/0000'
+                                        type="date"
                                         {...register('preview_end_date', {
                                             required: 'O campo "Fim previsto" não pode ser vazio.',
-                                            pattern: {
-                                                value: /^\d{2}\/\d{2}\/\d{4}$/,
-                                                message: "A data precisa ser no formato DD/MM/AAAA."
-                                            }
                                         })}
+                                        value={preview_end_date}
+                                        onChange={handlePreviewEndDate}
                                         focusBorderColor={errors.preview_end_date ? "#E71D36" : "#7956F7"}
                                         h="56px"
-
                                         fontSize="16px"
                                     />
                                     <FormLabel
@@ -312,7 +313,17 @@ export function CreateAction() {
                                         {errors.preview_end_date && errors.preview_end_date.message}
                                     </FormLabel>
                                 </Box>
+
                             </Stack>
+
+                            <AttentionMessage>
+                                {
+                                    preview_end_date < preview_init_date ?
+                                        "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
+                                        : ""
+                                }
+                            </AttentionMessage>
+
                         </Box>
 
                         <Box mt="20px">
@@ -351,6 +362,7 @@ export function CreateAction() {
                             loading={isSubmitting}
                             title={'Confirmar'}
                             type="submit"
+                            disabled={preview_end_date < preview_init_date ? true : false}
                         />
                     </ButtonWrapper>
                 </form>

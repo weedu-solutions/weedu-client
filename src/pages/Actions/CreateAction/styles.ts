@@ -31,4 +31,8 @@ export const ButtonWrapper = styled.div`
   justify-content: space-around;
 `
 
+export const AttentionMessage = styled.p`
+  color: red;
+`
+
 

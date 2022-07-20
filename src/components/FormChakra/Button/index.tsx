@@ -12,6 +12,7 @@ interface IButtonDefaultProps {
     title: string;
     loadingText?: string;
     type?: "button" | "submit" | "reset" | undefined;
+    disabled?: boolean;
 }
 
 
@@ -26,7 +27,8 @@ export function ButtonDefault({
     loading,
     title,
     loadingText,
-    type
+    type,
+    disabled
 }: IButtonDefaultProps) {
 
     return (
@@ -46,6 +48,7 @@ export function ButtonDefault({
             // letterSpacing='0.5px'
             type={type}
             transition="0.1"
+            disabled={disabled}
         >
             {title}
         </Button>
