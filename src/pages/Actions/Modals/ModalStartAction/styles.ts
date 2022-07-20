@@ -55,6 +55,10 @@ export const Footer = styled.div`
     margin-bottom: 40px;
 `
 
+export const ErrorMessage = styled.p`
+    color: red;
+`
+
 export const CalendarCss = styled.div`
     margin-top: 2rem;
     margin-bottom: 2rem;

@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import { Separator, SubTitle, Title, Wrapper, CalendarCss, TitleModal } from "./styles";
+import { Separator, SubTitle, Title, Wrapper, CalendarCss, TitleModal, ErrorMessage } from "./styles";
 import closeModalIcon from "../../../../assets/icon-close.svg";
 import IActions from "../../../../interfaces/actions";
 import Calendar from 'react-calendar';
@@ -121,11 +121,18 @@ export function ModalStartAction({ closeModal, action }: ModalDisableActionProps
                         <Calendar
                             onChange={setDate}
                             value={date}
-                        // minDate={new Date()}
                         />
                     </CalendarCss>
 
                     <Separator />
+
+                    {
+                        action?.init_date ?
+                            endDate < action?.init_date ?
+                                <ErrorMessage>Atenção a data de fim da ação, não pode ser menor que a data início.</ErrorMessage>
+                                : <></>
+                            : <></>
+                    }
 
                     <Button
                         mt="10px"
@@ -134,6 +141,11 @@ export function ModalStartAction({ closeModal, action }: ModalDisableActionProps
                         backgroundColor="#7956F7"
                         color="#FFF"
                         onClick={() => onSubmit()}
+                        disabled={
+                            action?.init_date ?
+                                endDate < action?.init_date ? true : false
+                                : false
+                        }
                     >
                         {
                             action?.init_date ?
