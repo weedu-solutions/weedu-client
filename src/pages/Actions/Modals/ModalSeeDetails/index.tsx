@@ -1,5 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Footer, Form, Separator, SubTitle, Title, Wrapper, Toggle, Margin, ContainerButtons } from "./styles";
+import { useForm } from "react-hook-form";
+import closeModalIcon from "../../../../assets/icon-close.svg";
+import IActions from "../../../../interfaces/actions";
+import { useAuth } from "../../../../hooks/auth";
+import { Api } from "../../../../services/api";
+import { AxiosResponse } from "axios";
+import { Notify, NotifyTypes } from "../../../../components/Notify";
+import { ButtonDefault } from "../../../../components/FormChakra/Button";
+import { useEffect, useState } from "react";
+
+import { Footer, Form, Separator, SubTitle, Title, Wrapper, Toggle, Margin } from "./styles";
 import {
     FormLabel,
     FormControl,
@@ -10,28 +19,17 @@ import {
     Textarea,
     Switch
 } from '@chakra-ui/react'
-import { useForm } from "react-hook-form";
-import closeModalIcon from "../../../../assets/icon-close.svg";
-import IActions from "../../../../interfaces/actions";
-import { useAuth } from "../../../../hooks/auth";
-import { Api } from "../../../../services/api";
-import { AxiosResponse } from "axios";
-import { Notify, NotifyTypes } from "../../../../components/Notify";
-import { ROUTES } from "../../../../constants/routes";
-import { useNavigate } from "react-router-dom";
-import { ButtonDefault } from "../../../../components/FormChakra/Button";
-import { useEffect, useState } from "react";
-
 
 type ModalSeeDetailsProps = {
-    click: any;
+    closeModal: any;
     action: IActions | undefined;
 }
 
-export function ModalSeeDetails({ click, action }: ModalSeeDetailsProps) {
+export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
     const { user } = useAuth();
-    const navigate = useNavigate()
     const [isActiveAction, setIsActiveAction] = useState<boolean>(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [iscloseModal, setIsCloseModal] = useState<any>();
 
     function IsActiveAction() {
         if (action?.is_active === 1) {
@@ -43,13 +41,13 @@ export function ModalSeeDetails({ click, action }: ModalSeeDetailsProps) {
 
     useEffect(() => {
         IsActiveAction()
-    }, []);
+    });
 
     const {
         handleSubmit,
         register,
         formState: { errors, isSubmitting },
-    } = useForm()
+    } = useForm();
 
     const onSubmit = async ({
         problem,
@@ -89,10 +87,11 @@ export function ModalSeeDetails({ click, action }: ModalSeeDetailsProps) {
             is_active: user.is_active
         })
             .then((res: AxiosResponse) => {
+                setIsCloseModal(closeModal)
                 Notify(NotifyTypes.SUCCESS, 'Plano de ação editado com sucesso!')
-                navigate(ROUTES.ACTIONS)
             })
             .catch((err: AxiosResponse) => {
+                setIsCloseModal(closeModal)
                 Notify(NotifyTypes.ERROR, 'Não foi possível editar o Plano de ação.')
             });
     }
@@ -106,7 +105,7 @@ export function ModalSeeDetails({ click, action }: ModalSeeDetailsProps) {
                         <h1>Detalhes da ação</h1>
                     </div>
                     <div>
-                        <Button colorScheme='#FFFFFF' onClick={click}>
+                        <Button colorScheme='#FFFFFF' onClick={closeModal}>
                             <img src={closeModalIcon} alt="Fechar modal" />
                         </Button>
                     </div>
@@ -122,7 +121,6 @@ export function ModalSeeDetails({ click, action }: ModalSeeDetailsProps) {
 
                 <Form>
                     <form onSubmit={handleSubmit(onSubmit)}>
-
                         <FormControl>
                             <Box>
                                 <FormLabel htmlFor='problem'>Qual o problema ou causa que será tratado?</FormLabel>

@@ -13,6 +13,7 @@ import IActions from "../../../interfaces/actions";
 import { ModalOptions } from "../Modals/ModalOptions";
 import TableLoader from "../../../components/Loaders/TableLoader";
 
+
 const conditionalRowStyles = [
     {
         when: (row: any) => row.id % 2 === 0,
@@ -54,7 +55,7 @@ const styleModalStartAction = {
     },
     content: {
         maxWidth: '800px',
-        height: '700px',
+        height: '650px',
         margin: 'auto',
     }
 }
@@ -186,8 +187,8 @@ export function TableActions() {
                     <ModalOptions
                         handleOpenModalStartAction={handleOpenModalStartAction}
                         handleOpenModalSeeDetails={handleOpenModalSeeDetails}
-                        handleModal={handleModal}
                         handleOpenModalDisableAction={handleOpenModalDisableAction}
+                        handleModal={handleModal}
                         action={actionInfo}
                     />
                 </ModalBlockContent>
@@ -212,7 +213,7 @@ export function TableActions() {
                 <>
                     <ModalSeeDetails
                         action={actionInfo}
-                        click={handleOpenModalSeeDetails}
+                        closeModal={handleOpenModalSeeDetails}
                     />
                 </>
             </Modal>

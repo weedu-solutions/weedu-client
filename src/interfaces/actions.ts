@@ -11,7 +11,7 @@ export default interface IActions {
     preview_init_date?: string;
     preview_end_date?: string;
     observation?: string;
-    init_date?: string;
+    init_date?: any;
     end_date?: string;
     status?: number;
     id?: string | number;

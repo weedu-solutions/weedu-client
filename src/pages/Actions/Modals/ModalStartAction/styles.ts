@@ -28,6 +28,10 @@ export const Title = styled.div`
     }
 
 `
+
+export const TitleModal = styled.div`
+    width: 30px;
+`
 export const SubTitle = styled.div`
     align-items: center;
     display: flex;

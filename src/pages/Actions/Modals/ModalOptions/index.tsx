@@ -19,20 +19,45 @@ export function ModalOptions({
 
     return (
         <>
-            <Button mt="10px" width="100%" onClick={handleOpenModalStartAction}>
-                Começar ação
+            <Button
+                mt="10px"
+                width="100%"
+                onClick={handleOpenModalStartAction}
+                disabled={action?.end_date ? true : false}
+            >
+                {
+                    action?.init_date ?
+                        "Finalizar ação"
+                        : "Começar ação"
+                }
             </Button>
-            <Button mt="10px" width="100%" onClick={handleOpenModalSeeDetails}>
+
+            <Button
+                mt="10px"
+                width="100%"
+                onClick={handleOpenModalSeeDetails}
+            >
                 Ver detalhes
             </Button>
-            <Button mt="10px" width="100%" onClick={handleOpenModalDisableAction}>
+
+            <Button
+                mt="10px"
+                width="100%"
+                onClick={handleOpenModalDisableAction}
+            >
                 {
                     action?.is_active === 1 ?
                         "Desativar ação"
                         : "Ativar ação"
                 }
             </Button>
-            <Button mt="10px" width="100%" colorScheme='red' onClick={handleModal}>
+
+            <Button
+                mt="10px"
+                width="100%"
+                colorScheme='red'
+                onClick={handleModal}
+            >
                 Cancel
             </Button>
         </>

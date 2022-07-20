@@ -45,17 +45,18 @@ export function ModalDisableAction({ closeModal, action }: ModalDisableActionPro
                 setIsModal(closeModal)
                 Notify(NotifyTypes.SUCCESS,
                     action?.is_active === 1 ?
-                        "Seu plano de ação foi desativado."
+                        "Seu plano de ação foi desativado com sucesso!"
                         :
-                        "Seu plano de ação foi ativado."
+                        "Seu plano de ação foi ativado com sucesso!"
                 )
             })
             .catch((err: AxiosResponse) => {
+                setIsModal(closeModal)
                 Notify(NotifyTypes.ERROR,
                     action?.is_active === 1 ?
-                        "Seu plano de ação não foi desativado."
+                        "Não foi possível desativar seu plano de ação!"
                         :
-                        "Seu plano de ação não foi ativado."
+                        "Não foi possível ativar seu plano de ação!"
                 )
             });
     }
