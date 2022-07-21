@@ -81,7 +81,6 @@ export function CreateAction() {
             });
     }
 
-    console.log(preview_init_date)
     return (
         <LayoutRegister>
             <strong>Adicionar uma nova ação</strong>

@@ -176,7 +176,9 @@ export function TableActions() {
         }
 
         getData()
+
     }, [setAction]);
+
 
     return (
         <>

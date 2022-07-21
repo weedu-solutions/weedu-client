@@ -53,7 +53,6 @@ export const MyButton = styled.button`
   } 
 `
 
-
 export const TextBlock = styled.p`
   color: #E71D36;;
   font-weight: 700; 
@@ -120,4 +119,28 @@ export const WrapperInputs = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
+`
+
+export const ContentGraph = styled.div`
+  border-width: 1px;
+  border-style: solid;
+  border-color: #E0DDF0;
+  width: 49%;
+  border-radius: 8px;
+
+  div > h1 {
+    margin-left: 60px;
+    margin-top: 20px;
+
+    color: #201F24;
+    font-weight: 700;
+    font-size: 25px;
+  }
+`
+
+export const Separator = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: #7A778A;
+  margin-bottom: 30px;
 `
