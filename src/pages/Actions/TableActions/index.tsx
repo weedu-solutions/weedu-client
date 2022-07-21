@@ -12,7 +12,8 @@ import { ModalStartAction } from "../Modals/ModalStartAction";
 import IActions from "../../../interfaces/actions";
 import { ModalOptions } from "../Modals/ModalOptions";
 import TableLoader from "../../../components/Loaders/TableLoader";
-import { Tooltip } from "@chakra-ui/react";
+import { Link, Tooltip } from "@chakra-ui/react";
+import { Message } from "./styles";
 
 
 const conditionalRowStyles = [
@@ -90,6 +91,8 @@ export function TableActions() {
     const [isModalDisableAction, setIsModalDisableAction] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState<any>([]);
+    const [actions, setActions] = useState<any>([]);
+
     const [actionInfo, setActionInfo] = useState<IActions | undefined>();
     const [pending, setPending] = useState<boolean>(false);
 
@@ -172,6 +175,7 @@ export function TableActions() {
         const getData = async () => {
             const { data } = await ActionsServices.getAllActions()
             setPending(pending => !pending);
+            setActions(data.data);
             return setAction(data.data.sort(compare));
         }
 
@@ -233,16 +237,27 @@ export function TableActions() {
                     />
                 </ModalBlockContent>
             </Modal>
+
             {
-                !pending ?
-                    <DataTable
-                        columns={headers}
-                        data={action}
-                        conditionalRowStyles={conditionalRowStyles}
-                        defaultSortFieldId={1}
-                        customStyles={stylesTable}
-                    />
-                    : <TableLoader />
+                actions.length === 0 ?
+
+                    <Message>
+                        <h1>
+                            Seja bem-vindo(a) ao Weedu !
+                        </h1>
+                        <Link color='#7956F7' href='/create-action' fontSize="20px">
+                            Clique aqui para criar um plano de ação
+                        </Link>
+                    </Message>
+                    : !pending ?
+                        <DataTable
+                            columns={headers}
+                            data={action}
+                            conditionalRowStyles={conditionalRowStyles}
+                            defaultSortFieldId={1}
+                            customStyles={stylesTable}
+                        />
+                        : <TableLoader />
             }
         </>
     )

@@ -11,35 +11,35 @@ export function TagTable({ prop }: ITagTable) {
     return (
         <Tag
             bgColor={
-                prop === 1 ? "#FADED6" :
-                    prop === 2 ? "#F7C9CF" :
-                        prop === 3 ? "#CDF1ED" :
-                            prop === 4 ? "#C9E2FC" :
-                                prop === 5 ? "#D3D7DA" :
-                                    prop === 6 ? "#EFF1F1" :
+                prop === 4 ? "#FADED6" :
+                    prop === 5 ? "#F7C9CF" :
+                        prop === 0 ? "#CDF1ED" :
+                            prop === 1 ? "#C9E2FC" :
+                                prop === 3 ? "#D3D7DA" :
+                                    prop === 2 ? "#EFF1F1" :
                                         "#1E163E"
             }
         >
             <Text
                 color={
-                    prop === 1 ? "#F07655" :
-                        prop === 2 ? "#E83737" :
-                            prop === 3 ? "#378479" :
-                                prop === 4 ? "#2185F6" :
-                                    prop === 5 ? "#485763" :
-                                        prop === 6 ? "#9AA8B3" :
+                    prop === 4 ? "#F07655" :
+                        prop === 5 ? "#E83737" :
+                            prop === 0 ? "#378479" :
+                                prop === 1 ? "#2185F6" :
+                                    prop === 3 ? "#485763" :
+                                        prop === 2 ? "#9AA8B3" :
                                             "#FFFFFF"
                 }
                 fontSize="14px"
                 fontWeight="500"
             >
                 {
-                    prop === 1 ? "A iniciar" :
-                        prop === 2 ? "Em execução" :
-                            prop === 3 ? "Executada" :
-                                prop === 4 ? "Atrasada - A iniciar" :
-                                    prop === 5 ? "Atrasada - A terminar" :
-                                        prop === 6 ? "Desa" :
+                    prop === 0 ? "A iniciar" :
+                        prop === 1 ? "Em execução" :
+                            prop === 3 ? "Executado" :
+                                prop === 4 ? "Atrasado - A iniciar" :
+                                    prop === 5 ? "Atrasado - A terminar" :
+                                        prop === 2 ? "Desativado" :
                                             prop
                 }
             </Text>

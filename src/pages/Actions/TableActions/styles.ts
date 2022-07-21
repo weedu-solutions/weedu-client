@@ -88,3 +88,9 @@ export const WrapperInputs = styled.div`
   align-items: center;
   flex-wrap: nowrap;
 `
+
+export const Message = styled.div`
+  h1 {
+    font-size: 30px;
+  }
+`
