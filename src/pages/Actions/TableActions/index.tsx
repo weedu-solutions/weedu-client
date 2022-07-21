@@ -11,6 +11,9 @@ import { ModalSeeDetails } from "../Modals/ModalSeeDetails";
 import { ModalStartAction } from "../Modals/ModalStartAction";
 import IActions from "../../../interfaces/actions";
 import { ModalOptions } from "../Modals/ModalOptions";
+import TableLoader from "../../../components/Loaders/TableLoader";
+import { Tooltip } from "@chakra-ui/react";
+
 
 const conditionalRowStyles = [
     {
@@ -53,7 +56,7 @@ const styleModalStartAction = {
     },
     content: {
         maxWidth: '800px',
-        height: '700px',
+        height: '650px',
         margin: 'auto',
     }
 }
@@ -88,7 +91,7 @@ export function TableActions() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState<any>([]);
     const [actionInfo, setActionInfo] = useState<IActions | undefined>();
-
+    const [pending, setPending] = useState<boolean>(false);
 
     const handleModal = async (row: any) => {
         setIsModalOpen(value => !value);
@@ -152,7 +155,8 @@ export function TableActions() {
             id: 6,
             name: '',
             sortable: true,
-            selector: (row: any) => <MyButton onClick={() => handleModal(row)}><img src={moreIcon} alt="Mais detalhes" /></MyButton>,
+            selector: (row: any) => <Tooltip label='Ver mais sobre o plano de ação' placement='right-end' hasArrow>
+                <MyButton onClick={() => handleModal(row)}><img src={moreIcon} alt="Mais detalhes" /></MyButton></Tooltip>,
             reorder: true
         }
     ]
@@ -164,14 +168,17 @@ export function TableActions() {
     }
 
     useEffect(() => {
-
+        setPending(pending => !pending);
         const getData = async () => {
             const { data } = await ActionsServices.getAllActions()
+            setPending(pending => !pending);
             return setAction(data.data.sort(compare));
         }
 
         getData()
-    }, [setAction, action]);
+
+    }, [setAction]);
+
 
     return (
         <>
@@ -184,8 +191,8 @@ export function TableActions() {
                     <ModalOptions
                         handleOpenModalStartAction={handleOpenModalStartAction}
                         handleOpenModalSeeDetails={handleOpenModalSeeDetails}
-                        handleModal={handleModal}
                         handleOpenModalDisableAction={handleOpenModalDisableAction}
+                        handleModal={handleModal}
                         action={actionInfo}
                     />
                 </ModalBlockContent>
@@ -210,7 +217,7 @@ export function TableActions() {
                 <>
                     <ModalSeeDetails
                         action={actionInfo}
-                        click={handleOpenModalSeeDetails}
+                        closeModal={handleOpenModalSeeDetails}
                     />
                 </>
             </Modal>
@@ -227,13 +234,15 @@ export function TableActions() {
                 </ModalBlockContent>
             </Modal>
             {
-                <DataTable
-                    columns={headers}
-                    data={action}
-                    conditionalRowStyles={conditionalRowStyles}
-                    defaultSortFieldId={1}
-                    customStyles={stylesTable}
-                />
+                !pending ?
+                    <DataTable
+                        columns={headers}
+                        data={action}
+                        conditionalRowStyles={conditionalRowStyles}
+                        defaultSortFieldId={1}
+                        customStyles={stylesTable}
+                    />
+                    : <TableLoader />
             }
         </>
     )
