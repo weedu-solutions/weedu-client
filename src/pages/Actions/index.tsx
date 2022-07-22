@@ -17,7 +17,7 @@ export function Actions() {
       <Wrapper>
         <div className="container">
           <Content>
-            <h1>{user.name} {user.suname} - {user.customer[0].fantasy_name}</h1>
+            <h1>{user?.name} {user?.suname} - {user?.customer[0].fantasy_name}</h1>
           </Content>
 
           <GraphsDash />

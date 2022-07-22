@@ -41,6 +41,9 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
 
     let chosenInitDate = moment(preview_init_date).format('DD/MM/YYYY');
     let chosenEndDate = moment(preview_end_date).format('DD/MM/YYYY');
+    let realEndDate = moment(action?.end_date).format('DD/MM/YYYY');
+    let realInitDate = moment(action?.init_date).format('DD/MM/YYYY');
+
 
 
     function IsActiveAction() {
@@ -89,12 +92,12 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
             why_5,
             preview_init_date: chosenInitDate,
             preview_end_date: chosenEndDate,
-            // init_date,
-            // end_date,
+            init_date,
+            end_date,
             observation,
             user_id: user.id,
             customer_id: user.user_type_id,
-            // where: "O",
+            where: "O",
             is_active: user.is_active
         })
             .then((res: AxiosResponse) => {
@@ -354,8 +357,8 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                             })}
                                             focusBorderColor={errors.preview_init_date ? "#E71D36" : "#7956F7"}
                                             h="56px"
-                                            defaultValue={action?.preview_init_date}
-                                            value={preview_init_date}
+                                            defaultValue={preview_init_date}
+                                            // value={preview_init_date}
                                             onChange={handlePreviewInitDate}
                                             fontSize="16px"
                                         />
@@ -378,11 +381,11 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                             {...register('preview_end_date', {
                                                 required: 'O campo "Fim previsto" não pode ser vazio.',
                                             })}
-                                            value={preview_end_date}
+                                            defaultValue={preview_init_date}
                                             onChange={handlePreviewEndDate}
                                             focusBorderColor={errors.preview_end_date ? "#E71D36" : "#7956F7"}
                                             h="56px"
-                                            defaultValue={action?.preview_end_date}
+
                                             fontSize="16px"
                                         />
                                         <FormLabel

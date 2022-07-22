@@ -9,4 +9,10 @@ export class ActionsServices {
         return data
     }
 
+    static async getDataGraphic(companyID: string | number) {
+        var { data } = await Api.get(`/auth/dashboard/${companyID}`)
+        return data
+    }
+
+
 }

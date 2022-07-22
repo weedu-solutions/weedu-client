@@ -11,7 +11,6 @@ export const ContentGraph = styled.div`
   div > h1 {
     margin-left: 60px;
     margin-top: 20px;
-    margin-bottom: 20px;
     color: #201F24;
     font-weight: 700;
     font-size: 25px;
@@ -28,7 +27,7 @@ export const RowGraph = styled.div`
 export const LegendGraph = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 60px;
   p {
     color: #7A778A;
     font-weight: 500;

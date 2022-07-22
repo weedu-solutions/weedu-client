@@ -14,6 +14,8 @@ import { ModalOptions } from "../Modals/ModalOptions";
 import TableLoader from "../../../components/Loaders/TableLoader";
 import { Link, Tooltip } from "@chakra-ui/react";
 import { Message } from "./styles";
+import { useAuth } from "../../../hooks/auth";
+
 
 
 const conditionalRowStyles = [
@@ -92,7 +94,11 @@ export function TableActions() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState<any>([]);
     const [actions, setActions] = useState<any>([]);
+    const { user } = useAuth();
 
+
+
+    const [dataGraphStarted, setDataGraphStarted] = useState<any>();
     const [actionInfo, setActionInfo] = useState<IActions | undefined>();
     const [pending, setPending] = useState<boolean>(false);
 
@@ -116,6 +122,18 @@ export function TableActions() {
         setIsModalDisableAction((oldValue) => !oldValue);
         setIsModalOpen(false);
     }
+
+    useEffect(() => {
+
+        console.log(user)
+        const getData = async () => {
+            const { data } = await ActionsServices.getDataGraphic(user.customer[0].id)
+
+            return setDataGraphStarted(data.finished);
+        }
+        getData()
+        console.log(dataGraphStarted)
+    }, []);
 
     const headers = [
         {
@@ -239,17 +257,19 @@ export function TableActions() {
             </Modal>
 
             {
-                actions.length === 0 ?
 
-                    <Message>
-                        <h1>
-                            Seja bem-vindo(a) ao Weedu !
-                        </h1>
-                        <Link color='#7956F7' href='/create-action' fontSize="20px">
-                            Clique aqui para criar um plano de ação
-                        </Link>
-                    </Message>
-                    : !pending ?
+                !pending ?
+
+                    actions.length === 0 ?
+                        <Message>
+                            <h1>
+                                Seja bem-vindo(a) ao Weedu !
+                            </h1>
+                            <Link color='#7956F7' href='/create-action' fontSize="20px">
+                                Clique aqui para criar um plano de ação
+                            </Link>
+                        </Message>
+                        :
                         <DataTable
                             columns={headers}
                             data={action}
@@ -257,7 +277,7 @@ export function TableActions() {
                             defaultSortFieldId={1}
                             customStyles={stylesTable}
                         />
-                        : <TableLoader />
+                    : <TableLoader />
             }
         </>
     )
