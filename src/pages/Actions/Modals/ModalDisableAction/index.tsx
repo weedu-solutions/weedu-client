@@ -43,6 +43,7 @@ export function ModalDisableAction({ closeModal, action }: ModalDisableActionPro
         })
             .then((res: AxiosResponse) => {
                 setIsModal(closeModal)
+                window.location.reload();
                 Notify(NotifyTypes.SUCCESS,
                     action?.is_active === 1 ?
                         "Seu plano de ação foi desativado com sucesso!"

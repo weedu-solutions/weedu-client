@@ -12,7 +12,7 @@ export default interface IActions {
     preview_end_date?: string;
     observation?: string;
     init_date?: any;
-    end_date?: string;
+    end_date?: any;
     status?: number;
     id?: string | number;
     is_active?: number;
