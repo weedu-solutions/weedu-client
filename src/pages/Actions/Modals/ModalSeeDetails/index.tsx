@@ -30,6 +30,8 @@ type ModalSeeDetailsProps = {
 export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
     const { user } = useAuth();
     const [isActiveAction, setIsActiveAction] = useState<boolean>(false);
+    const [editData, setEditData] = useState<boolean>(false);
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [iscloseModal, setIsCloseModal] = useState<any>();
 
@@ -41,10 +43,6 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
 
     let chosenInitDate = moment(preview_init_date).format('DD/MM/YYYY');
     let chosenEndDate = moment(preview_end_date).format('DD/MM/YYYY');
-    let realEndDate = moment(action?.end_date).format('DD/MM/YYYY');
-    let realInitDate = moment(action?.init_date).format('DD/MM/YYYY');
-
-
 
     function IsActiveAction() {
         if (action?.is_active === 1) {
@@ -58,6 +56,12 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
         IsActiveAction()
     });
 
+    function empo() {
+        var f = setTimeout(
+            () => Notify(NotifyTypes.SUCCESS, 'Plano de ação editado com sucesso!'),
+            1000
+        );
+    }
     const {
         handleSubmit,
         register,
@@ -90,10 +94,10 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
             why_3,
             why_4,
             why_5,
-            preview_init_date: chosenInitDate,
-            preview_end_date: chosenEndDate,
-            init_date,
-            end_date,
+            preview_init_date: editData === false ? action?.preview_init_date : chosenInitDate,
+            preview_end_date: editData === false ? action?.preview_end_date : chosenEndDate,
+            init_date: action?.init_date ? action?.init_date : null,
+            end_date: action?.init_date ? action?.init_date : null,
             observation,
             user_id: user.id,
             customer_id: user.user_type_id,
@@ -103,6 +107,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
             .then((res: AxiosResponse) => {
                 setIsCloseModal(closeModal)
                 Notify(NotifyTypes.SUCCESS, 'Plano de ação editado com sucesso!')
+                window.location.reload();
             })
             .catch((err: AxiosResponse) => {
                 setIsCloseModal(closeModal)
@@ -342,72 +347,144 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                 </FormLabel>
                             </Box>
 
-                            <Box mt="20px">
-                                <Stack direction={['column', 'row']}>
-                                    <Box w="50%">
-                                        <FormLabel htmlFor='preview_init_date'>Início Previsto (When?)</FormLabel>
-                                        <Input
-                                            backgroundColor="#F4F2FC"
-                                            borderColor="#F4F2FC"
-                                            id='preview_init_date'
-                                            type="date"
-                                            placeholder='00/00/0000'
-                                            {...register('preview_init_date', {
-                                                required: 'O campo "Início previsto" nao pode ser vazio.',
-                                            })}
-                                            focusBorderColor={errors.preview_init_date ? "#E71D36" : "#7956F7"}
-                                            h="56px"
-                                            defaultValue={preview_init_date}
-                                            // value={preview_init_date}
-                                            onChange={handlePreviewInitDate}
-                                            fontSize="16px"
-                                        />
-                                        <FormLabel
-                                            color="#E71D36"
-                                            fontSize="13px"
-                                            mt="4px"
-                                        >
-                                            {errors.preview_init_date && errors.preview_init_date.message}
-                                        </FormLabel>
+                            {
+                                editData ?
+                                    <Box mt="20px">
+                                        <Stack direction={['column', 'row']}>
+                                            <Box w="50%">
+                                                <FormLabel htmlFor='preview_init_date'>Início Previsto (When?)</FormLabel>
+                                                <Input
+                                                    backgroundColor="#F4F2FC"
+                                                    borderColor="#F4F2FC"
+                                                    id='preview_init_date'
+                                                    type="date"
+                                                    placeholder='00/00/0000'
+                                                    {...register('preview_init_date', {
+                                                        required: 'O campo "Início previsto" nao pode ser vazio.',
+                                                    })}
+                                                    focusBorderColor={errors.preview_init_date ? "#E71D36" : "#7956F7"}
+                                                    h="56px"
+                                                    defaultValue={preview_init_date}
+                                                    onChange={handlePreviewInitDate}
+                                                    fontSize="16px"
+                                                />
+                                                <FormLabel
+                                                    color="#E71D36"
+                                                    fontSize="13px"
+                                                    mt="4px"
+                                                >
+                                                    {errors.preview_init_date && errors.preview_init_date.message}
+                                                </FormLabel>
+                                            </Box>
+
+                                            <Box w="50%">
+                                                <FormLabel htmlFor='preview_end_date'>Fim Previsto (When?)</FormLabel>
+                                                <Input
+                                                    backgroundColor="#F4F2FC"
+                                                    borderColor="#F4F2FC"
+                                                    id='preview_end_date'
+                                                    type="date"
+                                                    {...register('preview_end_date', {
+                                                        required: 'O campo "Fim previsto" não pode ser vazio.',
+                                                    })}
+                                                    defaultValue={preview_init_date}
+                                                    onChange={handlePreviewEndDate}
+                                                    focusBorderColor={errors.preview_end_date ? "#E71D36" : "#7956F7"}
+                                                    h="56px"
+
+                                                    fontSize="16px"
+                                                />
+                                                <FormLabel
+                                                    color="#E71D36"
+                                                    fontSize="13px"
+                                                    mt="4px"
+                                                >
+                                                    {errors.preview_end_date && errors.preview_end_date.message}
+                                                </FormLabel>
+                                            </Box>
+                                        </Stack>
+
+                                        <AttentionMessage>
+                                            {
+                                                preview_end_date && preview_init_date ?
+                                                    preview_end_date < preview_init_date ?
+                                                        "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
+                                                        : ""
+                                                    : ""
+                                            }
+                                        </AttentionMessage>
                                     </Box>
+                                    : <Box mt="20px">
+                                        <Stack direction={['column', 'row']}>
+                                            <Box w="50%">
+                                                <FormLabel htmlFor='preview_init_date'>Início Previsto (When?)</FormLabel>
+                                                <Input
+                                                    backgroundColor="#F4F2FC"
+                                                    borderColor="#F4F2FC"
+                                                    id='preview_init_date'
+                                                    focusBorderColor={errors.preview_init_date ? "#E71D36" : "#7956F7"}
+                                                    h="56px"
+                                                    value={action?.preview_init_date}
+                                                    color="black"
+                                                    fontSize="16px"
+                                                    disabled
+                                                />
+                                                <FormLabel
+                                                    color="#E71D36"
+                                                    fontSize="13px"
+                                                    mt="4px"
+                                                >
+                                                    {errors.preview_init_date && errors.preview_init_date.message}
+                                                </FormLabel>
+                                            </Box>
 
-                                    <Box w="50%">
-                                        <FormLabel htmlFor='preview_end_date'>Fim Previsto (When?)</FormLabel>
-                                        <Input
-                                            backgroundColor="#F4F2FC"
-                                            borderColor="#F4F2FC"
-                                            id='preview_end_date'
-                                            type="date"
-                                            {...register('preview_end_date', {
-                                                required: 'O campo "Fim previsto" não pode ser vazio.',
-                                            })}
-                                            defaultValue={preview_init_date}
-                                            onChange={handlePreviewEndDate}
-                                            focusBorderColor={errors.preview_end_date ? "#E71D36" : "#7956F7"}
-                                            h="56px"
+                                            <Box w="50%">
+                                                <FormLabel htmlFor='preview_end_date'>Fim Previsto (When?)</FormLabel>
+                                                <Input
+                                                    backgroundColor="#F4F2FC"
+                                                    borderColor="#F4F2FC"
+                                                    id='preview_end_date'
+                                                    h="56px"
+                                                    color="black"
+                                                    focusBorderColor={errors.preview_end_date ? "#E71D36" : "#7956F7"}
+                                                    value={action?.preview_end_date}
+                                                    fontSize="16px"
+                                                    disabled
+                                                />
+                                                <FormLabel
+                                                    color="#E71D36"
+                                                    fontSize="13px"
+                                                    mt="4px"
+                                                >
+                                                    {errors.preview_end_date && errors.preview_end_date.message}
+                                                </FormLabel>
+                                            </Box>
+                                        </Stack>
 
-                                            fontSize="16px"
-                                        />
-                                        <FormLabel
-                                            color="#E71D36"
-                                            fontSize="13px"
-                                            mt="4px"
-                                        >
-                                            {errors.preview_end_date && errors.preview_end_date.message}
-                                        </FormLabel>
+                                        <AttentionMessage>
+                                            {
+                                                preview_end_date && preview_init_date ?
+                                                    preview_init_date < preview_end_date ?
+                                                        "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
+                                                        : ""
+                                                    : ""
+                                            }
+                                        </AttentionMessage>
                                     </Box>
-                                </Stack>
+                            }
 
-                                <AttentionMessage>
-                                    {
-                                        preview_end_date && preview_init_date ?
-                                            preview_end_date < preview_init_date ?
-                                                "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
-                                                : ""
-                                            : ""
-                                    }
-                                </AttentionMessage>
-                            </Box>
+                            <Button
+                                color="#7956F7"
+                                variant='link'
+                                marginBottom="10px"
+                                onClick={() => { setEditData(!editData) }}
+                            >
+                                {
+                                    editData ?
+                                        "Cancelar"
+                                        : "Editar datas previstas"
+                                }
+                            </Button>
 
                             <Box mt="20px">
                                 <Stack direction={['column', 'row']}>
@@ -418,7 +495,6 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                             borderColor="#F4F2FC"
                                             id='init_date'
                                             placeholder='00/00/0000'
-                                            {...register('init_date')}
                                             focusBorderColor={errors.init_date ? "#E71D36" : "#7956F7"}
                                             h="56px"
                                             value={action?.init_date}
@@ -426,13 +502,6 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                             color="black"
                                             isDisabled
                                         />
-                                        <FormLabel
-                                            color="#E71D36"
-                                            fontSize="13px"
-                                            mt="4px"
-                                        >
-                                            {errors.init_date && errors.init_date.message}
-                                        </FormLabel>
                                     </Box>
 
                                     <Box w="50%">
@@ -442,21 +511,13 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                             borderColor="#F4F2FC"
                                             id='preview_end_date'
                                             placeholder='00/00/0000'
-                                            {...register('end_date')}
                                             focusBorderColor={errors.end_date ? "#E71D36" : "#7956F7"}
                                             h="56px"
-                                            defaultValue={action?.end_date}
+                                            value={action?.end_date}
                                             fontSize="16px"
-                                            isDisabled
                                             color="black"
+                                            isDisabled
                                         />
-                                        <FormLabel
-                                            color="#E71D36"
-                                            fontSize="13px"
-                                            mt="4px"
-                                        >
-                                            {errors.end_date && errors.end_date.message}
-                                        </FormLabel>
                                     </Box>
                                 </Stack>
                             </Box>

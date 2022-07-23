@@ -64,8 +64,10 @@ export function ModalStartAction({ closeModal, action }: ModalDisableActionProps
             .then((res: AxiosResponse) => {
                 setIsCloseModal(closeModal)
                 if (action?.init_date) {
+                    window.location.reload();
                     Notify(NotifyTypes.SUCCESS, 'Plano de ação iniciado com sucesso!');
                 } else {
+                    window.location.reload();
                     Notify(NotifyTypes.SUCCESS, 'Plano de ação finalizado com sucesso!');
                 }
                 return iscloseModal
