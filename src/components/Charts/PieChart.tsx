@@ -20,8 +20,6 @@ export default function PieChartGH() {
     const [pending, setPending] = useState<boolean>(false);
     const [activeIndex, setActiveIndex] = useState(0);
 
-
-
     useEffect(() => {
         setPending(pending => !pending);
 

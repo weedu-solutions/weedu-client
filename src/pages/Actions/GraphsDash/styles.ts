@@ -57,4 +57,11 @@ export const Row = styled.div`
   align-items: center;
 `
 
+export const MessageDefaultChart = styled.div`
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+`
 
