@@ -202,6 +202,7 @@ export function TableActions() {
     }, [setAction]);
 
 
+
     return (
         <>
             <Modal
@@ -276,6 +277,8 @@ export function TableActions() {
                             conditionalRowStyles={conditionalRowStyles}
                             defaultSortFieldId={1}
                             customStyles={stylesTable}
+                            pagination
+                        // paginationComponent={}
                         />
                     : <TableLoader />
             }

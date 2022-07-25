@@ -68,7 +68,7 @@ export function CreateAction() {
             end_date: null,
             observation,
             user_id: user.id,
-            customer_id: user.user_type_id,
+            customer_id: user.customer[0].id,
             where: "O",
             is_active: user.is_active
         })
