@@ -17,6 +17,8 @@ interface IUser {
   suname: string;
   is_active: number;
   fantasy_name?: string;
+  customer: any;
+
 }
 
 interface IAuthState {

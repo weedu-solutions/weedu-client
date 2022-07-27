@@ -14,7 +14,7 @@ import { ModalOptions } from "../Modals/ModalOptions";
 import TableLoader from "../../../components/Loaders/TableLoader";
 import { Link, Tooltip } from "@chakra-ui/react";
 import { Message } from "./styles";
-import { useAuth } from "../../../hooks/auth";
+
 
 
 
@@ -94,11 +94,11 @@ export function TableActions() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState<any>([]);
     const [actions, setActions] = useState<any>([]);
-    const { user } = useAuth();
 
 
 
-    const [dataGraphStarted, setDataGraphStarted] = useState<any>();
+
+
     const [actionInfo, setActionInfo] = useState<IActions | undefined>();
     const [pending, setPending] = useState<boolean>(false);
 
@@ -123,17 +123,6 @@ export function TableActions() {
         setIsModalOpen(false);
     }
 
-    useEffect(() => {
-
-        console.log(user)
-        const getData = async () => {
-            const { data } = await ActionsServices.getDataGraphic(user.customer[0].id)
-
-            return setDataGraphStarted(data.finished);
-        }
-        getData()
-        console.log(dataGraphStarted)
-    }, []);
 
     const headers = [
         {
@@ -202,10 +191,10 @@ export function TableActions() {
     }, [setAction]);
 
 
-
     return (
         <>
             <Modal
+
                 style={styleModalOptions}
                 isOpen={isModalOpen}
                 ariaHideApp={false}
@@ -271,15 +260,15 @@ export function TableActions() {
                             </Link>
                         </Message>
                         :
+
                         <DataTable
                             columns={headers}
                             data={action}
                             conditionalRowStyles={conditionalRowStyles}
                             defaultSortFieldId={1}
                             customStyles={stylesTable}
-                            pagination
-                        // paginationComponent={}
                         />
+
                     : <TableLoader />
             }
         </>

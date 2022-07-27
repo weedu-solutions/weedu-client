@@ -33,6 +33,8 @@ export function CreateAction() {
     let chosenInitDate = moment(preview_init_date).format('DD/MM/YYYY');
     let chosenEndDate = moment(preview_end_date).format('DD/MM/YYYY');
 
+    const idCustumer = user.customer[0].id;
+
     const navigate = useNavigate()
     const {
         handleSubmit,
@@ -68,7 +70,7 @@ export function CreateAction() {
             end_date: null,
             observation,
             user_id: user.id,
-            customer_id: user.customer[0].id,
+            customer_id: idCustumer,
             where: "O",
             is_active: user.is_active
         })

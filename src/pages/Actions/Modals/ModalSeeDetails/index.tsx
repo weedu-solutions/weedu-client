@@ -44,6 +44,8 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
     let chosenInitDate = moment(preview_init_date).format('DD/MM/YYYY');
     let chosenEndDate = moment(preview_end_date).format('DD/MM/YYYY');
 
+    const idCustumer = user.customer[0].id;
+
     function IsActiveAction() {
         if (action?.is_active === 1) {
             setIsActiveAction(true);
@@ -56,12 +58,6 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
         IsActiveAction()
     });
 
-    function empo() {
-        var f = setTimeout(
-            () => Notify(NotifyTypes.SUCCESS, 'Plano de ação editado com sucesso!'),
-            1000
-        );
-    }
     const {
         handleSubmit,
         register,
@@ -97,10 +93,10 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
             preview_init_date: editData === false ? action?.preview_init_date : chosenInitDate,
             preview_end_date: editData === false ? action?.preview_end_date : chosenEndDate,
             init_date: action?.init_date ? action?.init_date : null,
-            end_date: action?.init_date ? action?.init_date : null,
+            end_date: action?.end_date ? action?.end_date : null,
             observation,
             user_id: user.id,
-            customer_id: user.user_type_id,
+            customer_id: idCustumer,
             where: "O",
             is_active: user.is_active
         })
