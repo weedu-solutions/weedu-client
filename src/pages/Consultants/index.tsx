@@ -244,7 +244,7 @@ export function Consultants() {
           </Content>
         </div>
         <AddButtonWrapper>
-          <AddButton onClick={() => navigate(ROUTES.REGISTER_COMPANY)} />
+          <AddButton onClick={() => navigate(ROUTES.REGISTER_CONSULTANT)} />
         </AddButtonWrapper>
       </Wrapper>
     </LayoutLogged>

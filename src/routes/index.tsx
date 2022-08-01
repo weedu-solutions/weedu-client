@@ -21,6 +21,7 @@ import '../styles.css'
 import { CreateAction } from "../pages/Actions/CreateAction"
 import { ChakraProvider } from '@chakra-ui/react'
 import { ModalSeeDetails } from "../pages/Actions/Modals/ModalSeeDetails"
+import { CreateConsultant } from "../pages/Consultants/CreateConsultant"
 
 export function MyRoutes() {
   return (
@@ -43,6 +44,9 @@ export function MyRoutes() {
             />
             <Route path={`${ROUTES.REGISTER_USER_COMPANY}/:id`}
               element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<RegisterUserCompany />} />}
+            />
+            <Route path={ROUTES.REGISTER_CONSULTANT}
+              element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<CreateConsultant />} />}
             />
             <Route path={`${ROUTES.UPDATE_USER_COMPANY}/:id`}
               element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<UpdateUserCompany />} />}
