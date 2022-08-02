@@ -94,11 +94,6 @@ export function TableActions() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState<any>([]);
     const [actions, setActions] = useState<any>([]);
-
-
-
-
-
     const [actionInfo, setActionInfo] = useState<IActions | undefined>();
     const [pending, setPending] = useState<boolean>(false);
 
@@ -182,8 +177,8 @@ export function TableActions() {
         const getData = async () => {
             const { data } = await ActionsServices.getAllActions()
             setPending(pending => !pending);
-            setActions(data.data);
-            return setAction(data.data.sort(compare));
+            setActions(data);
+            return setAction(data.sort(compare));
         }
 
         getData()

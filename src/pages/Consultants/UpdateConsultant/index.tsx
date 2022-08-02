@@ -10,14 +10,14 @@ import {
     InputRightElement
 } from '@chakra-ui/react'
 import { ButtonDefault } from "../../../components/FormChakra/Button";
-import { useForm } from 'react-hook-form'
+import { useForm } from "react-hook-form";
+import { useAuth } from "../../../hooks/auth";
 import { useNavigate } from "react-router-dom";
+import React from "react";
+import { Api } from "../../../services/api";
+import { AxiosResponse } from "axios";
 import { Notify, NotifyTypes } from "../../../components/Notify";
 import { ROUTES } from "../../../constants/routes";
-import { AxiosResponse } from "axios";
-import { useAuth } from "../../../hooks/auth";
-import { Api } from "../../../services/api";
-import React from "react";
 
 interface ICreateConsultant {
     name?: string;
@@ -29,18 +29,17 @@ interface ICreateConsultant {
     email?: string;
 }
 
-export function CreateConsultant() {
-    const { user } = useAuth();
-    const navigate = useNavigate()
-    const idCustumer = user.customer[0].id;
-    const [show, setShow] = React.useState(false)
-    const handleClick = () => setShow(!show)
+export function UpdateConsultant() {
     const {
         handleSubmit,
         register,
         formState: { errors },
     } = useForm();
-
+    const { user } = useAuth();
+    const navigate = useNavigate()
+    const idCustumer = user.customer[0].id;
+    const [show, setShow] = React.useState(false)
+    const handleClick = () => setShow(!show)
     const onSubmit = async ({
         name,
         suname,
@@ -64,10 +63,9 @@ export function CreateConsultant() {
                 Notify(NotifyTypes.ERROR, 'Não foi possível cadastrar consultor.')
             });
     }
-
     return (
         <LayoutRegister>
-            <strong>Cadastrar consultores Weedu</strong>
+            <strong>Editar consultor Weedu</strong>
             <Wrapper>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormControl>
@@ -201,7 +199,7 @@ export function CreateConsultant() {
                     </ButtonWrapper>
                 </form>
             </Wrapper>
-        </LayoutRegister >
+        </LayoutRegister>
     );
 }
 

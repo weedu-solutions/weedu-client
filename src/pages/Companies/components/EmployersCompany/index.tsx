@@ -70,7 +70,7 @@ export function EmployersCompany({ userRow }: any) {
   const getUserCustomer = async () => {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllUserCustomer(userRow.id)
-    setUserData(data.data[0].user.sort(compare))
+    setUserData(data[0].user.sort(compare))
     setPending(pending => !pending)
   }
 
