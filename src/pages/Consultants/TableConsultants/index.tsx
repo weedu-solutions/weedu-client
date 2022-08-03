@@ -6,6 +6,8 @@ import { TableCompanies } from "./TableCompanies"
 import { MyButton } from "../styled"
 import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../../../constants/routes"
+import { UpdateConsultant } from "../UpdateConsultant"
+import { useAuth } from "../../../hooks/auth"
 
 
 const conditionalRowStyles = [
@@ -40,8 +42,12 @@ export function TableConsultants() {
     const userStorage = localStorage.getItem('user');
     const userInfoStorage = JSON.parse(String(userStorage));
     const navigate = useNavigate()
+    const { setIdConsultant } = useAuth();
 
-    const handleOpenEditconsultans = () => {
+    const handleOpenEditconsultans = (row: any) => {
+        localStorage.setItem('idConsultant', JSON.stringify(row.id));
+        localStorage.setItem('consultantSelected', JSON.stringify(row));
+
         navigate(ROUTES.UPDATE_CONSULTANT)
     }
 
@@ -87,7 +93,7 @@ export function TableConsultants() {
             selector: (row: any) =>
                 <MyButton
                     onClick={
-                        () => handleOpenEditconsultans()
+                        () => handleOpenEditconsultans(row)
                     }
                 >
                     Ver detalhes

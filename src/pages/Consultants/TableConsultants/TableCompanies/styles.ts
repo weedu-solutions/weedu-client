@@ -14,6 +14,9 @@ export const TitleTable = styled.div`
         font-weight: 700;
     }
 `
+
+
+
 export const Box = styled.div`
   padding: 15px 0;
 

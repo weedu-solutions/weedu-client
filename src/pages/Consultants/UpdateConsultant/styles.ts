@@ -25,10 +25,17 @@ export const ButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
   margin-top: 20px;
-  padding-bottom: 30px;
-  justify-content: space-around;
+`
+
+export const ButtonBlock = styled.div`
+  width: 50%;
+`
+
+export const ButtonsEdit = styled.div`
+  width: 50%;
+  display: flex;  
+  justify-content: space-between;
 `
 
 export const AttentionMessage = styled.p`

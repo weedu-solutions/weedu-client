@@ -5,5 +5,8 @@ export class ConsultantsServices {
         return data
     }
 
-
+    static async getConsultant(id: string | null) {
+        var { data } = await Api.get(`auth/consultant-with-customer/${id}`)
+        return data
+    }
 }

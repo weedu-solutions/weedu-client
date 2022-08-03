@@ -2,45 +2,55 @@ import { Tag } from "./styles"
 import { Text } from "@chakra-ui/react"
 
 type ITagTable = {
-    prop: number;
+    status: number;
+    rowInfo?: any;
 }
 
 
-export function TagTable({ prop }: ITagTable) {
+export function TagTable({ status, rowInfo }: ITagTable) {
 
     return (
         <Tag
             bgColor={
-                prop === 4 ? "#FADED6" :
-                    prop === 5 ? "#F7C9CF" :
-                        prop === 0 ? "#CDF1ED" :
-                            prop === 1 ? "#C9E2FC" :
-                                prop === 3 ? "#D3D7DA" :
-                                    prop === 2 ? "#EFF1F1" :
-                                        "#1E163E"
+                rowInfo.is_active === 0 ?
+                    "#EFF1F1"
+                    :
+                    status === 0 ? "#CDF1ED" :
+                        status === 1 ? "#C9E2FC" :
+                            status === 2 ? "#EFF1F1" :
+                                status === 3 ? "#D3D7DA" :
+                                    status === 4 ? "#FADED6" :
+                                        status === 5 ? "#F7C9CF" :
+                                            "#1E163E"
             }
         >
             <Text
                 color={
-                    prop === 4 ? "#F07655" :
-                        prop === 5 ? "#E83737" :
-                            prop === 0 ? "#378479" :
-                                prop === 1 ? "#2185F6" :
-                                    prop === 3 ? "#485763" :
-                                        prop === 2 ? "#9AA8B3" :
-                                            "#FFFFFF"
+                    rowInfo.is_active === 0 ?
+                        "#9AA8B3"
+                        :
+                        status === 0 ? "#378479" :
+                            status === 1 ? "#2185F6" :
+                                status === 2 ? "#9AA8B3" :
+                                    status === 3 ? "#485763" :
+                                        status === 4 ? "#F07655" :
+                                            status === 5 ? "#E83737" :
+                                                "#FFFFFF"
                 }
                 fontSize="14px"
                 fontWeight="500"
             >
                 {
-                    prop === 0 ? "A iniciar" :
-                        prop === 1 ? "Em execução" :
-                            prop === 3 ? "Executado" :
-                                prop === 4 ? "Atrasado - A iniciar" :
-                                    prop === 5 ? "Atrasado - A terminar" :
-                                        prop === 2 ? "Desativado" :
-                                            prop
+                    rowInfo.is_active === 0 ?
+                        "Desativado"
+                        :
+                        status === 0 ? "A iniciar" :
+                            status === 1 ? "Em execução" :
+                                status === 2 ? "Desativado" :
+                                    status === 3 ? "Executado" :
+                                        status === 4 ? "Atrasado - A iniciar" :
+                                            status === 5 ? "Atrasado - A terminar" :
+                                                status
                 }
             </Text>
         </Tag>

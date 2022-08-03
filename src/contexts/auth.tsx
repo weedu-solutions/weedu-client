@@ -18,7 +18,7 @@ interface IUser {
   is_active: number;
   fantasy_name?: string;
   customer: any;
-
+  setIdConsultant: any;
 }
 
 interface IAuthState {
@@ -35,6 +35,8 @@ export interface IAuthContextState {
   recoverError: string;
   loading: boolean;
   recover(email: ICredentials): void;
+  idConsultant: any;
+  setIdConsultant: any;
 }
 
 export const AuthContext = createContext<IAuthContextState>(
@@ -46,6 +48,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [recoverError, setRecoverError] = useState<string>("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
+  const [idConsultant, setIdConsultant] = useState();
+
   const [data, setData] = useState<IAuthState>(() => {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
@@ -111,7 +115,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signIn, user: data.user, token: data.token, signOut, error, loading, recover, recoverError }}
+      value={{ signIn, user: data.user, token: data.token, signOut, error, loading, recover, recoverError, idConsultant, setIdConsultant }}
     >
       {children}
     </AuthContext.Provider>
