@@ -20,7 +20,8 @@ import {
 import '../styles.css'
 import { CreateAction } from "../pages/Actions/CreateAction"
 import { ChakraProvider } from '@chakra-ui/react'
-import { ModalSeeDetails } from "../pages/Actions/Modals/ModalSeeDetails"
+import { CreateConsultant } from "../pages/Consultants/CreateConsultant"
+import { UpdateConsultant } from "../pages/Consultants/UpdateConsultant"
 
 export function MyRoutes() {
   return (
@@ -38,11 +39,17 @@ export function MyRoutes() {
             <Route path={ROUTES.CONSULTANTS}
               element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<Consultants />} />}
             />
+            <Route path={ROUTES.UPDATE_CONSULTANT}
+              element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<UpdateConsultant />} />}
+            />
             <Route path={ROUTES.REGISTER_COMPANY}
               element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<RegisterCompany />} />}
             />
             <Route path={`${ROUTES.REGISTER_USER_COMPANY}/:id`}
               element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<RegisterUserCompany />} />}
+            />
+            <Route path={ROUTES.REGISTER_CONSULTANT}
+              element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<CreateConsultant />} />}
             />
             <Route path={`${ROUTES.UPDATE_USER_COMPANY}/:id`}
               element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<UpdateUserCompany />} />}

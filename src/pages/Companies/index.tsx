@@ -131,7 +131,7 @@ export function Companies() {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllCustomers()
     setPending(pending => !pending)
-    setCompanies(data.data.sort(compare))
+    setCompanies(data.sort(compare))
   }
 
   const getUserList = async (currentCompanyRow: any) => {

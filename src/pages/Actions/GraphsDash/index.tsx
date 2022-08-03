@@ -4,7 +4,6 @@ import DunotChart from "../../../components/Charts/DunotChart";
 import PieChartGH from "../../../components/Charts/PieChart";
 import { useAuth } from "../../../hooks/auth";
 import { ActionsServices } from "../../../services/actions";
-import { Api } from "../../../services/api";
 import { ColorfulFrame, ContainerRow, ContentGraph, LegendGraph, MessageDefaultChart, Row, RowGraph } from "./styles";
 
 interface IStockStatus {
@@ -26,31 +25,16 @@ export function GraphsDash() {
     const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
     const [dataFinishStatus, setDataFinishStatus] = useState<IFinishedActions>();
 
-    const [pending, setPending] = useState<boolean>(false);
-
     useEffect(() => {
-        setPending(pending => !pending);
 
         const getData = async () => {
             const { data } = await ActionsServices.getDataGraphic(user.customer[0].id)
-            setPending(pending => !pending);
-            return setDataStockStatus(data.started);
-        }
-        getData()
-
-    }, []);
-
-    useEffect(() => {
-        setPending(pending => !pending);
-
-        const getData = async () => {
-            const { data } = await ActionsServices.getDataGraphic(user.customer[0].id)
-            setPending(pending => !pending);
+            setDataStockStatus(data.started);
             return setDataFinishStatus(data.finished);
         }
         getData()
 
-    }, []);
+    }, [user.customer]);
 
     function HaveActios() {
         if (dataStockStatus?.starting === 0 &&
@@ -127,8 +111,6 @@ export function GraphsDash() {
                             </LegendGraph>
                         </ContainerRow>
                 }
-
-
             </ContentGraph>
 
             <ContentGraph>

@@ -14,6 +14,7 @@ import { ModalOptions } from "../Modals/ModalOptions";
 import TableLoader from "../../../components/Loaders/TableLoader";
 import { Link, Tooltip } from "@chakra-ui/react";
 import { Message } from "./styles";
+import { TagTableData } from "../../../components/TagTableData";
 
 
 
@@ -22,7 +23,7 @@ const conditionalRowStyles = [
     {
         when: (row: any) => row.id % 2 === 0,
         style: {
-            backgroundColor: '#F8F7FA'
+            backgroundColor: '#F8F7FA',
         },
     },
 ]
@@ -94,11 +95,6 @@ export function TableActions() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState<any>([]);
     const [actions, setActions] = useState<any>([]);
-
-
-
-
-
     const [actionInfo, setActionInfo] = useState<IActions | undefined>();
     const [pending, setPending] = useState<boolean>(false);
 
@@ -123,13 +119,15 @@ export function TableActions() {
         setIsModalOpen(false);
     }
 
+    const userStorage = localStorage.getItem('user')
+    const userInfoStorage = JSON.parse(String(userStorage))
 
     const headers = [
         {
             id: 1,
             name: 'Status',
             selector: (row: any) =>
-                <TagTable prop={row.status} />,
+                <TagTable status={row.status} rowInfo={row} />,
             sortable: true,
             reorder: true
         },
@@ -143,14 +141,14 @@ export function TableActions() {
         {
             id: 3,
             name: 'Início Previsto',
-            selector: (row: any) => <TagTable prop={row.preview_init_date} />,
+            selector: (row: any) => <TagTableData date={row.preview_init_date} />,
             sortable: true,
             reorder: true
         },
         {
             id: 4,
             name: 'Fim Previsto',
-            selector: (row: any) => <TagTable prop={row.preview_end_date} />,
+            selector: (row: any) => <TagTableData date={row.preview_end_date} />,
             sortable: true,
             reorder: true
         },
@@ -180,14 +178,15 @@ export function TableActions() {
     useEffect(() => {
         setPending(pending => !pending);
         const getData = async () => {
-            const { data } = await ActionsServices.getAllActions()
+            const { data } = await ActionsServices.getAllActions(userInfoStorage.customer[0].id)
             setPending(pending => !pending);
-            setActions(data.data);
-            return setAction(data.data.sort(compare));
+            setActions(data);
+            return setAction(data.sort(compare));
         }
 
         getData()
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setAction]);
 
 
@@ -260,7 +259,6 @@ export function TableActions() {
                             </Link>
                         </Message>
                         :
-
                         <DataTable
                             columns={headers}
                             data={action}
