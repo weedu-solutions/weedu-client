@@ -48,7 +48,6 @@ export const MyButton = styled.button`
   font-weight: 700;
   border-radius: 4px;
   border: 2px solid ${colors.primary.medium};
-
   &:hover {
     filter: brightness(0.9);
   }

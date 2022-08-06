@@ -15,6 +15,7 @@ export const Content = styled.div`
   align-items: flex-start;
   flex-direction: column;
   position: relative;
+  margin-top: 16px;
 
   h1 {
     font-weight: 600;

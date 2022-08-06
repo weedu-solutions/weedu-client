@@ -44,7 +44,14 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
     let chosenInitDate = moment(preview_init_date).format('DD/MM/YYYY');
     let chosenEndDate = moment(preview_end_date).format('DD/MM/YYYY');
 
-    const idCustumer = user.customer[0].id;
+    const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+
+    const idCustumer =
+        user.user_type_id === 3 ?
+            infoCompanyConsultant.id
+            :
+            user.customer[0].id
+        ;
 
     function IsActiveAction() {
         if (action?.is_active === 1) {

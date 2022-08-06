@@ -6,8 +6,7 @@ import { TableCompanies } from "./TableCompanies"
 import { MyButton } from "../styled"
 import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../../../constants/routes"
-import { UpdateConsultant } from "../UpdateConsultant"
-import { useAuth } from "../../../hooks/auth"
+
 
 
 const conditionalRowStyles = [
@@ -42,7 +41,6 @@ export function TableConsultants() {
     const userStorage = localStorage.getItem('user');
     const userInfoStorage = JSON.parse(String(userStorage));
     const navigate = useNavigate()
-    const { setIdConsultant } = useAuth();
 
     const handleOpenEditconsultans = (row: any) => {
         localStorage.setItem('idConsultant', JSON.stringify(row.id));
@@ -55,7 +53,7 @@ export function TableConsultants() {
         {
             id: 1,
             name: 'STATUS',
-            selector: (row: any) => row.is_active,
+            selector: (row: any) => row.is_active === 1 ? "Desbloqueado" : "Bloqueado",
             sortable: true,
             reorder: true
         },
@@ -83,7 +81,7 @@ export function TableConsultants() {
         {
             id: 5,
             name: 'TIPO DE PERFIL',
-            selector: (row: any) => row.user_type_id,
+            selector: (row: any) => row.user_type_id === 3 ? "Consultor" : "Gestor",
             sortable: true,
             reorder: true
         },

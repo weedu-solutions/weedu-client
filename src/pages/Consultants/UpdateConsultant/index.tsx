@@ -29,6 +29,7 @@ interface IConsultant {
     password?: string;
     user_type_id?: string;
     email?: string;
+    id?: string | number;
 }
 
 export function UpdateConsultant() {
@@ -73,6 +74,8 @@ export function UpdateConsultant() {
             is_active: consultant?.is_active,
             user_type_id: profileType,
             password: consultantSelected,
+            id: consultant?.id,
+            customer_id: idCustumer
         })
             .then((res: AxiosResponse) => {
                 Notify(NotifyTypes.SUCCESS, 'Consultor cadastrado com sucesso!')

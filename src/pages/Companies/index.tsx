@@ -82,7 +82,7 @@ export function Companies() {
   const { user } = useAuth();
 
   const navigate = useNavigate()
-
+  console.log(companies);
   const headers = [
     {
       id: 1,
@@ -108,7 +108,7 @@ export function Companies() {
     {
       id: 4,
       name: 'N.º DE USUÁRIOS',
-      selector: (row: any) => `${row.number_of_users}/10`,
+      selector: (row: any) => `${row.registered_user}/${row.number_of_users}`,
       sortable: true,
       reorder: true
     },

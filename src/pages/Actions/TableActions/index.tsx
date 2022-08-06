@@ -15,6 +15,7 @@ import TableLoader from "../../../components/Loaders/TableLoader";
 import { Link, Tooltip } from "@chakra-ui/react";
 import { Message } from "./styles";
 import { TagTableData } from "../../../components/TagTableData";
+import { useAuth } from "../../../hooks/auth";
 
 
 
@@ -97,6 +98,11 @@ export function TableActions() {
     const [actions, setActions] = useState<any>([]);
     const [actionInfo, setActionInfo] = useState<IActions | undefined>();
     const [pending, setPending] = useState<boolean>(false);
+    const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+
+
+    const { user } = useAuth();
+
 
     const handleModal = async (row: any) => {
         setIsModalOpen(value => !value);
@@ -178,9 +184,15 @@ export function TableActions() {
     useEffect(() => {
         setPending(pending => !pending);
         const getData = async () => {
-            const { data } = await ActionsServices.getAllActions(userInfoStorage.customer[0].id)
+            const { data } = await ActionsServices.getAllActions(
+                user.user_type_id === 3 ?
+                    infoCompanyConsultant.id
+                    :
+                    userInfoStorage.customer[0].id
+            )
             setPending(pending => !pending);
             setActions(data);
+            console.log(infoCompanyConsultant)
             return setAction(data.sort(compare));
         }
 
