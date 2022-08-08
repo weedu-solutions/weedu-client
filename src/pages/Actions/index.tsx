@@ -8,6 +8,8 @@ import { TableActions } from "./TableActions";
 import { Link, Tooltip } from '@chakra-ui/react'
 import { GraphsDash } from "./GraphsDash";
 import iconBack from "../../assets/seta-back.svg";
+import { useEffect } from "react";
+import { CustomerServices } from "../../services/customer";
 
 
 export function Actions() {
@@ -15,6 +17,26 @@ export function Actions() {
   const navigate = useNavigate()
   const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
 
+  const idCustumer =
+    user.user_type_id === 3 ?
+      infoCompanyConsultant.id
+      :
+      user.customer[0].id
+    ;
+
+  useEffect(() => {
+
+    const getData = async () => {
+      const { data } = await CustomerServices.getAllUserCustomer(idCustumer);
+
+      return localStorage.setItem('users_company', JSON.stringify(data));
+    }
+
+
+    getData()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <LayoutLogged>
       <Wrapper>

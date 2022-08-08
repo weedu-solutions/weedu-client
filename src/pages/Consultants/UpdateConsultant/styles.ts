@@ -42,4 +42,38 @@ export const AttentionMessage = styled.p`
   color: red;
 `
 
+export const ModalBody = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  
+  p {
+    color: #747880;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+`
+
+export const ModalTitle = styled.div`
+  align-items: center;
+  justify-content: center;
+  display: flex;
+
+  h1 {
+    font-weight: 700;
+    font-size: 16px;
+  }
+`
+
+export const ButtonsContainer = styled.div`
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 70%;
+`
+
 

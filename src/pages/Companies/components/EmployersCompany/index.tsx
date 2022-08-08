@@ -167,7 +167,7 @@ export function EmployersCompany({ userRow }: any) {
       id: 5,
       name: 'Perfil',
       sortable: true,
-      selector: (row: any) => row.user_type_id === 1 ? 'Colaborador' : row.user_type_id === 2 ? 'Gestor' : 'Consultor',
+      selector: (row: any) => row.user_type_id === 1 ? 'Colaborador' : row.user_type_id === 2 ? 'Gestor' : row.user_type_id === 3 ? 'Consultor' : 'Administrador',
       reorder: true
     },
     {

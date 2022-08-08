@@ -6,6 +6,8 @@ import { TableCompanies } from "./TableCompanies"
 import { MyButton } from "../styled"
 import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../../../constants/routes"
+import TableLoader from "../../../components/Loaders/TableLoader"
+
 
 
 
@@ -53,7 +55,7 @@ export function TableConsultants() {
         {
             id: 1,
             name: 'STATUS',
-            selector: (row: any) => row.is_active === 1 ? "Desbloqueado" : "Bloqueado",
+            selector: (row: any) => row.is_active === '0' ? "Bloqueado" : "Desbloqueado",
             sortable: true,
             reorder: true
         },
@@ -116,18 +118,23 @@ export function TableConsultants() {
 
     }, [setConsultants, userInfoStorage.id]);
 
+    console.log(consultants.length)
 
     return (
         <>
-            <DataTable
-                columns={headers}
-                data={consultants}
-                conditionalRowStyles={conditionalRowStyles}
-                defaultSortFieldId={1}
-                customStyles={styleTable}
-                expandableRows
-                expandableRowsComponent={({ data }) => <TableCompanies userRow={data} />}
-            />
+            {
+                !pending ?
+                    <DataTable
+                        columns={headers}
+                        data={consultants}
+                        conditionalRowStyles={conditionalRowStyles}
+                        defaultSortFieldId={1}
+                        customStyles={styleTable}
+                        expandableRows
+                        expandableRowsComponent={({ data }) => <TableCompanies userRow={data} />}
+                    />
+                    : <TableLoader />
+            }
         </>
     )
 }

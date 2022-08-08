@@ -18,7 +18,8 @@ import {
     Box,
     Button,
     Textarea,
-    Switch
+    Switch,
+    Select
 } from '@chakra-ui/react'
 import { AttentionMessage } from "../../CreateAction/styles";
 
@@ -37,6 +38,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
 
     const [preview_init_date, setPreview_init_date] = useState(action?.preview_init_date);
     const [preview_end_date, setPreview_end_date] = useState(action?.preview_end_date);
+    const [responsible, setResponsible] = useState(action?.who);
 
     const handlePreviewInitDate = (event: any) => setPreview_init_date(event.target.value);
     const handlePreviewEndDate = (event: any) => setPreview_end_date(event.target.value);
@@ -45,6 +47,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
     let chosenEndDate = moment(preview_end_date).format('DD/MM/YYYY');
 
     const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+    const usersCompanyConsultant: any = JSON.parse(localStorage.getItem('users_company') || '{}');
 
     const idCustumer =
         user.user_type_id === 3 ?
@@ -304,7 +307,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
 
                             <Box mt="20px">
                                 <FormLabel htmlFor='how'>Como irá realizar esta ação (passo a passo)? (How?)</FormLabel>
-                                <Input
+                                <Textarea
                                     backgroundColor="#F4F2FC"
                                     borderColor="#F4F2FC"
                                     id='how'
@@ -328,19 +331,28 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
 
                             <Box mt="20px">
                                 <FormLabel htmlFor='name'>Responsável pela ação (Who?)</FormLabel>
-                                <Input
-                                    backgroundColor="#F4F2FC"
-                                    borderColor="#F4F2FC"
-                                    id='who'
-                                    placeholder='Informe o que será feito'
+
+                                <Select
+                                    h="56px"
+                                    fontSize="16px"
+                                    placeholder='Informe o responsável pela ação'
+                                    focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
+                                    value={responsible}
                                     {...register('who', {
                                         required: 'O campo "Who?" não pode ser vazio.',
                                     })}
-                                    focusBorderColor={errors.who ? "#E71D36" : "#7956F7"}
-                                    h="56px"
-                                    fontSize="16px"
-                                    defaultValue={action?.who}
-                                />
+                                    onChange={(e) => {
+                                        const responsibleAction = e.target.value;
+                                        setResponsible(responsibleAction);
+                                    }
+                                    }
+                                >
+                                    {
+                                        usersCompanyConsultant[0].user.map((user: any) =>
+                                            <option value={user.name}>{user.name}</option>
+                                        )
+                                    }
+                                </Select>
                                 <FormLabel
                                     color="#E71D36"
                                     fontSize="13px"
@@ -467,7 +479,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                         <AttentionMessage>
                                             {
                                                 preview_end_date && preview_init_date ?
-                                                    preview_init_date < preview_end_date ?
+                                                    preview_init_date > preview_end_date ?
                                                         "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
                                                         : ""
                                                     : ""

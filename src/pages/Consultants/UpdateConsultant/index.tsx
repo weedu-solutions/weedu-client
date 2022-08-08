@@ -1,5 +1,5 @@
 import { LayoutRegister } from "../../../components/LayoutRegister";
-import { ButtonWrapper, Wrapper, ButtonBlock, ButtonsEdit } from "./styles";
+import { ButtonWrapper, Wrapper, ButtonBlock, ButtonsEdit, ModalBody, ModalTitle, ButtonsContainer } from "./styles";
 import {
     FormLabel,
     FormControl,
@@ -20,6 +20,8 @@ import { AxiosResponse } from "axios";
 import { Notify, NotifyTypes } from "../../../components/Notify";
 import { ROUTES } from "../../../constants/routes";
 import { ConsultantsServices } from "../../../services/consultants";
+import Modal from 'react-modal'
+import { Consultants } from "..";
 
 interface IConsultant {
     name?: string;
@@ -32,6 +34,17 @@ interface IConsultant {
     id?: string | number;
 }
 
+const customStyleModalBlock = {
+    overlay: {
+        backgroundColor: 'rgba(0,0,0,0.50)'
+    },
+    content: {
+        maxWidth: '400px',
+        height: '300px',
+        margin: 'auto',
+    }
+}
+
 export function UpdateConsultant() {
 
     const { user } = useAuth();
@@ -39,6 +52,7 @@ export function UpdateConsultant() {
     const [show, setShow] = useState(false);
     const [consultant, setConsultant] = useState<IConsultant>();
     const [profileType, setProfileType] = useState(consultant ? consultant?.user_type_id : '3');
+    const [isModalBlockOpen, setIsModalBlockOpen] = useState(false);
 
     const {
         handleSubmit,
@@ -51,7 +65,6 @@ export function UpdateConsultant() {
 
     const idConsultant = localStorage.getItem('idConsultant');
     const consultantSelected: any = localStorage.getItem('consultantSelected');
-
 
 
     function handleCancelEdit() {
@@ -72,17 +85,50 @@ export function UpdateConsultant() {
             suname,
             email,
             is_active: consultant?.is_active,
-            user_type_id: profileType,
-            password: consultantSelected,
+            user_type_id: Number(profileType),
+            password,
             id: consultant?.id,
-            customer_id: idCustumer
+            customer_id: [idCustumer]
         })
             .then((res: AxiosResponse) => {
-                Notify(NotifyTypes.SUCCESS, 'Consultor cadastrado com sucesso!')
+                Notify(NotifyTypes.SUCCESS, 'Dados editados com sucesso!')
                 navigate(ROUTES.CONSULTANTS)
             })
             .catch((err: AxiosResponse) => {
-                Notify(NotifyTypes.ERROR, 'Não foi possível cadastrar consultor.')
+                Notify(NotifyTypes.ERROR, 'Não foi possível editar os dados.')
+            });
+    }
+
+    const handleBlockConsultant = async () => {
+        await Api.post(`/auth/user/${idConsultant}`, {
+            name: consultant?.name,
+            suname: consultant?.suname,
+            email: consultant?.email,
+            is_active: consultant?.is_active === '1' ? '0' : '1',
+            user_type_id: Number(profileType),
+            password: '1234',
+            id: consultant?.id,
+            customer_id: [idCustumer]
+        })
+            .then((res: AxiosResponse) => {
+                // eslint-disable-next-line no-lone-blocks
+                {
+                    consultant?.is_active === '1' ?
+                        Notify(NotifyTypes.SUCCESS, 'Consultor bloqueado com sucesso!')
+                        :
+                        Notify(NotifyTypes.SUCCESS, 'Consultor desbloqueado com sucesso!')
+                }
+                navigate(ROUTES.CONSULTANTS)
+            })
+            .catch((err: AxiosResponse) => {
+                // eslint-disable-next-line no-lone-blocks
+                {
+                    consultant?.is_active === '1' ?
+                        Notify(NotifyTypes.ERROR, 'Não foi possível bloquear o consultor.')
+                        :
+                        Notify(NotifyTypes.ERROR, 'Não foi possível desbloquear o consultor.')
+                }
+
             });
     }
 
@@ -99,6 +145,7 @@ export function UpdateConsultant() {
 
 
 
+
     return (
         <LayoutRegister>
             <strong>Editar consultor Weedu</strong>
@@ -110,12 +157,10 @@ export function UpdateConsultant() {
                             <Input
                                 id='name'
                                 placeholder='Informe o nome'
-                                {...register('name', {
-                                    required: 'O campo "Nome" não pode ser vazio.',
-                                })}
+                                defaultValue={consultant?.name}
+                                {...register('name')}
                                 focusBorderColor={errors.name ? "#E71D36" : "#7956F7"}
                                 h="56px"
-                                defaultValue={consultant?.name}
                                 fontSize="16px"
                             />
                             <FormLabel
@@ -132,9 +177,7 @@ export function UpdateConsultant() {
                             <Input
                                 id='suname'
                                 placeholder='Informe o sobrenome'
-                                {...register('suname', {
-                                    required: 'O campo "Sobrenome" não pode ser vazio.',
-                                })}
+                                {...register('suname')}
                                 defaultValue={consultant?.suname}
                                 focusBorderColor={errors.suname ? "#E71D36" : "#7956F7"}
                                 h="56px"
@@ -174,9 +217,7 @@ export function UpdateConsultant() {
                             <Input
                                 id='email'
                                 placeholder='Informe o email'
-                                {...register('email', {
-                                    required: 'O campo "Email" não pode ser vazio.',
-                                })}
+                                {...register('email')}
                                 defaultValue={consultant?.email}
                                 focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
                                 h="56px"
@@ -192,9 +233,9 @@ export function UpdateConsultant() {
                         </Box>
 
                         <Box mt="20px">
-                            <FormLabel htmlFor='password'>Tipo de perfil</FormLabel>
+                            <FormLabel htmlFor='user_type_id'>Tipo de perfil</FormLabel>
                             <Select
-                                {...register('password')}
+                                {...register('user_type_id')}
                                 h="56px"
                                 fontSize="16px"
                                 focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
@@ -214,7 +255,7 @@ export function UpdateConsultant() {
                                 fontSize="13px"
                                 mt="4px"
                             >
-                                {errors.password && errors.password.message}
+                                {errors.user_type_id && errors.user_type_id.message}
                             </FormLabel>
                         </Box>
 
@@ -251,12 +292,11 @@ export function UpdateConsultant() {
                     <ButtonWrapper>
                         <ButtonBlock>
                             <ButtonDefault
-                                backgroundColor={'#E71D36'}
+                                backgroundColor={consultant?.is_active === '1' ? '#E71D36' : '#7956F7'}
                                 width={'40%'}
                                 height={'50px'}
-                                loadingText={'Bloquear'}
-                                title={'Bloquear'}
-                                type="submit"
+                                title={consultant?.is_active === '1' ? 'Bloquear' : 'Desbloquear'}
+                                onClick={() => setIsModalBlockOpen(true)}
                             />
                         </ButtonBlock>
 
@@ -280,6 +320,45 @@ export function UpdateConsultant() {
                     </ButtonWrapper>
                 </form>
             </Wrapper>
+
+            <Modal
+                isOpen={isModalBlockOpen}
+                style={customStyleModalBlock}
+            >
+                <ModalBody>
+                    <ModalTitle>
+                        {
+                            consultant?.is_active === '1' ?
+                                <h1>Confirmação de bloqueio</h1>
+                                :
+                                <h1>Confirmação de desbloqueio</h1>
+                        }
+                    </ModalTitle>
+                    <p>
+                        Tem certeza que deseja bloquear
+                        o consultor(a) {consultant?.name} ?
+                    </p>
+
+                    <ButtonsContainer>
+                        <ButtonDefault
+                            onClick={() => handleBlockConsultant()}
+                            backgroundColor={consultant?.is_active === '1' ? '#E71D36' : '#7956F7'}
+                            width={'100%'}
+                            height={'50px'}
+                            title={consultant?.is_active === '1' ? 'Bloquear' : 'Desbloquear'}
+                        />
+                        <ButtonDefault
+                            onClick={() => setIsModalBlockOpen(false)}
+                            backgroundColor={'#646170'}
+                            width={'100%'}
+                            height={'50px'}
+                            title={'Cancelar'}
+                        />
+                    </ButtonsContainer>
+
+
+                </ModalBody>
+            </Modal>
         </LayoutRegister>
     );
 }
