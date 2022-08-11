@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from "react-router-dom";
 import { Notify, NotifyTypes } from "../../../components/Notify";
 import { ROUTES } from "../../../constants/routes";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { useAuth } from "../../../hooks/auth";
 import { Api } from "../../../services/api";
 import React from "react";
@@ -60,8 +60,12 @@ export function CreateConsultant() {
                 Notify(NotifyTypes.SUCCESS, 'Consultor cadastrado com sucesso!')
                 navigate(ROUTES.CONSULTANTS)
             })
-            .catch((err: AxiosResponse) => {
-                Notify(NotifyTypes.ERROR, 'Não foi possível cadastrar consultor.')
+            .catch((err: AxiosError) => {
+                if (err.response?.status === 422) {
+                    Notify(NotifyTypes.ERROR, 'Número máximo de funcionários excedido.')
+                } else {
+                    Notify(NotifyTypes.ERROR, 'Não foi possível cadastrar consultor.')
+                }
             });
     }
 

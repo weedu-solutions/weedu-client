@@ -205,7 +205,6 @@ export function TableActions() {
     return (
         <>
             <Modal
-
                 style={styleModalOptions}
                 isOpen={isModalOpen}
                 ariaHideApp={false}

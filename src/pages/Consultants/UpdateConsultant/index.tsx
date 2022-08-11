@@ -21,7 +21,7 @@ import { Notify, NotifyTypes } from "../../../components/Notify";
 import { ROUTES } from "../../../constants/routes";
 import { ConsultantsServices } from "../../../services/consultants";
 import Modal from 'react-modal'
-import { Consultants } from "..";
+
 
 interface IConsultant {
     name?: string;

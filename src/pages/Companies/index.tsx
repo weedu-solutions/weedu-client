@@ -20,7 +20,7 @@ import { Notify, NotifyTypes } from "../../components/Notify"
 import { useAuth } from "../../hooks/auth"
 import { ButtonDefault } from "../../components/FormChakra/Button"
 import TableLoader from "../../components/Loaders/TableLoader"
-import { FormLabel } from "@chakra-ui/react"
+import { FormLabel, Select } from "@chakra-ui/react"
 
 const conditionalRowStyles = [
   {
@@ -70,6 +70,8 @@ const customStyleModalBlock = {
 
 export function Companies() {
   const [companies, setCompanies] = useState<any>([]);
+  const [companiesSelect, setCompaniesSelect] = useState<any>([]);
+
   const [currentCompany, setCurrentCompany] = useState<any>({});
   const [pending, setPending] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -82,7 +84,7 @@ export function Companies() {
   const { user } = useAuth();
 
   const navigate = useNavigate()
-  console.log(companies);
+
   const headers = [
     {
       id: 1,
@@ -131,6 +133,7 @@ export function Companies() {
     setPending(pending => !pending)
     const { data } = await CustomerServices.getAllCustomers()
     setPending(pending => !pending)
+    setCompaniesSelect(data.data)
     setCompanies(data.sort(compare))
   }
 
@@ -201,8 +204,11 @@ export function Companies() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+
   return (
     <LayoutLogged>
+
+
       <Modal
         style={customStyleModal}
         isOpen={isModalOpen}

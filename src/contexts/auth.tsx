@@ -6,6 +6,7 @@ import ICredentials from '../interfaces/credentials';
 import { Api } from '../services/api';
 import { Notify, NotifyTypes } from '../components/Notify';
 
+
 interface IUser {
   id: string;
   name: string;
@@ -49,6 +50,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [idConsultant, setIdConsultant] = useState();
+
 
   const [data, setData] = useState<IAuthState>(() => {
     const token = localStorage.getItem('token');
@@ -115,7 +117,18 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signIn, user: data.user, token: data.token, signOut, error, loading, recover, recoverError, idConsultant, setIdConsultant }}
+      value={{
+        signIn,
+        user: data.user,
+        token: data.token,
+        signOut,
+        error,
+        loading,
+        recover,
+        recoverError,
+        idConsultant,
+        setIdConsultant
+      }}
     >
       {children}
     </AuthContext.Provider>

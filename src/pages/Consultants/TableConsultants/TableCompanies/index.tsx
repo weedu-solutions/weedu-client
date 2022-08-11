@@ -1,12 +1,15 @@
 import { Link } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { ConsultantsServices } from "../../../../services/consultants";
 import { colors } from "../../../../theme";
 import { MyButton } from "../styles";
 import { Box, TitleTable } from "./styles";
 import moreIcon from "../../../../assets/more.svg";
-
+import { useFetch } from "../../../../hooks/useFetch";
+import TableChildLoader from "../../../../components/Loaders/TableChildLoader";
+import Modal from 'react-modal'
+import { useEffect, useState } from "react";
+import { ModalLinkCompanies } from "../ModalLinkCompanies";
+import { CustomerServices } from "../../../../services/customer";
 
 
 const conditionalRowStyles = [
@@ -33,17 +36,27 @@ const styleTable = {
     },
 }
 
+const styleModalLinkCompanies = {
+    overlay: {
+        backgroundColor: 'rgba(0,0,0,0.50)'
+    },
+    content: {
+        maxWidth: '400px',
+        height: '400px',
+        margin: 'auto',
+    }
+}
 interface ITableCompanies {
     userRow: any;
 }
 
 export function TableCompanies({ userRow }: ITableCompanies) {
 
-    const [consultants, setConsultants] = useState<any>();
-    const [pending, setPending] = useState<boolean>(false)
-
     const userStorage = localStorage.getItem('user')
     const userInfoStorage = JSON.parse(String(userStorage))
+    const [isModalLinkCompanies, setIsModalLinkCompanies] = useState<boolean>(false);
+
+    const { data } = useFetch<any>(`/auth/consultant-customer/${userInfoStorage.id}`);
 
     const headers = [
         {
@@ -98,37 +111,63 @@ export function TableCompanies({ userRow }: ITableCompanies) {
 
     ]
 
-    useEffect(() => {
+    function handleOpenModalLinkCompanies() {
+        setIsModalLinkCompanies((oldValue) => !oldValue);
+    }
 
-        const getData = async () => {
-            setPending(pending => !pending);
-            const { data } = await ConsultantsServices.getAllConsultants(userInfoStorage.id);
-            setPending(pending => !pending);
+    if (data) {
+        return (
+            <>
+                <Modal
+                    isOpen={isModalLinkCompanies}
+                    style={styleModalLinkCompanies}
+                >
+                    <>
+                        <ModalLinkCompanies
+                            isActive={handleOpenModalLinkCompanies}
+                            consultantInfo={userRow}
+                        />
+                    </>
+                </Modal>
 
-            return setConsultants(data)
-        }
+                {
+                    data.data.length === 0 ?
+                        <>
+                            <p>Você não tem vínculo com nenhuma empresa.</p>
+                            {/* <Link color='#7956F7' href='/register-consultant' fontSize="20px">
+                                Clique aqui para cadastrar consultores a sua empresa.
+                            </Link> */}
+                        </>
+                        :
+                        <>
+                            <TitleTable>
+                                <p>Empresas</p>
+                                <Link
+                                    onClick={() => { setIsModalLinkCompanies(true) }}
+                                    color='#7956F7'
+                                    fontSize="16px"
+                                    marginRight="4px"
+                                >
+                                    Vincular nova empresa
+                                </Link>
+                            </TitleTable>
 
-        getData()
+                            <DataTable
+                                columns={headers}
+                                data={data.data}
+                                conditionalRowStyles={conditionalRowStyles}
+                                defaultSortFieldId={1}
+                                customStyles={styleTable}
+                            />
+                        </>
+                }
+            </>
+        )
+    } else {
+        return (
+            <TableChildLoader />
+        )
+    }
 
-    }, [setConsultants, userInfoStorage.id]);
 
-
-
-    return (
-        <>
-            <TitleTable>
-                <p>Empresas</p>
-                <Link color='#7956F7' href='/create-action' fontSize="16px" marginRight="4px">
-                    Vincular nova empresa
-                </Link>
-            </TitleTable>
-            <DataTable
-                columns={headers}
-                data={consultants}
-                conditionalRowStyles={conditionalRowStyles}
-                defaultSortFieldId={1}
-                customStyles={styleTable}
-            />
-        </>
-    )
 }

@@ -84,11 +84,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
         what,
         how,
         who,
-        // preview_init_date,
-        // preview_end_date,
-        observation,
-        init_date,
-        end_date
+        observation
     }: IActions) => {
         await Api.post(`/auth/plan/${action?.id}`, {
             problem,
