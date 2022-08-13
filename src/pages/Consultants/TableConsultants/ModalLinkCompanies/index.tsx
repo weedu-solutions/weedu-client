@@ -15,19 +15,20 @@ import { BodyModal, ContainerButtons, ContainerSelect } from "./styles";
 interface IModal {
     isActive: any;
     consultantInfo: any;
-    LinkCompanies?: any;
+    linkedBusinesses?: any;
 }
 
 
-export function ModalLinkCompanies({ isActive, consultantInfo, LinkCompanies }: IModal) {
+export function ModalLinkCompanies({ isActive, consultantInfo, linkedBusinesses }: IModal) {
 
     const [link_Company, setLinkCompany] = useState('');
+    const [companies, setCompanies] = useState([]);
 
     const navigate = useNavigate();
 
-    const [companies, setCompanies] = useState([]);
-
-    console.log(link_Company);
+    const linkedBusinessesIDs = linkedBusinesses.map((business: any) => {
+        return business.id
+    });
 
     const getData = async () => {
         const { data } = await CustomerServices.getAllCustomers()
@@ -47,7 +48,7 @@ export function ModalLinkCompanies({ isActive, consultantInfo, LinkCompanies }: 
             user_type_id: consultantInfo.user_type_id,
             password: "de",
             id: consultantInfo.id,
-            customer_id: link_Company
+            customer_id: [...linkedBusinessesIDs, link_Company]
         })
             .then((res: AxiosResponse) => {
                 Notify(NotifyTypes.SUCCESS, 'Dados editados com sucesso!')
@@ -57,6 +58,16 @@ export function ModalLinkCompanies({ isActive, consultantInfo, LinkCompanies }: 
                 Notify(NotifyTypes.ERROR, 'Não foi possível editar os dados.')
             });
     }
+
+    const allCompanies = companies;
+    const linkedCompanies = linkedBusinesses;
+
+
+    const optionsCompanies = linkedCompanies.filter((it: any) => allCompanies.some((it2: any) => it2.id !== it.id))
+
+    console.log(optionsCompanies)
+
+
 
     return (
         <BodyModal>
@@ -73,37 +84,29 @@ export function ModalLinkCompanies({ isActive, consultantInfo, LinkCompanies }: 
             <ContainerSelect>
                 <Box mt="20px">
                     <FormLabel htmlFor='name'>Empresa a vincular</FormLabel>
-                    {
 
-                        <Select
-                            h="56px"
-                            w="100%"
-                            fontSize="16px"
-                            placeholder='Selecionar'
-                            // focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
-                            // value={responsible}
-                            // {...register('who', {
-                            //     required: 'O campo "Who?" não pode ser vazio.',
-                            // })}
-                            onChange={(e) => {
-                                const linkCompany = e.target.value;
-                                setLinkCompany(linkCompany);
-                            }
-                            }
-                        >
-                            {
-                                companies?.map((companie: any) =>
-                                    <option
-                                        key={companie.id}
-                                        value={companie.company_name}
-                                    >
-                                        {companie.company_name}
-                                    </option>
-                                )
-                            }
-                        </Select>
-
-                    }
+                    <Select
+                        h="56px"
+                        w="100%"
+                        fontSize="16px"
+                        placeholder='Selecionar'
+                        onChange={(e) => {
+                            const linkCompany = e.target.value;
+                            setLinkCompany(linkCompany);
+                        }
+                        }
+                    >
+                        {
+                            optionsCompanies?.map((companie: any) =>
+                                <option
+                                    key={companie.id}
+                                    value={companie.id}
+                                >
+                                    {companie.company_name}
+                                </option>
+                            )
+                        }
+                    </Select>
 
                     <FormLabel
                         color="#E71D36"

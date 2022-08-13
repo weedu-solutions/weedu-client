@@ -9,7 +9,13 @@ import TableChildLoader from "../../../../components/Loaders/TableChildLoader";
 import Modal from 'react-modal'
 import { useEffect, useState } from "react";
 import { ModalLinkCompanies } from "../ModalLinkCompanies";
-import { CustomerServices } from "../../../../services/customer";
+import { Api } from "../../../../services/api";
+import { AxiosResponse } from "axios";
+import { Notify, NotifyTypes } from "../../../../components/Notify";
+import { ROUTES } from "../../../../constants/routes";
+import { useNavigate } from "react-router-dom";
+import { ModalWithdraw } from "../ModalWithdrawCompanie";
+
 
 
 const conditionalRowStyles = [
@@ -46,17 +52,39 @@ const styleModalLinkCompanies = {
         margin: 'auto',
     }
 }
+
+const styleModalWithdrawCompanie = {
+    overlay: {
+        backgroundColor: 'rgba(0,0,0,0.50)'
+    },
+    content: {
+        maxWidth: '400px',
+        height: '400px',
+        margin: 'auto',
+    }
+}
 interface ITableCompanies {
     userRow: any;
 }
 
 export function TableCompanies({ userRow }: ITableCompanies) {
 
-    const userStorage = localStorage.getItem('user')
-    const userInfoStorage = JSON.parse(String(userStorage))
-    const [isModalLinkCompanies, setIsModalLinkCompanies] = useState<boolean>(false);
 
-    const { data } = useFetch<any>(`/auth/consultant-customer/${userInfoStorage.id}`);
+    const [isModalLinkCompanies, setIsModalLinkCompanies] = useState<boolean>(false);
+    const [isModalWithdrawCompanies, setIsModalWithdrawCompanies] = useState<boolean>(false);
+    const [idCompanie, setIdCompanie] = useState<number>();
+
+
+
+    const navigate = useNavigate();
+    const { data } = useFetch<any>(`/auth/consultant-with-customer/${userRow.id}`);
+
+
+    function handleWithdrawCompanie(id: number) {
+        setIsModalWithdrawCompanies(true)
+        setIdCompanie(id)
+    }
+
 
     const headers = [
         {
@@ -101,7 +129,11 @@ export function TableCompanies({ userRow }: ITableCompanies) {
                 <Box>
                     <MyButton><img src={moreIcon} alt="Mais detalhes" /></MyButton>
                     <div className="dropdown">
-                        <button>Retirar empresa</button>
+                        <button
+                            onClick={() => { handleWithdrawCompanie(row.id) }}
+                        >
+                            Retirar empresa
+                        </button>
                     </div>
                 </Box>
             ,
@@ -111,8 +143,12 @@ export function TableCompanies({ userRow }: ITableCompanies) {
 
     ]
 
-    function handleOpenModalLinkCompanies() {
+    function handleModalLinkCompanies() {
         setIsModalLinkCompanies((oldValue) => !oldValue);
+    }
+
+    function handleModalWithdrawCompanie() {
+        setIsModalWithdrawCompanies((oldValue) => !oldValue);
     }
 
     if (data) {
@@ -124,19 +160,35 @@ export function TableCompanies({ userRow }: ITableCompanies) {
                 >
                     <>
                         <ModalLinkCompanies
-                            isActive={handleOpenModalLinkCompanies}
+                            isActive={handleModalLinkCompanies}
                             consultantInfo={userRow}
+                            linkedBusinesses={data.data.customer}
                         />
                     </>
                 </Modal>
+
+                <Modal
+                    isOpen={isModalWithdrawCompanies}
+                    style={styleModalWithdrawCompanie}
+                >
+                    <>
+                        <ModalWithdraw
+                            isActive={handleModalWithdrawCompanie}
+                            consultantInfo={userRow}
+                            linkedBusinesses={data.data.customer}
+                            idCompanie={idCompanie}
+                        />
+                    </>
+                </Modal>
+
 
                 {
                     data.data.length === 0 ?
                         <>
                             <p>Você não tem vínculo com nenhuma empresa.</p>
-                            {/* <Link color='#7956F7' href='/register-consultant' fontSize="20px">
+                            <Link color='#7956F7' href='/register-consultant' fontSize="20px">
                                 Clique aqui para cadastrar consultores a sua empresa.
-                            </Link> */}
+                            </Link>
                         </>
                         :
                         <>
@@ -154,7 +206,7 @@ export function TableCompanies({ userRow }: ITableCompanies) {
 
                             <DataTable
                                 columns={headers}
-                                data={data.data}
+                                data={data.data.customer}
                                 conditionalRowStyles={conditionalRowStyles}
                                 defaultSortFieldId={1}
                                 customStyles={styleTable}

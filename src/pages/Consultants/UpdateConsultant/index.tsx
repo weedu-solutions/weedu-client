@@ -1,5 +1,5 @@
 import { LayoutRegister } from "../../../components/LayoutRegister";
-import { ButtonWrapper, Wrapper, ButtonBlock, ButtonsEdit, ModalBody, ModalTitle, ButtonsContainer } from "./styles";
+import { ButtonWrapper, Wrapper, ButtonBlock, ButtonsEdit, ModalBody, ModalTitle, ButtonsContainer, ModalSubtitle } from "./styles";
 import {
     FormLabel,
     FormControl,
@@ -26,7 +26,7 @@ import Modal from 'react-modal'
 interface IConsultant {
     name?: string;
     suname?: string;
-    is_active?: string;
+    is_active?: number;
     manager_id?: string;
     password?: string;
     user_type_id?: string;
@@ -99,37 +99,53 @@ export function UpdateConsultant() {
             });
     }
 
-    const handleBlockConsultant = async () => {
-        await Api.post(`/auth/user/${idConsultant}`, {
-            name: consultant?.name,
-            suname: consultant?.suname,
-            email: consultant?.email,
-            is_active: consultant?.is_active === '1' ? '0' : '1',
-            user_type_id: Number(profileType),
-            password: '1234',
-            id: consultant?.id,
-            customer_id: [idCustumer]
-        })
-            .then((res: AxiosResponse) => {
-                // eslint-disable-next-line no-lone-blocks
-                {
-                    consultant?.is_active === '1' ?
-                        Notify(NotifyTypes.SUCCESS, 'Consultor bloqueado com sucesso!')
-                        :
-                        Notify(NotifyTypes.SUCCESS, 'Consultor desbloqueado com sucesso!')
-                }
-                navigate(ROUTES.CONSULTANTS)
-            })
-            .catch((err: AxiosResponse) => {
-                // eslint-disable-next-line no-lone-blocks
-                {
-                    consultant?.is_active === '1' ?
-                        Notify(NotifyTypes.ERROR, 'Não foi possível bloquear o consultor.')
-                        :
-                        Notify(NotifyTypes.ERROR, 'Não foi possível desbloquear o consultor.')
-                }
 
-            });
+    // 0 - Bloqueado
+    // 1 - Desbloqueado
+    function blockAndUnBlockCunsulant() {
+        if (consultant?.is_active === 1) {
+            return Number(0);
+        } else {
+            return Number(1);
+        }
+    }
+
+
+    const handleBlockConsultant = async () => {
+        if (consultant) {
+            await Api.post(`/auth/user/${idConsultant}`, {
+                name: consultant?.name,
+                suname: consultant?.suname,
+                email: consultant?.email,
+                is_active: blockAndUnBlockCunsulant(),
+                user_type_id: Number(profileType),
+                password: '1234aaaaa',
+                id: consultant?.id,
+                customer_id: [idCustumer]
+            })
+                .then((res: AxiosResponse) => {
+                    // eslint-disable-next-line no-lone-blocks
+                    {
+                        consultant?.is_active === 0 ?
+                            Notify(NotifyTypes.SUCCESS, 'Consultor bloqueado com sucesso!')
+                            :
+                            Notify(NotifyTypes.SUCCESS, 'Consultor desbloqueado com sucesso!')
+                    }
+                    navigate(ROUTES.CONSULTANTS)
+                })
+                .catch((err: AxiosResponse) => {
+                    // eslint-disable-next-line no-lone-blocks
+                    {
+                        consultant?.is_active === 0 ?
+                            Notify(NotifyTypes.ERROR, 'Não foi possível bloquear o consultor.')
+                            :
+                            Notify(NotifyTypes.ERROR, 'Não foi possível desbloquear o consultor.')
+                    }
+
+                });
+        } else {
+            Notify(NotifyTypes.ERROR, 'Erro interno no servidor.')
+        }
     }
 
     useEffect(() => {
@@ -142,8 +158,6 @@ export function UpdateConsultant() {
         getDataConsultant()
 
     }, []);
-
-
 
 
     return (
@@ -292,10 +306,10 @@ export function UpdateConsultant() {
                     <ButtonWrapper>
                         <ButtonBlock>
                             <ButtonDefault
-                                backgroundColor={consultant?.is_active === '1' ? '#E71D36' : '#7956F7'}
+                                backgroundColor={consultant?.is_active === 0 ? '#E71D36' : '#7956F7'}
                                 width={'40%'}
                                 height={'50px'}
-                                title={consultant?.is_active === '1' ? 'Bloquear' : 'Desbloquear'}
+                                title={consultant?.is_active === 1 ? 'Desbloquear' : 'Bloquear'}
                                 onClick={() => setIsModalBlockOpen(true)}
                             />
                         </ButtonBlock>
@@ -327,25 +341,25 @@ export function UpdateConsultant() {
             >
                 <ModalBody>
                     <ModalTitle>
-                        {
-                            consultant?.is_active === '1' ?
-                                <h1>Confirmação de bloqueio</h1>
-                                :
-                                <h1>Confirmação de desbloqueio</h1>
-                        }
+                        <h1>Confirmação de {consultant?.is_active === 0 ? "bloqueio" : "desbloqueio"}</h1>
                     </ModalTitle>
-                    <p>
-                        Tem certeza que deseja bloquear
-                        o consultor(a) {consultant?.name} ?
-                    </p>
+
+                    <ModalSubtitle>
+                        <p>
+                            Tem certeza que deseja {consultant?.is_active === 0 ? "bloquear " : "desbloquear "}
+                        </p>
+                        <span>
+                            o consultor(a) {consultant?.name} ?
+                        </span>
+                    </ModalSubtitle>
 
                     <ButtonsContainer>
                         <ButtonDefault
                             onClick={() => handleBlockConsultant()}
-                            backgroundColor={consultant?.is_active === '1' ? '#E71D36' : '#7956F7'}
+                            backgroundColor={consultant?.is_active === 0 ? '#E71D36' : '#7956F7'}
                             width={'100%'}
                             height={'50px'}
-                            title={consultant?.is_active === '1' ? 'Bloquear' : 'Desbloquear'}
+                            title={consultant?.is_active === 0 ? 'Bloquear' : 'Desbloquear'}
                         />
                         <ButtonDefault
                             onClick={() => setIsModalBlockOpen(false)}

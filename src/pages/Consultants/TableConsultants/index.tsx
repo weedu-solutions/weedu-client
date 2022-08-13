@@ -52,7 +52,7 @@ export function TableConsultants() {
         {
             id: 1,
             name: 'STATUS',
-            selector: (row: any) => row.is_active === '0' ? "Bloqueado" : "Desbloqueado",
+            selector: (row: any) => row.is_active === 1 ? "Bloqueado" : "Desbloqueado",
             sortable: true,
             reorder: true
         },

@@ -47,12 +47,6 @@ export const ModalBody = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  
-  p {
-    color: #747880;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
 `
 
 export const ModalTitle = styled.div`
@@ -65,6 +59,22 @@ export const ModalTitle = styled.div`
     font-size: 16px;
   }
 `
+export const ModalSubtitle = styled.div`
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction:column ;
+  margin-top: 10px;
+  
+  p {
+    color: #747880;
+  }
+
+  span {
+    color: #747880;
+  }
+`
 
 export const ButtonsContainer = styled.div`
   align-items: center;
@@ -73,7 +83,9 @@ export const ButtonsContainer = styled.div`
   width: 100%;
   flex-direction: column;
   justify-content: space-between;
-  height: 70%;
+  height: 120px;
+  margin-top: 30px;
+  /* background-color: red; */
 `
 
 
