@@ -7,12 +7,8 @@ import moreIcon from "../../../../assets/more.svg";
 import { useFetch } from "../../../../hooks/useFetch";
 import TableChildLoader from "../../../../components/Loaders/TableChildLoader";
 import Modal from 'react-modal'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ModalLinkCompanies } from "../ModalLinkCompanies";
-import { Api } from "../../../../services/api";
-import { AxiosResponse } from "axios";
-import { Notify, NotifyTypes } from "../../../../components/Notify";
-import { ROUTES } from "../../../../constants/routes";
 import { useNavigate } from "react-router-dom";
 import { ModalWithdraw } from "../ModalWithdrawCompanie";
 
@@ -59,7 +55,7 @@ const styleModalWithdrawCompanie = {
     },
     content: {
         maxWidth: '400px',
-        height: '400px',
+        height: '280px',
         margin: 'auto',
     }
 }

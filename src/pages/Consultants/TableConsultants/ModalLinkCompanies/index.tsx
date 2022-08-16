@@ -59,15 +59,11 @@ export function ModalLinkCompanies({ isActive, consultantInfo, linkedBusinesses 
             });
     }
 
-    const allCompanies = companies;
-    const linkedCompanies = linkedBusinesses;
+    let optionsCompanies = companies;
 
+    optionsCompanies = optionsCompanies.filter((it: any) => !linkedBusinesses.some((i2: any) => it.id === i2.id))
 
-    const optionsCompanies = linkedCompanies.filter((it: any) => allCompanies.some((it2: any) => it2.id !== it.id))
-
-    console.log(optionsCompanies)
-
-
+    const verifyLinkedCompanies = companies.length === optionsCompanies.length;
 
     return (
         <BodyModal>
@@ -123,8 +119,8 @@ export function ModalLinkCompanies({ isActive, consultantInfo, linkedBusinesses 
                     backgroundColor={'#7956F7'}
                     width={'100%'}
                     height={'50px'}
-                    loadingText={'Vincular'}
                     title={'Vincular'}
+                    disabled={verifyLinkedCompanies === true ? true : false}
                     onClick={() => onSubmit()}
                     type="submit"
                 />

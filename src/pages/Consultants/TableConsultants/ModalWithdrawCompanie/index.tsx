@@ -1,15 +1,11 @@
-import { Box, filter, FormLabel, Select } from "@chakra-ui/react";
 import { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ButtonDefault } from "../../../../components/FormChakra/Button";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
 import { ROUTES } from "../../../../constants/routes";
 import { Api } from "../../../../services/api";
-import { CustomerServices } from "../../../../services/customer";
 
-
-import { BodyModal, ContainerButtons, ContainerSelect } from "./styles";
+import { BodyModal, ContainerButtons } from "./styles";
 
 
 interface IModal {

@@ -38,6 +38,7 @@ export const ContainerButtons = styled.div`
     flex-direction: column;  
     height: 110px;
     width: 100%;
+    margin-top: 20px;
     justify-content: space-between;
 `
 
