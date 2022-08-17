@@ -1,11 +1,16 @@
 import { Link } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { ConsultantsServices } from "../../../../services/consultants";
 import { colors } from "../../../../theme";
 import { MyButton } from "../styles";
 import { Box, TitleTable } from "./styles";
 import moreIcon from "../../../../assets/more.svg";
+import { useFetch } from "../../../../hooks/useFetch";
+import TableChildLoader from "../../../../components/Loaders/TableChildLoader";
+import Modal from 'react-modal'
+import { useState } from "react";
+import { ModalLinkCompanies } from "../ModalLinkCompanies";
+import { useNavigate } from "react-router-dom";
+import { ModalWithdraw } from "../ModalWithdrawCompanie";
 
 
 
@@ -33,17 +38,44 @@ const styleTable = {
     },
 }
 
+const styleModalLinkCompanies = {
+    overlay: {
+        backgroundColor: 'rgba(0,0,0,0.50)'
+    },
+    content: {
+        maxWidth: '400px',
+        height: '400px',
+        margin: 'auto',
+    }
+}
+
+const styleModalWithdrawCompanie = {
+    overlay: {
+        backgroundColor: 'rgba(0,0,0,0.50)'
+    },
+    content: {
+        maxWidth: '400px',
+        height: '280px',
+        margin: 'auto',
+    }
+}
 interface ITableCompanies {
     userRow: any;
 }
 
 export function TableCompanies({ userRow }: ITableCompanies) {
 
-    const [consultants, setConsultants] = useState<any>();
-    const [pending, setPending] = useState<boolean>(false)
+    const [isModalLinkCompanies, setIsModalLinkCompanies] = useState<boolean>(false);
+    const [isModalWithdrawCompanies, setIsModalWithdrawCompanies] = useState<boolean>(false);
+    const [idCompanie, setIdCompanie] = useState<number>();
 
-    const userStorage = localStorage.getItem('user')
-    const userInfoStorage = JSON.parse(String(userStorage))
+    const { data } = useFetch<any>(`/auth/consultant-with-customer/${userRow.id}`);
+
+    function handleWithdrawCompanie(id: number) {
+        setIsModalWithdrawCompanies(true)
+        setIdCompanie(id)
+    }
+
 
     const headers = [
         {
@@ -88,7 +120,11 @@ export function TableCompanies({ userRow }: ITableCompanies) {
                 <Box>
                     <MyButton><img src={moreIcon} alt="Mais detalhes" /></MyButton>
                     <div className="dropdown">
-                        <button>Retirar empresa</button>
+                        <button
+                            onClick={() => { handleWithdrawCompanie(row.id) }}
+                        >
+                            Retirar empresa
+                        </button>
                     </div>
                 </Box>
             ,
@@ -98,37 +134,83 @@ export function TableCompanies({ userRow }: ITableCompanies) {
 
     ]
 
-    useEffect(() => {
+    function handleModalLinkCompanies() {
+        setIsModalLinkCompanies((oldValue) => !oldValue);
+    }
 
-        const getData = async () => {
-            setPending(pending => !pending);
-            const { data } = await ConsultantsServices.getAllConsultants(userInfoStorage.id);
-            setPending(pending => !pending);
+    function handleModalWithdrawCompanie() {
+        setIsModalWithdrawCompanies((oldValue) => !oldValue);
+    }
 
-            return setConsultants(data)
-        }
+    if (data) {
+        return (
+            <>
+                <Modal
+                    isOpen={isModalLinkCompanies}
+                    style={styleModalLinkCompanies}
+                >
+                    <>
+                        <ModalLinkCompanies
+                            isActive={handleModalLinkCompanies}
+                            consultantInfo={userRow}
+                            linkedBusinesses={data.data.customer}
+                        />
+                    </>
+                </Modal>
 
-        getData()
+                <Modal
+                    isOpen={isModalWithdrawCompanies}
+                    style={styleModalWithdrawCompanie}
+                >
+                    <>
+                        <ModalWithdraw
+                            isActive={handleModalWithdrawCompanie}
+                            consultantInfo={userRow}
+                            linkedBusinesses={data.data.customer}
+                            idCompanie={idCompanie}
+                        />
+                    </>
+                </Modal>
 
-    }, [setConsultants, userInfoStorage.id]);
+
+                {
+                    data.data.length === 0 ?
+                        <>
+                            <p>Você não tem vínculo com nenhuma empresa.</p>
+                            <Link color='#7956F7' href='/register-consultant' fontSize="20px">
+                                Clique aqui para cadastrar consultores a sua empresa.
+                            </Link>
+                        </>
+                        :
+                        <>
+                            <TitleTable>
+                                <p>Empresas</p>
+                                <Link
+                                    onClick={() => { setIsModalLinkCompanies(true) }}
+                                    color='#7956F7'
+                                    fontSize="16px"
+                                    marginRight="4px"
+                                >
+                                    Vincular nova empresa
+                                </Link>
+                            </TitleTable>
+
+                            <DataTable
+                                columns={headers}
+                                data={data.data.customer}
+                                conditionalRowStyles={conditionalRowStyles}
+                                defaultSortFieldId={1}
+                                customStyles={styleTable}
+                            />
+                        </>
+                }
+            </>
+        )
+    } else {
+        return (
+            <TableChildLoader />
+        )
+    }
 
 
-
-    return (
-        <>
-            <TitleTable>
-                <p>Empresas</p>
-                <Link color='#7956F7' href='/create-action' fontSize="16px" marginRight="4px">
-                    Vincular nova empresa
-                </Link>
-            </TitleTable>
-            <DataTable
-                columns={headers}
-                data={consultants}
-                conditionalRowStyles={conditionalRowStyles}
-                defaultSortFieldId={1}
-                customStyles={styleTable}
-            />
-        </>
-    )
 }

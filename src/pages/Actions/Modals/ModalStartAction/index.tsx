@@ -22,6 +22,7 @@ export function ModalStartAction({ closeModal, action }: ModalDisableActionProps
     const [startDate, setStartDate] = useState<any>();
     const [endDate, setEndDate] = useState<any>();
     const [iscloseModal, setIsCloseModal] = useState<any>();
+    const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
 
     function SubmitDate() {
         if (action?.init_date) {
@@ -38,6 +39,13 @@ export function ModalStartAction({ closeModal, action }: ModalDisableActionProps
     useEffect(() => {
         SubmitDate()
     })
+
+    const idCustumer =
+        user.user_type_id === 3 ?
+            infoCompanyConsultant.id
+            :
+            user.customer[0].id
+        ;
 
     const onSubmit = async () => {
         await Api.post(`/auth/plan/${action?.id}`, {
@@ -56,7 +64,7 @@ export function ModalStartAction({ closeModal, action }: ModalDisableActionProps
             end_date: endDate,
             observation: action?.observation,
             user_id: user.id,
-            customer_id: user.user_type_id,
+            customer_id: idCustumer,
             where: "O",
             status: action?.status,
             is_active: user.is_active
@@ -65,19 +73,19 @@ export function ModalStartAction({ closeModal, action }: ModalDisableActionProps
                 setIsCloseModal(closeModal)
                 if (action?.init_date) {
                     window.location.reload();
-                    Notify(NotifyTypes.SUCCESS, 'Plano de ação iniciado com sucesso!');
+                    Notify(NotifyTypes.SUCCESS, 'Plano de ação finalizado com sucesso!');
                 } else {
                     window.location.reload();
-                    Notify(NotifyTypes.SUCCESS, 'Plano de ação finalizado com sucesso!');
+                    Notify(NotifyTypes.SUCCESS, 'Plano de ação iniciado com sucesso!');
                 }
                 return iscloseModal
             })
             .catch((err: AxiosResponse) => {
                 setIsCloseModal(closeModal)
                 if (action?.init_date) {
-                    Notify(NotifyTypes.ERROR, 'Não foi posível iniciar o plano de ação!');
-                } else {
                     Notify(NotifyTypes.ERROR, 'Não foi posível finalizar o plano de ação!');
+                } else {
+                    Notify(NotifyTypes.ERROR, 'Não foi posível iniciar o plano de ação!');
                 }
                 return iscloseModal
             });

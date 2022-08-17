@@ -25,10 +25,18 @@ export function GraphsDash() {
     const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
     const [dataFinishStatus, setDataFinishStatus] = useState<IFinishedActions>();
 
+    const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+
+
     useEffect(() => {
 
         const getData = async () => {
-            const { data } = await ActionsServices.getDataGraphic(user.customer[0].id)
+            const { data } = await ActionsServices.getDataGraphic(
+                user.user_type_id === 3 ?
+                    infoCompanyConsultant.id
+                    :
+                    user.customer[0].id
+            )
             setDataStockStatus(data.started);
             return setDataFinishStatus(data.finished);
         }

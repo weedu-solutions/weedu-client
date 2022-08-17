@@ -167,7 +167,7 @@ export function EmployersCompany({ userRow }: any) {
       id: 5,
       name: 'Perfil',
       sortable: true,
-      selector: (row: any) => row.user_type_id === 1 ? 'Colaborador' : 'Gestor',
+      selector: (row: any) => row.user_type_id === 1 ? 'Colaborador' : row.user_type_id === 2 ? 'Gestor' : row.user_type_id === 3 ? 'Consultor' : 'Administrador',
       reorder: true
     },
     {
@@ -259,7 +259,7 @@ export function EmployersCompany({ userRow }: any) {
 
         {
           !pending ?
-            userData.length > 1 ?
+            userData.length > 0 ?
               <DataTable
                 data={userData}
                 columns={headers}

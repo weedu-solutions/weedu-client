@@ -111,3 +111,8 @@ export const WrapperInputs = styled.div`
   align-items: center;
   flex-wrap: nowrap;
 `
+
+export const Message = styled.div`
+  background-color: red;
+  width: 100%;
+`

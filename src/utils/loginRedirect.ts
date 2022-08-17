@@ -7,7 +7,7 @@ export function loginRedirect(roleId: number) {
     case 2:
       return ROUTES.ACTIONS
     case 3:
-      return ROUTES.ACTIONS
+      return ROUTES.CONSULTANT_COMPANIES
     case 4:
       return ROUTES.CUSTOMERS
     default:

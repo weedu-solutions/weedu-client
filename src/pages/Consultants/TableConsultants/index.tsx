@@ -1,13 +1,13 @@
 import DataTable from "react-data-table-component"
-import { ConsultantsServices } from "../../../services/consultants"
 import { colors } from "../../../theme"
-import { useEffect, useState } from "react"
 import { TableCompanies } from "./TableCompanies"
 import { MyButton } from "../styled"
 import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../../../constants/routes"
-import { UpdateConsultant } from "../UpdateConsultant"
-import { useAuth } from "../../../hooks/auth"
+import TableLoader from "../../../components/Loaders/TableLoader"
+import { useFetch } from "../../../hooks/useFetch"
+import { Link } from "@chakra-ui/react";
+
 
 
 const conditionalRowStyles = [
@@ -34,15 +34,12 @@ const styleTable = {
     },
 }
 
-export function TableConsultants() {
 
-    const [consultants, setConsultants] = useState<any>();
-    const [pending, setPending] = useState<boolean>(false);
+export function TableConsultants() {
 
     const userStorage = localStorage.getItem('user');
     const userInfoStorage = JSON.parse(String(userStorage));
     const navigate = useNavigate()
-    const { setIdConsultant } = useAuth();
 
     const handleOpenEditconsultans = (row: any) => {
         localStorage.setItem('idConsultant', JSON.stringify(row.id));
@@ -55,7 +52,7 @@ export function TableConsultants() {
         {
             id: 1,
             name: 'STATUS',
-            selector: (row: any) => row.is_active,
+            selector: (row: any) => row.is_active === 1 ? "Bloqueado" : "Desbloqueado",
             sortable: true,
             reorder: true
         },
@@ -83,7 +80,7 @@ export function TableConsultants() {
         {
             id: 5,
             name: 'TIPO DE PERFIL',
-            selector: (row: any) => row.user_type_id,
+            selector: (row: any) => row.user_type_id === 3 ? "Consultor" : "Gestor",
             sortable: true,
             reorder: true
         },
@@ -104,32 +101,36 @@ export function TableConsultants() {
         },
     ]
 
-    useEffect(() => {
+    const { data } = useFetch<any>(`/auth/consultant-customer/${userInfoStorage.id}`);
 
-        const getData = async () => {
-            setPending(pending => !pending);
-            const { data } = await ConsultantsServices.getAllConsultants(userInfoStorage.id);
-            setPending(pending => !pending);
+    if (data) {
+        return (
+            <>
+                {
+                    data.data[0].user.length === 0 ?
+                        <>
+                            <p>Você não possui consultores cadastrados.</p>
+                            <Link color='#7956F7' href='/register-consultant' fontSize="20px">
+                                Clique aqui para cadastrar consultores a sua empresa.
+                            </Link>
+                        </>
+                        :
+                        <DataTable
+                            columns={headers}
+                            data={data.data[0].user}
+                            conditionalRowStyles={conditionalRowStyles}
+                            defaultSortFieldId={1}
+                            customStyles={styleTable}
+                            expandableRows
+                            expandableRowsComponent={({ data }) => <TableCompanies userRow={data} />}
+                        />
+                }
+            </>
+        )
+    } else {
+        return (
+            <TableLoader />
+        )
+    }
 
-            return setConsultants(data[0].user)
-        }
-
-        getData()
-
-    }, [setConsultants, userInfoStorage.id]);
-
-
-    return (
-        <>
-            <DataTable
-                columns={headers}
-                data={consultants}
-                conditionalRowStyles={conditionalRowStyles}
-                defaultSortFieldId={1}
-                customStyles={styleTable}
-                expandableRows
-                expandableRowsComponent={({ data }) => <TableCompanies userRow={data} />}
-            />
-        </>
-    )
 }

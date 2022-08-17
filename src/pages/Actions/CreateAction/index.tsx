@@ -16,9 +16,12 @@ import {
     FormControl,
     Input,
     Stack,
-    Box
+    Box,
+    Select,
+    Textarea
 } from '@chakra-ui/react'
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { CustomerServices } from "../../../services/customer";
 
 
 export function CreateAction() {
@@ -26,6 +29,8 @@ export function CreateAction() {
 
     const [preview_init_date, setPreview_init_date] = useState("");
     const [preview_end_date, setPreview_end_date] = useState("");
+    const [responsible, setResponsible] = useState("");
+
 
     const handlePreviewInitDate = (event: any) => setPreview_init_date(event.target.value);
     const handlePreviewEndDate = (event: any) => setPreview_end_date(event.target.value);
@@ -33,9 +38,22 @@ export function CreateAction() {
     let chosenInitDate = moment(preview_init_date).format('DD/MM/YYYY');
     let chosenEndDate = moment(preview_end_date).format('DD/MM/YYYY');
 
-    const idCustumer = user.customer[0].id;
+    const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+    const usersCompanyConsultant: any = JSON.parse(localStorage.getItem('users_company') || '{}');
+
+
+    const idCustumer =
+        user.user_type_id === 3 ?
+            infoCompanyConsultant.id
+            :
+            user.customer[0].id
+        ;
 
     const navigate = useNavigate()
+
+
+
+
     const {
         handleSubmit,
         register,
@@ -58,7 +76,7 @@ export function CreateAction() {
             problem,
             what,
             how,
-            who,
+            who: responsible,
             why_1,
             why_2,
             why_3,
@@ -86,11 +104,14 @@ export function CreateAction() {
     return (
         <LayoutRegister>
             <strong>Adicionar uma nova ação</strong>
+
+
             <Wrapper>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <FormControl>
                         <Box>
                             <FormLabel htmlFor='problem'>Qual o problema ou causa que será tratado?</FormLabel>
+
                             <Input
                                 id='problem'
                                 placeholder='Informe o problema ou causa'
@@ -228,7 +249,7 @@ export function CreateAction() {
 
                         <Box mt="20px">
                             <FormLabel htmlFor='how'>Como irá realizar esta ação (passo a passo)? (How?)</FormLabel>
-                            <Input
+                            <Textarea
                                 id='how'
                                 placeholder='Informe o passo a passo'
                                 {...register('how', {
@@ -249,16 +270,29 @@ export function CreateAction() {
 
                         <Box mt="20px">
                             <FormLabel htmlFor='name'>Responsável pela ação (Who?)</FormLabel>
-                            <Input
-                                id='who'
+
+                            <Select
+                                h="56px"
+                                fontSize="16px"
                                 placeholder='Informe o responsável pela ação'
+                                focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
+                                value={responsible}
                                 {...register('who', {
                                     required: 'O campo "Who?" não pode ser vazio.',
                                 })}
-                                focusBorderColor={errors.who ? "#E71D36" : "#7956F7"}
-                                h="56px"
-                                fontSize="16px"
-                            />
+                                onChange={(e) => {
+                                    const responsibleAction = e.target.value;
+                                    setResponsible(responsibleAction);
+                                }
+                                }
+                            >
+                                {
+                                    usersCompanyConsultant[0].user.map((user: any) =>
+                                        <option value={user.name}>{user.name}</option>
+                                    )
+                                }
+                            </Select>
+
                             <FormLabel
                                 color="#E71D36"
                                 fontSize="13px"
