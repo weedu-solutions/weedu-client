@@ -63,7 +63,7 @@ export function ModalLinkCompanies({ isActive, consultantInfo, linkedBusinesses 
 
     optionsCompanies = optionsCompanies.filter((it: any) => !linkedBusinesses.some((i2: any) => it.id === i2.id))
 
-    const verifyLinkedCompanies = companies.length === optionsCompanies.length;
+    const verifyLinkedCompanies = optionsCompanies.length === 0;
 
     return (
         <BodyModal>
@@ -86,6 +86,7 @@ export function ModalLinkCompanies({ isActive, consultantInfo, linkedBusinesses 
                         w="100%"
                         fontSize="16px"
                         placeholder='Selecionar'
+                        focusBorderColor={"#7956F7"}
                         onChange={(e) => {
                             const linkCompany = e.target.value;
                             setLinkCompany(linkCompany);

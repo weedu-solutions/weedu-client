@@ -65,16 +65,11 @@ interface ITableCompanies {
 
 export function TableCompanies({ userRow }: ITableCompanies) {
 
-
     const [isModalLinkCompanies, setIsModalLinkCompanies] = useState<boolean>(false);
     const [isModalWithdrawCompanies, setIsModalWithdrawCompanies] = useState<boolean>(false);
     const [idCompanie, setIdCompanie] = useState<number>();
 
-
-
-    const navigate = useNavigate();
     const { data } = useFetch<any>(`/auth/consultant-with-customer/${userRow.id}`);
-
 
     function handleWithdrawCompanie(id: number) {
         setIsModalWithdrawCompanies(true)

@@ -21,6 +21,7 @@ import { Notify, NotifyTypes } from "../../../components/Notify";
 import { ROUTES } from "../../../constants/routes";
 import { ConsultantsServices } from "../../../services/consultants";
 import Modal from 'react-modal'
+import { useFetch } from "../../../hooks/useFetch";
 
 
 interface IConsultant {
@@ -51,6 +52,8 @@ export function UpdateConsultant() {
 
     const [show, setShow] = useState(false);
     const [consultant, setConsultant] = useState<IConsultant>();
+    const [companies, setCompanies] = useState<IConsultant>();
+
     const [profileType, setProfileType] = useState(consultant ? consultant?.user_type_id : '3');
     const [isModalBlockOpen, setIsModalBlockOpen] = useState(false);
 
@@ -61,15 +64,15 @@ export function UpdateConsultant() {
     } = useForm();
 
     const navigate = useNavigate()
-    const idCustumer = user.customer[0].id;
 
     const idConsultant = localStorage.getItem('idConsultant');
     const consultantSelected: any = localStorage.getItem('consultantSelected');
 
 
+
+
     function handleCancelEdit() {
         navigate(-1)
-
     }
 
     const handleClick = () => setShow(!show);
@@ -88,7 +91,7 @@ export function UpdateConsultant() {
             user_type_id: Number(profileType),
             password,
             id: consultant?.id,
-            customer_id: [idCustumer]
+            customer_id: companies
         })
             .then((res: AxiosResponse) => {
                 Notify(NotifyTypes.SUCCESS, 'Dados editados com sucesso!')
@@ -119,9 +122,9 @@ export function UpdateConsultant() {
                 email: consultant?.email,
                 is_active: blockAndUnBlockCunsulant(),
                 user_type_id: Number(profileType),
-                password: '1234aaaaa',
                 id: consultant?.id,
-                customer_id: [idCustumer]
+                password: "111",
+                customer_id: companies
             })
                 .then((res: AxiosResponse) => {
                     // eslint-disable-next-line no-lone-blocks
@@ -153,7 +156,15 @@ export function UpdateConsultant() {
         const getDataConsultant = async () => {
             const { data } = await ConsultantsServices.getConsultant(idConsultant);
             setConsultant(data);
+
+            const filterIdCompanies = data.customer.map((business: any) => {
+                return business.id
+            });
+
+            setCompanies(filterIdCompanies)
+
         }
+
 
         getDataConsultant()
 
@@ -171,11 +182,14 @@ export function UpdateConsultant() {
                             <Input
                                 id='name'
                                 placeholder='Informe o nome'
-                                defaultValue={consultant?.name}
-                                {...register('name')}
+                                {...register('name', {
+                                    required: 'O campo "Nome" não pode ser vazio.',
+                                })}
                                 focusBorderColor={errors.name ? "#E71D36" : "#7956F7"}
                                 h="56px"
                                 fontSize="16px"
+                                defaultValue={consultant?.name}
+
                             />
                             <FormLabel
                                 color="#E71D36"
@@ -191,7 +205,9 @@ export function UpdateConsultant() {
                             <Input
                                 id='suname'
                                 placeholder='Informe o sobrenome'
-                                {...register('suname')}
+                                {...register('suname', {
+                                    required: 'O campo "Sobrenome" não pode ser vazio.',
+                                })}
                                 defaultValue={consultant?.suname}
                                 focusBorderColor={errors.suname ? "#E71D36" : "#7956F7"}
                                 h="56px"
@@ -231,7 +247,9 @@ export function UpdateConsultant() {
                             <Input
                                 id='email'
                                 placeholder='Informe o email'
-                                {...register('email')}
+                                {...register('email', {
+                                    required: 'O campo "Email" não pode ser vazio.',
+                                })}
                                 defaultValue={consultant?.email}
                                 focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
                                 h="56px"
@@ -279,7 +297,9 @@ export function UpdateConsultant() {
                                 <Input
                                     id='password'
                                     placeholder='Informe a senha'
-                                    {...register('password')}
+                                    {...register('password', {
+                                        required: 'O campo "Senha" não pode ser vazio.',
+                                    })}
                                     defaultValue={consultantSelected?.password}
                                     focusBorderColor={errors.password ? "#E71D36" : "#7956F7"}
                                     h="56px"
