@@ -584,6 +584,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                                 height={'50px'}
                                 loadingText={'Salvar alterações'}
                                 loading={isSubmitting}
+                                disabled={action?.status === 3 ? true : false}
                                 title={'Salvar alterações'}
                                 type="submit"
                             />
