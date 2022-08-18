@@ -46,7 +46,8 @@ export function ModalLinkCompanies({ isActive, consultantInfo, linkedBusinesses 
             email: consultantInfo.email,
             is_active: consultantInfo.is_active,
             user_type_id: consultantInfo.user_type_id,
-            password: "de",
+            // phone: consultantInfo.phone,
+            password: 1234,
             id: consultantInfo.id,
             customer_id: [...linkedBusinessesIDs, link_Company]
         })

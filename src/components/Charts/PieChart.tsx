@@ -19,16 +19,29 @@ export default function PieChartGH() {
     const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
     const [pending, setPending] = useState<boolean>(false);
     const [activeIndex, setActiveIndex] = useState(0);
+    const infoCompany: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+
 
     useEffect(() => {
         setPending(pending => !pending);
 
-        const getData = async () => {
-            const { data } = await ActionsServices.getDataGraphic(user.customer[0].id)
+        const getGraphicCustomer = async () => {
+            const { data } = await ActionsServices.getDataGraphic(user.id)
             setPending(pending => !pending);
             return setDataStockStatus(data.started);
         }
-        getData()
+
+        const getGraphic = async () => {
+            const { data } = await ActionsServices.getDataGraphicCustomer(infoCompany.id)
+            setPending(pending => !pending);
+            return setDataStockStatus(data.started);
+        }
+
+        if (user.user_type_id === 1 || 2) {
+            getGraphic()
+        } else {
+            getGraphicCustomer()
+        }
 
     }, []);
 

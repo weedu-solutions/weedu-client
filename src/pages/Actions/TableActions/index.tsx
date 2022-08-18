@@ -98,7 +98,7 @@ export function TableActions() {
     const [actions, setActions] = useState<any>([]);
     const [actionInfo, setActionInfo] = useState<IActions | undefined>();
     const [pending, setPending] = useState<boolean>(false);
-    const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+    const infoCompany: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
 
 
     const { user } = useAuth();
@@ -125,8 +125,6 @@ export function TableActions() {
         setIsModalOpen(false);
     }
 
-    const userStorage = localStorage.getItem('user')
-    const userInfoStorage = JSON.parse(String(userStorage))
 
     const headers = [
         {
@@ -182,21 +180,31 @@ export function TableActions() {
     }
 
     useEffect(() => {
-        setPending(pending => !pending);
-        const getData = async () => {
-            const { data } = await ActionsServices.getAllActions(
-                user.user_type_id === 3 ?
-                    infoCompanyConsultant.id
-                    :
-                    userInfoStorage.customer[0].id
-            )
-            setPending(pending => !pending);
+        setPending(true);
+
+        const getTableActionsCustomer = async () => {
+            const { data } = await ActionsServices.getAllActionsCustomer(infoCompany.id)
+            setPending(false);
+
             setActions(data);
-            console.log(infoCompanyConsultant)
             return setAction(data.sort(compare));
         }
 
-        getData()
+        const getTableActions = async () => {
+            const { data } = await ActionsServices.getAllActions()
+            setPending(false);
+            setActions(data);
+            return setAction(data.sort(compare));
+        }
+
+        if (user.user_type_id === 1 || 2) {
+            getTableActions()
+        }
+
+        if (user.user_type_id === 3) {
+            getTableActionsCustomer()
+        }
+
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setAction]);

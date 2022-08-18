@@ -27,6 +27,7 @@ interface ICreateConsultant {
     password?: string;
     user_type_id?: string;
     email?: string;
+    // phone?: number | string;
 }
 
 export function CreateConsultant() {
@@ -45,14 +46,16 @@ export function CreateConsultant() {
         name,
         suname,
         password,
-        email
+        email,
+        // phone
     }: ICreateConsultant) => {
         await Api.post('/auth/user', {
             name,
             suname,
-            is_active: "1",
+            is_active: Number(1),
             customer_id: [idCustumer],
             password,
+            // phone,
             user_type_id: 3,
             email
         })
@@ -118,12 +121,12 @@ export function CreateConsultant() {
                         </Box>
 
                         <Box mt="20px">
-                            <FormLabel htmlFor='telephone'>Telefone</FormLabel>
+                            <FormLabel htmlFor='phone'>Telefone</FormLabel>
                             <Input
-                                id='telephone'
+                                id='phone'
                                 placeholder='Informe o telefone'
-                                {...register('telephone')}
-                                focusBorderColor={errors.telephone ? "#E71D36" : "#7956F7"}
+                                {...register('phone')}
+                                focusBorderColor={errors.phone ? "#E71D36" : "#7956F7"}
                                 h="56px"
                                 fontSize="16px"
                             />
@@ -132,7 +135,7 @@ export function CreateConsultant() {
                                 fontSize="13px"
                                 mt="4px"
                             >
-                                {errors.telephone && errors.telephone.message}
+                                {errors.phone && errors.phone.message}
                             </FormLabel>
                         </Box>
 

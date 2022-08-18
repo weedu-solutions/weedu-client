@@ -29,6 +29,7 @@ export const Body = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `
 
 export const Box = styled.div`
@@ -44,7 +45,7 @@ export const Box = styled.div`
   align-items: center;
   flex-direction: row;
   justify-content:space-between;
-  
+  margin-top: 20px;
   h1 {
     font-weight: 600;
     font-size: 20px;
