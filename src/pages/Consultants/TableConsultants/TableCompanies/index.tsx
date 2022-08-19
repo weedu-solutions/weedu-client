@@ -11,6 +11,7 @@ import { useState } from "react";
 import { ModalLinkCompanies } from "../ModalLinkCompanies";
 import { useNavigate } from "react-router-dom";
 import { ModalWithdraw } from "../ModalWithdrawCompanie";
+import { useAuth } from "../../../../hooks/auth";
 
 
 
@@ -77,6 +78,8 @@ export function TableCompanies({ userRow }: ITableCompanies) {
     }
 
 
+    const { user } = useAuth();
+
     const headers = [
         {
             id: 1,
@@ -117,16 +120,19 @@ export function TableCompanies({ userRow }: ITableCompanies) {
             id: 6,
             name: '',
             selector: (row: any) =>
-                <Box>
-                    <MyButton><img src={moreIcon} alt="Mais detalhes" /></MyButton>
-                    <div className="dropdown">
-                        <button
-                            onClick={() => { handleWithdrawCompanie(row.id) }}
-                        >
-                            Retirar empresa
-                        </button>
-                    </div>
-                </Box>
+                user.id === row.id ?
+                    <></>
+                    :
+                    <Box>
+                        <MyButton><img src={moreIcon} alt="Mais detalhes" /></MyButton>
+                        <div className="dropdown">
+                            <button
+                                onClick={() => { handleWithdrawCompanie(row.id) }}
+                            >
+                                Retirar empresa
+                            </button>
+                        </div>
+                    </Box>
             ,
             sortable: true,
             reorder: true

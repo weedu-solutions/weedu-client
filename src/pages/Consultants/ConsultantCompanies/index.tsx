@@ -20,7 +20,7 @@ export function ConsultantCompanies() {
             <Wrapper>
                 <div className="container">
                     <Content>
-                        <h1>Suas empresas</h1>
+                        <h1>Suas empresas - {user.name}</h1>
                     </Content>
                 </div>
             </Wrapper>

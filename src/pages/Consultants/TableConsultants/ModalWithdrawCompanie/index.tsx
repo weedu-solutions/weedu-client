@@ -31,7 +31,7 @@ export function ModalWithdraw({ isActive, consultantInfo, linkedBusinesses, idCo
             email: consultantInfo.email,
             is_active: consultantInfo.is_active,
             user_type_id: consultantInfo.user_type_id,
-            password: "de",
+            phone: consultantInfo.phone,
             id: consultantInfo.id,
             customer_id: [...choseCompanies]
         })

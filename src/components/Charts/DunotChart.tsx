@@ -16,16 +16,30 @@ export default function DunotChart() {
   const [datafinishedActions, setDataFinishedActions] = useState<IFinishedActions>();
   const [pending, setPending] = useState<boolean>(false);
 
+  const infoCompany: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+
   useEffect(() => {
     setPending(pending => !pending);
 
-    const getData = async () => {
-      const { data } = await ActionsServices.getDataGraphic(user.customer[0].id)
+    const getGraphicCustomer = async () => {
+      const { data } = await ActionsServices.getDataGraphic(user.id)
       setPending(pending => !pending);
       return setDataFinishedActions(data.finished);
     }
-    getData()
 
+    const getGraphic = async () => {
+      const { data } = await ActionsServices.getDataGraphicCustomer(infoCompany.id)
+      setPending(pending => !pending);
+      return setDataFinishedActions(data.finished);
+    }
+
+    if (user.user_type_id === 1 || 2) {
+      getGraphic()
+    } else {
+      getGraphicCustomer()
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const data = [

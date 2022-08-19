@@ -33,6 +33,7 @@ interface IConsultant {
     user_type_id?: string;
     email?: string;
     id?: string | number;
+    phone?: any;
 }
 
 const customStyleModalBlock = {
@@ -54,7 +55,7 @@ export function UpdateConsultant() {
     const [consultant, setConsultant] = useState<IConsultant>();
     const [companies, setCompanies] = useState<IConsultant>();
 
-    const [profileType, setProfileType] = useState(consultant ? consultant?.user_type_id : '3');
+    const [profileType, setProfileType] = useState(consultant ? consultant?.user_type_id : Number(3));
     const [isModalBlockOpen, setIsModalBlockOpen] = useState(false);
 
     const {
@@ -66,22 +67,17 @@ export function UpdateConsultant() {
     const navigate = useNavigate()
 
     const idConsultant = localStorage.getItem('idConsultant');
-    const consultantSelected: any = localStorage.getItem('consultantSelected');
-
-
-
 
     function handleCancelEdit() {
         navigate(-1)
     }
 
-    const handleClick = () => setShow(!show);
 
     const onSubmit = async ({
         name,
         suname,
-        password,
-        email
+        email,
+        phone
     }: IConsultant) => {
         await Api.post(`/auth/user/${idConsultant}`, {
             name,
@@ -89,7 +85,7 @@ export function UpdateConsultant() {
             email,
             is_active: consultant?.is_active,
             user_type_id: Number(profileType),
-            password,
+            phone,
             id: consultant?.id,
             customer_id: companies
         })
@@ -121,15 +117,15 @@ export function UpdateConsultant() {
                 suname: consultant?.suname,
                 email: consultant?.email,
                 is_active: blockAndUnBlockCunsulant(),
-                user_type_id: Number(profileType),
+                user_type_id: consultant.user_type_id,
                 id: consultant?.id,
-                password: "111",
+                phone: consultant?.phone,
                 customer_id: companies
             })
                 .then((res: AxiosResponse) => {
                     // eslint-disable-next-line no-lone-blocks
                     {
-                        consultant?.is_active === 0 ?
+                        consultant?.is_active === 1 ?
                             Notify(NotifyTypes.SUCCESS, 'Consultor bloqueado com sucesso!')
                             :
                             Notify(NotifyTypes.SUCCESS, 'Consultor desbloqueado com sucesso!')
@@ -139,7 +135,7 @@ export function UpdateConsultant() {
                 .catch((err: AxiosResponse) => {
                     // eslint-disable-next-line no-lone-blocks
                     {
-                        consultant?.is_active === 0 ?
+                        consultant?.is_active === 1 ?
                             Notify(NotifyTypes.ERROR, 'Não foi possível bloquear o consultor.')
                             :
                             Notify(NotifyTypes.ERROR, 'Não foi possível desbloquear o consultor.')
@@ -224,12 +220,13 @@ export function UpdateConsultant() {
                         </Box>
 
                         <Box mt="20px">
-                            <FormLabel htmlFor='telephone'>Telefone</FormLabel>
+                            <FormLabel htmlFor='phone'>Telefone</FormLabel>
                             <Input
-                                id='telephone'
+                                id='phone'
                                 placeholder='Informe o telefone'
-                                {...register('telephone')}
-                                focusBorderColor={errors.telephone ? "#E71D36" : "#7956F7"}
+                                {...register('phone')}
+                                defaultValue={consultant?.phone}
+                                focusBorderColor={errors.phone ? "#E71D36" : "#7956F7"}
                                 h="56px"
                                 fontSize="16px"
                             />
@@ -238,7 +235,7 @@ export function UpdateConsultant() {
                                 fontSize="13px"
                                 mt="4px"
                             >
-                                {errors.telephone && errors.telephone.message}
+                                {errors.phone && errors.phone.message}
                             </FormLabel>
                         </Box>
 
@@ -279,7 +276,7 @@ export function UpdateConsultant() {
                                 }
                             >
                                 <option value='3'>Consultor</option>
-                                <option value='4'>Gestor</option>
+                                <option value='2'>Gestor</option>
                             </Select>
 
                             <FormLabel
@@ -291,7 +288,7 @@ export function UpdateConsultant() {
                             </FormLabel>
                         </Box>
 
-                        <Box mt="20px">
+                        {/* <Box mt="20px">
                             <FormLabel htmlFor='password'>Senha</FormLabel>
                             <InputGroup justifyContent="center">
                                 <Input
@@ -319,7 +316,7 @@ export function UpdateConsultant() {
                             >
                                 {errors.password && errors.password.message}
                             </FormLabel>
-                        </Box>
+                        </Box> */}
 
                     </FormControl>
 
@@ -329,7 +326,7 @@ export function UpdateConsultant() {
                                 backgroundColor={consultant?.is_active === 0 ? '#E71D36' : '#7956F7'}
                                 width={'40%'}
                                 height={'50px'}
-                                title={consultant?.is_active === 1 ? 'Desbloquear' : 'Bloquear'}
+                                title={consultant?.is_active === 0 ? 'Desbloquear' : 'Bloquear'}
                                 onClick={() => setIsModalBlockOpen(true)}
                             />
                         </ButtonBlock>
@@ -361,12 +358,12 @@ export function UpdateConsultant() {
             >
                 <ModalBody>
                     <ModalTitle>
-                        <h1>Confirmação de {consultant?.is_active === 0 ? "bloqueio" : "desbloqueio"}</h1>
+                        <h1>Confirmação de {consultant?.is_active === 1 ? "bloqueio" : "desbloqueio"}</h1>
                     </ModalTitle>
 
                     <ModalSubtitle>
                         <p>
-                            Tem certeza que deseja {consultant?.is_active === 0 ? "bloquear " : "desbloquear "}
+                            Tem certeza que deseja {consultant?.is_active === 1 ? "bloquear " : "desbloquear "}
                         </p>
                         <span>
                             o consultor(a) {consultant?.name} ?
@@ -379,7 +376,7 @@ export function UpdateConsultant() {
                             backgroundColor={consultant?.is_active === 0 ? '#E71D36' : '#7956F7'}
                             width={'100%'}
                             height={'50px'}
-                            title={consultant?.is_active === 0 ? 'Bloquear' : 'Desbloquear'}
+                            title={consultant?.is_active === 1 ? 'Bloquear' : 'Desbloquear'}
                         />
                         <ButtonDefault
                             onClick={() => setIsModalBlockOpen(false)}

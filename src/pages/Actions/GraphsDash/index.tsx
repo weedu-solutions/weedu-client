@@ -25,24 +25,32 @@ export function GraphsDash() {
     const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
     const [dataFinishStatus, setDataFinishStatus] = useState<IFinishedActions>();
 
-    const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+    const infoCompany: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
 
 
     useEffect(() => {
 
-        const getData = async () => {
-            const { data } = await ActionsServices.getDataGraphic(
-                user.user_type_id === 3 ?
-                    infoCompanyConsultant.id
-                    :
-                    user.customer[0].id
-            )
+        const getGraphicCustomer = async () => {
+            const { data } = await ActionsServices.getDataGraphic(user.id)
+            setDataStockStatus(data.started);
+            return setDataFinishStatus(data.finished);
+
+        }
+
+        const getGraphic = async () => {
+            const { data } = await ActionsServices.getDataGraphicCustomer(infoCompany.id)
             setDataStockStatus(data.started);
             return setDataFinishStatus(data.finished);
         }
-        getData()
 
-    }, [user.customer]);
+        if (user.user_type_id === 1 || 2) {
+            getGraphic()
+        } else {
+            getGraphicCustomer()
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function HaveActios() {
         if (dataStockStatus?.starting === 0 &&

@@ -31,7 +31,6 @@ export function CreateAction() {
     const [preview_end_date, setPreview_end_date] = useState("");
     const [responsible, setResponsible] = useState("");
 
-
     const handlePreviewInitDate = (event: any) => setPreview_init_date(event.target.value);
     const handlePreviewEndDate = (event: any) => setPreview_end_date(event.target.value);
 
@@ -41,6 +40,8 @@ export function CreateAction() {
     const infoCompanyConsultant: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
     const usersCompanyConsultant: any = JSON.parse(localStorage.getItem('users_company') || '{}');
 
+    const filterCollaborators = usersCompanyConsultant[0].user.filter((users: any) => users.user_type_id === 1 || users.id === user.id)
+    const idResponsibleAction = responsible.split(',');
 
     const idCustumer =
         user.user_type_id === 3 ?
@@ -50,8 +51,6 @@ export function CreateAction() {
         ;
 
     const navigate = useNavigate()
-
-
 
 
     const {
@@ -76,7 +75,7 @@ export function CreateAction() {
             problem,
             what,
             how,
-            who: responsible,
+            who: user.user_type_id === 1 ? user.name : idResponsibleAction[0],
             why_1,
             why_2,
             why_3,
@@ -87,7 +86,7 @@ export function CreateAction() {
             init_date: null,
             end_date: null,
             observation,
-            user_id: user.id,
+            user_id: user.user_type_id === 1 ? user.id : idResponsibleAction[1],
             customer_id: idCustumer,
             where: "O",
             is_active: user.is_active
@@ -100,6 +99,7 @@ export function CreateAction() {
                 Notify(NotifyTypes.ERROR, 'Não foi possível criar um Plano de ação.')
             });
     }
+
 
     return (
         <LayoutRegister>
@@ -269,29 +269,50 @@ export function CreateAction() {
                         </Box>
 
                         <Box mt="20px">
-                            <FormLabel htmlFor='name'>Responsável pela ação (Who?)</FormLabel>
+                            <FormLabel htmlFor='who'>Responsável pela ação (Who?)</FormLabel>
+                            {
+                                user.user_type_id === 1 ?
+                                    <Input
+                                        id='preview_init_date'
+                                        {...register('who')}
+                                        value={user.name}
+                                        focusBorderColor={"#7956F7"}
+                                        h="56px"
+                                        cursor={"not-allowed"}
+                                        fontSize="16px"
+                                    /> :
+                                    <Select
+                                        h="56px"
+                                        fontSize="16px"
+                                        placeholder='Informe o responsável pela ação'
+                                        focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
+                                        value={responsible}
+                                        {...register('who', {
+                                            required: 'O campo "Who?" não pode ser vazio.',
+                                        })}
+                                        onChange={(e) => {
+                                            const responsibleAction = e.target.value;
+                                            setResponsible(responsibleAction);
+                                        }
+                                        }
+                                    >
 
-                            <Select
-                                h="56px"
-                                fontSize="16px"
-                                placeholder='Informe o responsável pela ação'
-                                focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
-                                value={responsible}
-                                {...register('who', {
-                                    required: 'O campo "Who?" não pode ser vazio.',
-                                })}
-                                onChange={(e) => {
-                                    const responsibleAction = e.target.value;
-                                    setResponsible(responsibleAction);
-                                }
-                                }
-                            >
-                                {
-                                    usersCompanyConsultant[0].user.map((user: any) =>
-                                        <option value={user.name}>{user.name}</option>
-                                    )
-                                }
-                            </Select>
+                                        {
+
+                                            user.user_type_id === 2 ?
+                                                filterCollaborators.map((user: any) =>
+                                                    <option value={[user.name, user.id]}>{user.name}</option>
+                                                )
+                                                :
+                                                usersCompanyConsultant[0].user.map((user: any) =>
+                                                    <option value={user.name}>{user.name}</option>
+                                                )
+
+                                        }
+
+                                    </Select>
+                            }
+
 
                             <FormLabel
                                 color="#E71D36"
