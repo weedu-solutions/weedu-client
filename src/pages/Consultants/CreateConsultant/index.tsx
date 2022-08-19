@@ -27,7 +27,7 @@ interface ICreateConsultant {
     password?: string;
     user_type_id?: string;
     email?: string;
-    // phone?: number | string;
+    phone?: number | string;
 }
 
 export function CreateConsultant() {
@@ -47,7 +47,7 @@ export function CreateConsultant() {
         suname,
         password,
         email,
-        // phone
+        phone
     }: ICreateConsultant) => {
         await Api.post('/auth/user', {
             name,
@@ -55,7 +55,7 @@ export function CreateConsultant() {
             is_active: Number(1),
             customer_id: [idCustumer],
             password,
-            // phone,
+            phone,
             user_type_id: 3,
             email
         })

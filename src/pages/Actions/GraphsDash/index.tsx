@@ -34,6 +34,7 @@ export function GraphsDash() {
             const { data } = await ActionsServices.getDataGraphic(user.id)
             setDataStockStatus(data.started);
             return setDataFinishStatus(data.finished);
+
         }
 
         const getGraphic = async () => {

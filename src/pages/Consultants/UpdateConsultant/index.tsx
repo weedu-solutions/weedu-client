@@ -67,21 +67,17 @@ export function UpdateConsultant() {
     const navigate = useNavigate()
 
     const idConsultant = localStorage.getItem('idConsultant');
-    const consultantSelected: any = localStorage.getItem('consultantSelected');
-
 
     function handleCancelEdit() {
         navigate(-1)
     }
 
-    const handleClick = () => setShow(!show);
 
     const onSubmit = async ({
         name,
         suname,
-        password,
         email,
-        // phone
+        phone
     }: IConsultant) => {
         await Api.post(`/auth/user/${idConsultant}`, {
             name,
@@ -89,8 +85,7 @@ export function UpdateConsultant() {
             email,
             is_active: consultant?.is_active,
             user_type_id: Number(profileType),
-            password,
-            // phone,
+            phone,
             id: consultant?.id,
             customer_id: companies
         })
@@ -124,8 +119,7 @@ export function UpdateConsultant() {
                 is_active: blockAndUnBlockCunsulant(),
                 user_type_id: consultant.user_type_id,
                 id: consultant?.id,
-                password: 1234,
-                // phone: consultant?.phone,
+                phone: consultant?.phone,
                 customer_id: companies
             })
                 .then((res: AxiosResponse) => {
@@ -282,7 +276,7 @@ export function UpdateConsultant() {
                                 }
                             >
                                 <option value='3'>Consultor</option>
-                                <option value='4'>Gestor</option>
+                                <option value='2'>Gestor</option>
                             </Select>
 
                             <FormLabel
@@ -294,7 +288,7 @@ export function UpdateConsultant() {
                             </FormLabel>
                         </Box>
 
-                        <Box mt="20px">
+                        {/* <Box mt="20px">
                             <FormLabel htmlFor='password'>Senha</FormLabel>
                             <InputGroup justifyContent="center">
                                 <Input
@@ -322,7 +316,7 @@ export function UpdateConsultant() {
                             >
                                 {errors.password && errors.password.message}
                             </FormLabel>
-                        </Box>
+                        </Box> */}
 
                     </FormControl>
 

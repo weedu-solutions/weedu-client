@@ -31,7 +31,6 @@ export function CreateAction() {
     const [preview_end_date, setPreview_end_date] = useState("");
     const [responsible, setResponsible] = useState("");
 
-
     const handlePreviewInitDate = (event: any) => setPreview_init_date(event.target.value);
     const handlePreviewEndDate = (event: any) => setPreview_end_date(event.target.value);
 
@@ -42,6 +41,7 @@ export function CreateAction() {
     const usersCompanyConsultant: any = JSON.parse(localStorage.getItem('users_company') || '{}');
 
     const filterCollaborators = usersCompanyConsultant[0].user.filter((users: any) => users.user_type_id === 1 || users.id === user.id)
+    const idResponsibleAction = responsible.split(',');
 
     const idCustumer =
         user.user_type_id === 3 ?
@@ -51,8 +51,6 @@ export function CreateAction() {
         ;
 
     const navigate = useNavigate()
-
-
 
 
     const {
@@ -77,7 +75,7 @@ export function CreateAction() {
             problem,
             what,
             how,
-            who: user.user_type_id === 1 ? user.name : responsible,
+            who: user.user_type_id === 1 ? user.name : idResponsibleAction[0],
             why_1,
             why_2,
             why_3,
@@ -88,7 +86,7 @@ export function CreateAction() {
             init_date: null,
             end_date: null,
             observation,
-            user_id: user.id,
+            user_id: user.user_type_id === 1 ? user.id : idResponsibleAction[1],
             customer_id: idCustumer,
             where: "O",
             is_active: user.is_active
@@ -101,6 +99,7 @@ export function CreateAction() {
                 Notify(NotifyTypes.ERROR, 'Não foi possível criar um Plano de ação.')
             });
     }
+
 
     return (
         <LayoutRegister>
@@ -302,7 +301,7 @@ export function CreateAction() {
 
                                             user.user_type_id === 2 ?
                                                 filterCollaborators.map((user: any) =>
-                                                    <option value={user.name}>{user.name}</option>
+                                                    <option value={[user.name, user.id]}>{user.name}</option>
                                                 )
                                                 :
                                                 usersCompanyConsultant[0].user.map((user: any) =>
