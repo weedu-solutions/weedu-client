@@ -14,8 +14,8 @@ export class ActionsServices {
         return data
     }
 
-    static async getDataGraphic(companyID: string | number) {
-        var { data } = await Api.get(`/auth/dashboard/${companyID}`)
+    static async getDataGraphic(userID: string | number) {
+        var { data } = await Api.get(`/auth/dashboard/${userID}`)
         return data
     }
 

@@ -28,27 +28,29 @@ export function GraphsDash() {
     const infoCompany: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
 
 
+    
     useEffect(() => {
 
-        const getGraphicCustomer = async () => {
+        const getGraphic = async () => {
             const { data } = await ActionsServices.getDataGraphic(user.id)
             setDataStockStatus(data.started);
             return setDataFinishStatus(data.finished);
 
         }
 
-        const getGraphic = async () => {
+        const getGraphicCustomer = async () => {
             const { data } = await ActionsServices.getDataGraphicCustomer(infoCompany.id)
             setDataStockStatus(data.started);
             return setDataFinishStatus(data.finished);
         }
 
         if (user.user_type_id === 1 || 2) {
-            getGraphic()
-        } else {
+            getGraphic()                       
+        } 
+        
+        if (user.user_type_id === 3) {
             getGraphicCustomer()
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -88,7 +90,8 @@ export function GraphsDash() {
                                 <Link color='#7956F7' href='/create-action' fontSize="25px" marginRight="4px">
                                     Crie planos de ação
                                 </Link>
-                                para vizualizar o gráfico de status das ações.</h1>
+                                para vizualizar o gráfico de status das ações.
+                            </h1>
                         </MessageDefaultChart>
 
                         : <ContainerRow>
