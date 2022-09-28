@@ -23,25 +23,27 @@ export default function PieChartGH() {
 
 
     useEffect(() => {
-        setPending(pending => !pending);
+        setPending(true);
 
-        const getGraphicCustomer = async () => {
+        const getGraphic = async () => {
             const { data } = await ActionsServices.getDataGraphic(user.id)
-            setPending(pending => !pending);
+            setPending(false);
             return setDataStockStatus(data.started);
         }
 
-        const getGraphic = async () => {
+        const getGraphicCustomer = async () => {
             const { data } = await ActionsServices.getDataGraphicCustomer(infoCompany.id)
-            setPending(pending => !pending);
+            setPending(false);
             return setDataStockStatus(data.started);
         }
 
         if (user.user_type_id === 1 || 2) {
-            getGraphic()
-        } else {
+            getGraphic()            
+        } 
+        if (user.user_type_id === 3) {
             getGraphicCustomer()
         }
+        
 
     }, []);
 

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const Api = axios.create({ 
-  baseURL: 'http://174.129.120.82/api'
+  baseURL: 'http://18.232.197.188:3000/api'
 })
 
 Api.defaults.headers.post['Content-Type'] = 'application/json'

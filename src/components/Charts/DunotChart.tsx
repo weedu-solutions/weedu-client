@@ -19,23 +19,25 @@ export default function DunotChart() {
   const infoCompany: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
 
   useEffect(() => {
-    setPending(pending => !pending);
+    setPending(true);
 
-    const getGraphicCustomer = async () => {
+    const getGraphic = async () => {
       const { data } = await ActionsServices.getDataGraphic(user.id)
-      setPending(pending => !pending);
+      setPending(false);
       return setDataFinishedActions(data.finished);
     }
 
-    const getGraphic = async () => {
+    const getGraphicCustomer = async () => {
       const { data } = await ActionsServices.getDataGraphicCustomer(infoCompany.id)
-      setPending(pending => !pending);
+      setPending(false);
       return setDataFinishedActions(data.finished);
     }
 
     if (user.user_type_id === 1 || 2) {
-      getGraphic()
-    } else {
+      getGraphic()            
+    } 
+    
+    if (user.user_type_id === 3) {
       getGraphicCustomer()
     }
 
