@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import { MyRoutes } from "./routes";
 import { NativeBaseProvider } from "native-base";
 import reportWebVitals from "./reportWebVitals";
 import { theme } from "./theme";
@@ -8,7 +8,7 @@ import { theme } from "./theme";
 ReactDOM.render(
   <React.StrictMode>
     <NativeBaseProvider theme={theme}>
-      <App />
+      <MyRoutes />
     </NativeBaseProvider>
   </React.StrictMode>,
   document.getElementById("root")
