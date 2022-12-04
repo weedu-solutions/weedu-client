@@ -1,15 +1,15 @@
+import { Link, Tooltip } from '@chakra-ui/react';
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import iconBack from "../../assets/seta-back.svg";
 import { AddButton } from "../../components/AddButton";
 import LayoutLogged from "../../components/LayoutLogged";
 import { ROUTES } from "../../constants/routes";
 import { useAuth } from "../../hooks/auth";
+import { CustomerServices } from "../../services/customer";
+import { GraphsDash } from "./GraphsDash";
 import { AddButtonWrapper, Content, Separator, Wrapper } from "./styles";
 import { TableActions } from "./TableActions";
-import { Link, Tooltip } from '@chakra-ui/react'
-import { GraphsDash } from "./GraphsDash";
-import iconBack from "../../assets/seta-back.svg";
-import { useEffect } from "react";
-import { CustomerServices } from "../../services/customer";
 
 
 export function Actions() {
@@ -62,10 +62,10 @@ export function Actions() {
           {
             user.user_type_id === 3 && infoCompanyConsultant ?
               <Content>
-                <h1>{infoCompanyConsultant.fantasy_name} - {user.name} - {user.user_type_id} - {infoCompanyConsultant.id}</h1>
+                <h1>{infoCompanyConsultant.fantasy_name} - {user.name}</h1>
               </Content>
             : <Content>
-                <h1>{user?.customer[0].fantasy_name} - {user.name} - {user.user_type_id}</h1>
+                <h1>{user?.customer[0].fantasy_name} - {user.name}</h1>
               </Content>
           }
 

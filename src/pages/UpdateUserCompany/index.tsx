@@ -1,14 +1,14 @@
-import { Label, CustomInput, Wrapper, ButtonWrapper } from './styled'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import Select from 'react-select'
+import { ButtonDefault } from '../../components/FormChakra/Button'
 import { InputText } from '../../components/InputText'
 import { LayoutRegister } from '../../components/LayoutRegister'
-import Select from 'react-select'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { UserServices } from '../../services/user'
+import { Notify, NotifyTypes } from '../../components/Notify'
 import { ROUTES } from '../../constants/routes'
 import { useUser } from '../../hooks/user'
-import { Notify, NotifyTypes } from '../../components/Notify'
-import { ButtonDefault } from '../../components/FormChakra/Button'
+import { UserServices } from '../../services/user'
+import { ButtonWrapper, CustomInput, Label, Wrapper } from './styled'
 
 export function UpdateUserCompany() {
   interface IDataForm {
@@ -29,7 +29,7 @@ export function UpdateUserCompany() {
     }),
     control: (provided: any) => ({
       ...provided,
-      padding: '10px 0'
+      padding: '10px 0',
     }),
   }
 
@@ -50,6 +50,7 @@ export function UpdateUserCompany() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataForm, setDataForm] = useState<IDataForm>(initialForm)
+
 
 
 
@@ -111,16 +112,28 @@ export function UpdateUserCompany() {
           type="email"
         />
 
-        <Label htmlFor="">Tipo de perfil</Label>
-        <CustomInput>
-          <Select
-            styles={selectCustomStyles}
-            options={options}
-            defaultValue={() => Number(userDataForm.user_type_id) === 1 ? { label: 'Colaborador', value: '1' } : { label: 'Gestor', value: '2' }}
-            onChange={(value: any) => setDataForm({ ...dataForm, user_type_id: value.value })}
-            placeholder="Selecione um tipo de usuário"
-          />
-        </CustomInput>
+        {
+          Number(userDataForm.user_type_id) !== 4 ?
+            <CustomInput>
+              <Label htmlFor="">
+                Tipo de perfil
+              </Label>
+              <Select
+                styles={selectCustomStyles}
+                options={options}
+                defaultValue={() => Number(userDataForm.user_type_id) === 1 ? { label: 'Colaborador', value: '1' } : { label: 'Gestor', value: '2' }}
+                onChange={(value: any) => setDataForm({ ...dataForm, user_type_id: value.value })}
+                placeholder="Selecione um tipo de usuário"
+                isSearchable={false}
+              />
+            </CustomInput>
+          : <InputText
+              isDisabled
+              title="Tipo de perfil"
+              value="Administrador"
+              type="text"
+            />
+        }
 
         {(Number(userDataForm.user_type_id) === 1 || dataForm.user_type_id === '1') && <>
           <Label htmlFor="">Gestor</Label>
@@ -131,6 +144,7 @@ export function UpdateUserCompany() {
               defaultValue={dataForm.user_type_id}
               onChange={(value: any) => setDataForm({ ...dataForm, maneger_id: value.id })}
               placeholder="Selecione um Gestor"
+              isSearchable={false}
             />
           </CustomInput>
         </>}
