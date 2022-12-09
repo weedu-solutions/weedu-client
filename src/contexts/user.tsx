@@ -8,7 +8,8 @@ interface IUserDataForm {
   password: string;
   is_active: string;
   customer_id: Array<number>;
-  maneger_id: string;
+  manager_id: string;
+  manager: any;
 }
 
 export interface IUserData {
@@ -29,7 +30,8 @@ const initialUserDataForm = {
   password: "",
   is_active: "1",
   customer_id: [],
-  maneger_id: ""
+  manager_id: "",
+  manager: ''
 }
 
 

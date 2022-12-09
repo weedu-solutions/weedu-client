@@ -1,13 +1,13 @@
-import { Label, CustomInput, Wrapper, ButtonWrapper } from './styled'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import Select from 'react-select'
+import { ButtonDefault } from '../../components/FormChakra/Button'
 import { InputText } from '../../components/InputText'
 import { LayoutRegister } from '../../components/LayoutRegister'
-import Select from 'react-select'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { UserServices } from '../../services/user'
 import { ROUTES } from '../../constants/routes'
 import { useUser } from '../../hooks/user'
-import { ButtonDefault } from '../../components/FormChakra/Button'
+import { UserServices } from '../../services/user'
+import { ButtonWrapper, CustomInput, Label, Wrapper } from './styled'
 
 export function RegisterUserCompany() {
   interface IDataForm {
@@ -103,6 +103,7 @@ export function RegisterUserCompany() {
             defaultValue={dataForm.user_type_id}
             onChange={(value: any) => setDataForm({ ...dataForm, user_type_id: value.value })}
             placeholder="Selecione um tipo de usuário"
+            isSearchable={false}
           />
         </CustomInput>
         {dataForm.user_type_id === "1" && <>

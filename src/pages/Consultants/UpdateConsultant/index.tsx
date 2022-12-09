@@ -1,27 +1,18 @@
-import { LayoutRegister } from "../../../components/LayoutRegister";
-import { ButtonWrapper, Wrapper, ButtonBlock, ButtonsEdit, ModalBody, ModalTitle, ButtonsContainer, ModalSubtitle } from "./styles";
 import {
-    FormLabel,
-    FormControl,
-    Input,
-    Box,
-    Button,
-    InputGroup,
-    InputRightElement,
-    Select
-} from '@chakra-ui/react'
-import { ButtonDefault } from "../../../components/FormChakra/Button";
-import { useForm } from "react-hook-form";
-import { useAuth } from "../../../hooks/auth";
-import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import { Api } from "../../../services/api";
+  Box, FormControl, FormLabel, Input, Select
+} from '@chakra-ui/react';
 import { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import Modal from 'react-modal';
+import { useNavigate } from "react-router-dom";
+import { ButtonDefault } from "../../../components/FormChakra/Button";
+import { LayoutRegister } from "../../../components/LayoutRegister";
 import { Notify, NotifyTypes } from "../../../components/Notify";
 import { ROUTES } from "../../../constants/routes";
+import { Api } from "../../../services/api";
 import { ConsultantsServices } from "../../../services/consultants";
-import Modal from 'react-modal'
-import { useFetch } from "../../../hooks/useFetch";
+import { ButtonBlock, ButtonsContainer, ButtonsEdit, ButtonWrapper, ModalBody, ModalSubtitle, ModalTitle, Wrapper } from "./styles";
 
 
 interface IConsultant {
@@ -49,9 +40,6 @@ const customStyleModalBlock = {
 
 export function UpdateConsultant() {
 
-    const { user } = useAuth();
-
-    const [show, setShow] = useState(false);
     const [consultant, setConsultant] = useState<IConsultant>();
     const [companies, setCompanies] = useState<IConsultant>();
 
@@ -158,9 +146,7 @@ export function UpdateConsultant() {
             });
 
             setCompanies(filterIdCompanies)
-
         }
-
 
         getDataConsultant()
 
