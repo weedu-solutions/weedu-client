@@ -19,7 +19,7 @@ export function UpdateUserCompany() {
     password: string;
     is_active: string;
     customer_id: Array<number>;
-    maneger_id: string;
+    manager_id: string;
     id?: string;
   }
 
@@ -41,7 +41,7 @@ export function UpdateUserCompany() {
     password: "",
     is_active: "1",
     customer_id: [],
-    maneger_id: ""
+    manager_id: ""
   }
 
   const navigate = useNavigate()
@@ -51,6 +51,9 @@ export function UpdateUserCompany() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataForm, setDataForm] = useState<IDataForm>(initialForm)
 
+  console.log(dataForm, 'dataForm')
+  console.log(userDataForm, 'userDataForm')
+  console.log(userDataList, 'userDataList')
 
 
 
@@ -62,6 +65,9 @@ export function UpdateUserCompany() {
   const manegerOptions = userDataList.map((user) => {
     return { label: user.name, value: String(user.user_type_id), id: user.id }
   }) as any
+
+  const manager = { label: userDataForm.manager[0]?.name, value: userDataForm.manager[0]?.id, }
+
 
 
   useEffect(() => {
@@ -141,8 +147,8 @@ export function UpdateUserCompany() {
             <Select
               styles={selectCustomStyles}
               options={manegerOptions}
-              defaultValue={dataForm.user_type_id}
-              onChange={(value: any) => setDataForm({ ...dataForm, maneger_id: value.id })}
+              defaultValue={manager}
+              onChange={(value: any) => setDataForm({ ...dataForm, manager_id: value.id })}
               placeholder="Selecione um Gestor"
               isSearchable={false}
             />
