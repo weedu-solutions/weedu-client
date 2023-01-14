@@ -1,12 +1,14 @@
+import { Link } from "@chakra-ui/react"
+import { AxiosResponse } from "axios"
+import { useEffect, useState } from "react"
 import DataTable from "react-data-table-component"
-import { colors } from "../../../theme"
-import { TableCompanies } from "./TableCompanies"
-import { MyButton } from "../styled"
 import { useNavigate } from "react-router-dom"
-import { ROUTES } from "../../../constants/routes"
 import TableLoader from "../../../components/Loaders/TableLoader"
-import { useFetch } from "../../../hooks/useFetch"
-import { Link } from "@chakra-ui/react";
+import { ROUTES } from "../../../constants/routes"
+import { Api } from "../../../services/api"
+import { colors } from "../../../theme"
+import { MyButton } from "../styled"
+import { TableCompanies } from "./TableCompanies"
 
 
 
@@ -40,8 +42,9 @@ export function TableConsultants() {
     const userStorage = localStorage.getItem('user');
     const userInfoStorage = JSON.parse(String(userStorage));
     const navigate = useNavigate()
+    const [consultants, setConsultants] = useState<any>([]);
 
-    const handleOpenEditconsultans = (row: any) => {
+    const handleOpenEditConsultants = (row: any) => {
         localStorage.setItem('idConsultant', JSON.stringify(row.id));
         localStorage.setItem('consultantSelected', JSON.stringify(row));
 
@@ -90,7 +93,7 @@ export function TableConsultants() {
             selector: (row: any) =>
                 <MyButton
                     onClick={
-                        () => handleOpenEditconsultans(row)
+                        () => handleOpenEditConsultants(row)
                     }
                 >
                     Ver detalhes
@@ -101,13 +104,24 @@ export function TableConsultants() {
         },
     ]
 
-    const { data } = useFetch<any>(`/auth/consultant-customer/${userInfoStorage.id}`);
+    const getConsultants = async () => {
+      await Api.get(`/auth/consultant-customer/${userInfoStorage.customer[0].id}`)
+        .then((res: AxiosResponse) => {
+          setConsultants(res.data.data);
+        })
+        .catch((err: AxiosResponse) => {});
+    }
 
-    if (data) {
+    useEffect(() => {
+      getConsultants()
+    }, [])
+
+
+    if (consultants) {
         return (
             <>
                 {
-                    data.data[0].user.length === 0 ?
+                    consultants.length === 0 ?
                         <>
                             <p>Você não possui consultores cadastrados.</p>
                             <Link color='#7956F7' href='/register-consultant' fontSize="20px">
@@ -117,7 +131,7 @@ export function TableConsultants() {
                         :
                         <DataTable
                             columns={headers}
-                            data={data.data[0].user}
+                            data={consultants[0].user}
                             conditionalRowStyles={conditionalRowStyles}
                             defaultSortFieldId={1}
                             customStyles={styleTable}
