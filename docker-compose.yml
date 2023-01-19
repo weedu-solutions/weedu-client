@@ -10,11 +10,5 @@ services:
           context: .
           dockerfile: Dockerfile
       ports:
-        - "3001:3000"
-      deploy:
-        resources:
-          limits:
-            memory: 768M
-          reservations:
-            memory: 512M
+        - "80:3000"
 
