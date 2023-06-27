@@ -397,6 +397,7 @@ export function Companies() {
                   conditionalRowStyles={conditionalRowStyles}
                   defaultSortFieldId={1}
                   expandableRows
+                  noDataComponent="Desculpe não encontramos :/"
                   customStyles={styles}
                   expandableRowsComponent={({ data }) => <EmployersCompany userRow={data} />}
                   expandableIcon={{ collapsed: <TiArrowSortedDown fill={colors.primary.darker} size="20" />, expanded: <TiArrowSortedUp fill={colors.primary.darker} size="20" /> }}

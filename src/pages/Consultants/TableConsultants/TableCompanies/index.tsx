@@ -204,6 +204,7 @@ export function TableCompanies({ userRow }: ITableCompanies) {
                             <DataTable
                                 columns={headers}
                                 data={data.data.customer}
+                                noDataComponent="Desculpe não encontramos :/"
                                 conditionalRowStyles={conditionalRowStyles}
                                 defaultSortFieldId={1}
                                 customStyles={styleTable}

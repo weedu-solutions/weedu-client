@@ -135,6 +135,7 @@ export function TableConsultants() {
                             conditionalRowStyles={conditionalRowStyles}
                             defaultSortFieldId={1}
                             customStyles={styleTable}
+                            noDataComponent="Desculpe não encontramos :/"
                             expandableRows
                             expandableRowsComponent={({ data }) => <TableCompanies userRow={data} />}
                         />
