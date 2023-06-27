@@ -1,11 +1,10 @@
-import styled from 'styled-components'
-
+import styled from "styled-components";
 
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   padding: 80px 0;
-`
+`;
 
 export const Content = styled.div`
   width: 100%;
@@ -18,12 +17,12 @@ export const Content = styled.div`
 
   h1 {
     font-weight: 600;
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-size: 32px;
-    color: #1E163E;
+    color: #1e163e;
   }
-`
+`;
 
 export const ButtonsWrapper = styled.div`
   width: 100%;
@@ -32,23 +31,23 @@ export const ButtonsWrapper = styled.div`
   justify-content: center;
   margin-top: 20px;
   padding-bottom: 30px;
-`
+`;
 
 export const AddButtonWrapper = styled.div`
   position: absolute;
   right: 180px;
   bottom: 30px;
-`
+`;
 
 export const TextBlock = styled.p`
-  color: #E71D36;;
-  font-weight: 700; 
-`
+  color: #e71d36;
+  font-weight: 700;
+`;
 
 export const TextUnBlock = styled.p`
-  color: #3D2B7C;;
+  color: #3d2b7c;
   font-weight: 700;
-`
+`;
 
 export const ModalContent = styled.div`
   padding: 15px;
@@ -63,8 +62,7 @@ export const ModalContent = styled.div`
     margin-bottom: 10px;
     align-self: center;
   }
-
-`
+`;
 
 export const ModalBlockContent = styled.div`
   padding: 15px;
@@ -80,17 +78,84 @@ export const ModalBlockContent = styled.div`
   p {
     margin-bottom: 20px;
   }
-`
+`;
 
 export const WrapperInputs = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-`
+`;
 
 export const Message = styled.div`
   h1 {
     font-size: 30px;
   }
-`
+`;
+
+export const SelectWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+export const SelectButton = styled.button`
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #fff;
+  border: 1px solid #3d2b7c;
+  color: #3d2b7c;
+  font-weight: 500;
+  border-radius: 16px;
+  cursor: pointer;
+`;
+
+export const CheckboxList = styled.div`
+  position: absolute;
+  top: 100%;
+  width: 15rem;
+  left: 0;
+  z-index: 1;
+  background-color: #fff;
+  border: 1px solid #3d2b7c;
+  margin-top: 10px;
+  border-radius: 16px;
+  max-height: 400px;
+  overflow: auto;
+  padding: 4px;
+
+  p {
+    padding: 8px;
+    margin-left: 4px;
+    color: #1e163e;
+    font-weight: 700;
+  }
+`;
+
+export const CheckboxLabel = styled.label`
+  display: block;
+  padding: 8px;
+  cursor: pointer;
+  margin-left: 10px;
+
+  span {
+    margin-left: 4px;
+    font-weight: 500;
+  }
+`;
+
+export const CheckboxInput = styled.input``;
+
+export const ButtonFilter = styled.button`
+  max-height: 200px;
+border-radius: 10px;
+padding: 8px 16px;
+border: 1px solid #3d2b7c;
+margin-left: 10px;
+
+`;
+
+export const RowFilter = styled.div`
+ display: flex;
+`;
+

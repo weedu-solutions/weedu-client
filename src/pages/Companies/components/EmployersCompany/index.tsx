@@ -264,6 +264,7 @@ export function EmployersCompany({ userRow }: any) {
                 data={userData}
                 columns={headers}
                 customStyles={styles}
+                noDataComponent="Desculpe não encontramos :/"
               />
               : <Center height='50px'>
                 <p>Você não possui funcionários cadastrados!</p>

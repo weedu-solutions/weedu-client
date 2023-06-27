@@ -51,24 +51,16 @@ export function UpdateUserCompany() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataForm, setDataForm] = useState<IDataForm>(initialForm)
 
-  console.log(dataForm, 'dataForm')
-  console.log(userDataForm, 'userDataForm')
-  console.log(userDataList, 'userDataList')
-
-
-
   const options = [
     { label: 'Colaborador', value: '1' },
     { label: 'Gestor', value: '2' }
   ] as any
 
-  const manegerOptions = userDataList.map((user) => {
+  const managerOptions = userDataList.map((user) => {
     return { label: user.name, value: String(user.user_type_id), id: user.id }
   }) as any
 
   const manager = { label: userDataForm.manager[0]?.name, value: userDataForm.manager[0]?.id, }
-
-
 
   useEffect(() => {
     setDataForm({ ...userDataForm, customer_id: [Number(id)] })
@@ -146,7 +138,7 @@ export function UpdateUserCompany() {
           <CustomInput>
             <Select
               styles={selectCustomStyles}
-              options={manegerOptions}
+              options={managerOptions}
               defaultValue={manager}
               onChange={(value: any) => setDataForm({ ...dataForm, manager_id: value.id })}
               placeholder="Selecione um Gestor"
