@@ -5,9 +5,8 @@ import Modal from "react-modal";
 
 import arrowDown from "../../../assets/arrow-down.svg";
 import arrowUp from "../../../assets/arrow-up.svg";
-import filter from "../../../assets/filter.svg";
 import clearFilter from "../../../assets/clearFilter.svg";
-
+import filter from "../../../assets/filter.svg";
 import moreIcon from "../../../assets/more.svg";
 import TableLoader from "../../../components/Loaders/TableLoader";
 import { TagTable } from "../../../components/TagTable";
@@ -157,15 +156,15 @@ export function TableActions() {
       id: 3,
       name: "Início Previsto",
       selector: (row: any) => <TagTableData date={row.preview_init_date} />,
-      sortable: false,
-      reorder: false,
+      sortable: true,
+      reorder: true,
     },
     {
       id: 4,
       name: "Fim Previsto",
       selector: (row: any) => <TagTableData date={row.preview_end_date} />,
-      sortable: false,
-      reorder: false,
+      sortable: true,
+      reorder: true,
     },
     {
       id: 5,
