@@ -155,14 +155,14 @@ export function TableActions() {
     {
       id: 3,
       name: "Início Previsto",
-      selector: (row: any) => <TagTableData date={row.preview_init_date} />,
+      selector: (row: any) => row.preview_init_date,
       sortable: true,
       reorder: true,
     },
     {
       id: 4,
       name: "Fim Previsto",
-      selector: (row: any) => <TagTableData date={row.preview_end_date} />,
+      selector: (row: any) => row.preview_end_date,
       sortable: true,
       reorder: true,
     },
