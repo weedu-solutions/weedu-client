@@ -1,4 +1,4 @@
-import { Link, Tooltip } from "@chakra-ui/react";
+import { Button, Link, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Modal from "react-modal";
@@ -8,6 +8,7 @@ import arrowUp from "../../../assets/arrow-up.svg";
 import clearFilter from "../../../assets/clearFilter.svg";
 import filter from "../../../assets/filter.svg";
 import moreIcon from "../../../assets/more.svg";
+import { BoxColor } from "../../../components/BoxColor";
 import TableLoader from "../../../components/Loaders/TableLoader";
 import { TagTable } from "../../../components/TagTable";
 import { TagTableData } from "../../../components/TagTableData";
@@ -20,7 +21,7 @@ import { ModalOptions } from "../Modals/ModalOptions";
 import { ModalSeeDetails } from "../Modals/ModalSeeDetails";
 import { ModalStartAction } from "../Modals/ModalStartAction";
 import { ModalBlockContent, MyButton } from "../styles";
-import { Message } from "./styles";
+import { ButtonActions, Message } from "./styles";
 import * as S from "./styles";
 
 export interface Option {
@@ -122,9 +123,10 @@ export function TableActions() {
     return setActionInfo(detaislAction);
   };
 
-  function handleOpenModalStartAction() {
+  function handleOpenModalStartAction(row: any) {
     setIsModalStartAction((oldValue) => !oldValue);
     setIsModalOpen(false);
+    setActionInfo(row);
   }
 
   function handleOpenModalSeeDetails() {
@@ -141,9 +143,10 @@ export function TableActions() {
     {
       id: 1,
       name: "Status",
-      selector: (row: any) => <TagTable status={row.status} rowInfo={row} />,
+      selector: (row: any) => <BoxColor status={row.status} rowInfo={row} />,
       sortable: true,
       reorder: true,
+      width: "90px",
     },
     {
       id: 2,
@@ -151,45 +154,76 @@ export function TableActions() {
       selector: (row: any) => row.what,
       sortable: true,
       reorder: true,
+      width: "400px",
     },
     {
       id: 3,
-      name: "Início Previsto",
-      selector: (row: any) => row.preview_init_date,
-      sortable: true,
-      reorder: true,
-    },
-    {
-      id: 4,
-      name: "Fim Previsto",
-      selector: (row: any) => row.preview_end_date,
-      sortable: true,
-      reorder: true,
-    },
-    {
-      id: 5,
       name: "Responsável",
       sortable: true,
       selector: (row: any) => row.who,
       reorder: true,
     },
     {
+      id: 4,
+      name: "Início Previsto",
+      selector: (row: any) => row.preview_init_date,
+      sortable: true,
+      reorder: true,
+    },
+    {
+      id: 5,
+      name: "Fim Previsto",
+      selector: (row: any) => row.preview_end_date,
+      sortable: true,
+      reorder: true,
+    },
+    {
       id: 6,
-      name: "",
+      name: "Início Real",
+      selector: (row: any) => row.init_date,
+      sortable: true,
+      reorder: true,
+    },
+    {
+      id: 7,
+      name: "Fim Real",
+      selector: (row: any) => row.end_date,
+      sortable: true,
+      reorder: true,
+    },
+    {
+      id: 8,
+      name: "Iniciar/Finalizar",
       selector: (row: any) => (
-        <Tooltip
-          label="Ver mais sobre o plano de ação"
-          placement="right-end"
-          hasArrow
+        <ButtonActions
+          isInit={row.init_date ? true : false}
+          onClick={() => handleOpenModalStartAction(row)}
+          disabled={row.end_date ? true : false}
         >
-          <MyButton onClick={() => handleModal(row)}>
-            <img src={moreIcon} alt="Mais detalhes" />
-          </MyButton>
-        </Tooltip>
+          {row.init_date ? "Finalizar ação" : "Iniciar ação"}
+        </ButtonActions>
       ),
       sortable: true,
       reorder: true,
     },
+
+    // {
+    //   id: 6,
+    //   name: "",
+    //   selector: (row: any) => (
+    //     <Tooltip
+    //       label="Ver mais sobre o plano de ação"
+    //       placement="right-end"
+    //       hasArrow
+    //     >
+    //       <MyButton onClick={() => handleModal(row)}>
+    //         <img src={moreIcon} alt="Mais detalhes" />
+    //       </MyButton>
+    //     </Tooltip>
+    //   ),
+    //   sortable: true,
+    //   reorder: true,
+    // },
   ];
 
   function compare(a: any, b: any) {
@@ -272,7 +306,7 @@ export function TableActions() {
         <S.SelectButton onClick={toggleOpen}>
           {selectedOptions.length === 0 ? (
             <>
-              Filtrar <img src={isOpen ? arrowDown : arrowUp} />
+              Filtrar <img src={isOpen ? arrowDown : arrowUp} alt="" />
             </>
           ) : (
             `${selectedOptions.length} opções selecionadas`
@@ -312,6 +346,11 @@ export function TableActions() {
     setSelectedOptions([]);
     setIsOpen(false);
   }
+
+  const handleRowClick = (row: IActions) => {
+    handleOpenModalSeeDetails();
+    return setActionInfo(row);
+  };
 
   return (
     <>
@@ -385,7 +424,10 @@ export function TableActions() {
             conditionalRowStyles={conditionalRowStyles}
             defaultSortFieldId={1}
             customStyles={stylesTable}
+            highlightOnHover
+            pointerOnHover
             noDataComponent="Desculpe não encontramos :/"
+            onRowClicked={handleRowClick}
           />
         )
       ) : (

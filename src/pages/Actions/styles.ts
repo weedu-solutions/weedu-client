@@ -49,7 +49,7 @@ export const MyButton = styled.button`
   border-radius: 4px;
   border: 2px solid ${colors.primary.medium};
 
-  &:hover {
+  &: {
     filter: brightness(0.9);
   } 
 `

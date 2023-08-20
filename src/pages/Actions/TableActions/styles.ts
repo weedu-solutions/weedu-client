@@ -148,14 +148,36 @@ export const CheckboxInput = styled.input``;
 
 export const ButtonFilter = styled.button`
   max-height: 200px;
-border-radius: 10px;
-padding: 8px 16px;
-border: 1px solid #3d2b7c;
-margin-left: 10px;
-
+  border-radius: 10px;
+  padding: 8px 16px;
+  border: 1px solid #3d2b7c;
+  margin-left: 10px;
 `;
 
 export const RowFilter = styled.div`
- display: flex;
+  display: flex;
 `;
 
+interface IButtonAction {
+  isInit: boolean;
+}
+
+export const ButtonActions = styled.button<IButtonAction>`
+  border: 1px solid ${(prop: any) => (prop.isInit ? "#D8564E" : "#4ED874")};
+  color: ${(prop: any) => (prop.isInit ? "#D8564E" : "#4ED874")};
+  width: 100px;
+  height: 30px;
+  border-radius: 10px;
+  font-weight: 500;
+
+  :hover {
+    filter: brightness(0.9);
+  }
+
+  :disabled {
+    border-color: #d6d7da;
+    color: #d6d7da;
+    :hover {
+    }
+  }
+`;
