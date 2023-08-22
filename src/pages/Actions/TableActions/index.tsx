@@ -1,4 +1,4 @@
-import { Button, Link, Tooltip } from "@chakra-ui/react";
+import { Link, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Modal from "react-modal";
@@ -7,11 +7,8 @@ import arrowDown from "../../../assets/arrow-down.svg";
 import arrowUp from "../../../assets/arrow-up.svg";
 import clearFilter from "../../../assets/clearFilter.svg";
 import filter from "../../../assets/filter.svg";
-import moreIcon from "../../../assets/more.svg";
 import { BoxColor } from "../../../components/BoxColor";
 import TableLoader from "../../../components/Loaders/TableLoader";
-import { TagTable } from "../../../components/TagTable";
-import { TagTableData } from "../../../components/TagTableData";
 import { useAuth } from "../../../hooks/auth";
 import IActions from "../../../interfaces/actions";
 import { ActionsServices } from "../../../services/actions";
@@ -20,7 +17,7 @@ import { ModalDisableAction } from "../Modals/ModalDisableAction";
 import { ModalOptions } from "../Modals/ModalOptions";
 import { ModalSeeDetails } from "../Modals/ModalSeeDetails";
 import { ModalStartAction } from "../Modals/ModalStartAction";
-import { ModalBlockContent, MyButton } from "../styles";
+import { ModalBlockContent } from "../styles";
 import { ButtonActions, Message } from "./styles";
 import * as S from "./styles";
 
@@ -193,8 +190,11 @@ export function TableActions() {
     },
     {
       id: 8,
-      name: "Iniciar/Finalizar",
+      name: "",
       selector: (row: any) => (
+        row.end_date && row.init_date ?
+        <p>Ação finalizada</p>
+        : 
         <ButtonActions
           isInit={row.init_date ? true : false}
           onClick={() => handleOpenModalStartAction(row)}
@@ -206,24 +206,6 @@ export function TableActions() {
       sortable: true,
       reorder: true,
     },
-
-    // {
-    //   id: 6,
-    //   name: "",
-    //   selector: (row: any) => (
-    //     <Tooltip
-    //       label="Ver mais sobre o plano de ação"
-    //       placement="right-end"
-    //       hasArrow
-    //     >
-    //       <MyButton onClick={() => handleModal(row)}>
-    //         <img src={moreIcon} alt="Mais detalhes" />
-    //       </MyButton>
-    //     </Tooltip>
-    //   ),
-    //   sortable: true,
-    //   reorder: true,
-    // },
   ];
 
   function compare(a: any, b: any) {

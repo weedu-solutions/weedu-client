@@ -1,10 +1,10 @@
 import styled from 'styled-components'
+
 import { colors } from '../../theme'
 
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding: 80px 0;
 `
 
 export const Content = styled.div`
@@ -144,4 +144,12 @@ export const Separator = styled.div`
   height: 1px;
   background-color: #7A778A;
   margin-bottom: 30px;
+`
+
+export const ContainerTable = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  padding: 50px;
+  position: relative;
 `

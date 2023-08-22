@@ -24,14 +24,6 @@ button {
   position: relative;
 }
 
-.container-table {
-  width: 100%;
-  margin: 0 auto;
-  height: 100%;
-  padding: 40px;
-  position: relative;
-}
-
 .notify_progress_error,
 .notify_progress_success {
   visibility: hidden;

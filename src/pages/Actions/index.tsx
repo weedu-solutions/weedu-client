@@ -8,7 +8,7 @@ import { ROUTES } from "../../constants/routes";
 import { useAuth } from "../../hooks/auth";
 import { CustomerServices } from "../../services/customer";
 import { GraphsDash } from "./GraphsDash";
-import { AddButtonWrapper, Content, Separator, Wrapper } from "./styles";
+import { AddButtonWrapper, ContainerTable, Content, Separator, Wrapper } from "./styles";
 import { TableActions } from "./TableActions";
 
 export function Actions() {
@@ -34,7 +34,7 @@ export function Actions() {
   return (
     <LayoutLogged>
       <Wrapper>
-        <div className="container-table">
+        <ContainerTable>
           {user.user_type_id === 3 ? (
             <Link
               color="#7956F7"
@@ -71,7 +71,7 @@ export function Actions() {
           <Separator />
 
           <TableActions />
-        </div>
+        </ContainerTable>
 
         <Tooltip label="Criar plano de ação" placement="top-end" hasArrow>
           <AddButtonWrapper>
