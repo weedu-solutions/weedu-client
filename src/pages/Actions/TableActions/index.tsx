@@ -1,7 +1,9 @@
 import { Link, Tooltip } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { HiPlus } from "react-icons/hi";
 import Modal from "react-modal";
+import { useNavigate } from "react-router-dom";
 
 import arrowDown from "../../../assets/arrow-down.svg";
 import arrowUp from "../../../assets/arrow-up.svg";
@@ -9,6 +11,7 @@ import clearFilter from "../../../assets/clearFilter.svg";
 import filter from "../../../assets/filter.svg";
 import { BoxColor } from "../../../components/BoxColor";
 import TableLoader from "../../../components/Loaders/TableLoader";
+import { ROUTES } from "../../../constants/routes";
 import { useAuth } from "../../../hooks/auth";
 import IActions from "../../../interfaces/actions";
 import { ActionsServices } from "../../../services/actions";
@@ -114,6 +117,8 @@ export function TableActions() {
 
   const { user } = useAuth();
 
+  const navigate = useNavigate();
+
   const handleModal = async (row: any) => {
     setIsModalOpen((value) => !value);
     let detaislAction = await row;
@@ -148,10 +153,12 @@ export function TableActions() {
     {
       id: 2,
       name: "O que será feito",
-      selector: (row: any) => row.what,
+      selector: (row: any) => (
+        <div style={{ whiteSpace: "normal" }}>{row.what}</div>
+      ),
       sortable: true,
       reorder: true,
-      width: "400px",
+      width: "300px",
     },
     {
       id: 3,
@@ -190,19 +197,21 @@ export function TableActions() {
     },
     {
       id: 8,
-      name: "",
-      selector: (row: any) => (
-        row.end_date && row.init_date ?
-        <p>Ação finalizada</p>
-        : 
-        <ButtonActions
-          isInit={row.init_date ? true : false}
-          onClick={() => handleOpenModalStartAction(row)}
-          disabled={row.end_date ? true : false}
-        >
-          {row.init_date ? "Finalizar ação" : "Iniciar ação"}
-        </ButtonActions>
-      ),
+      name: "Executada/Desativada",
+      selector: (row: any) =>
+        row.end_date && row.init_date ? (
+          <p>Finalizada</p>
+        ) : row.is_active === 0 ? (
+          <p>Desativada</p>
+        ) : (
+          <ButtonActions
+            isInit={row.init_date ? true : false}
+            onClick={() => handleOpenModalStartAction(row)}
+            disabled={row.end_date ? true : false}
+          >
+            {row.init_date ? "Finalizar" : "Iniciar"}
+          </ButtonActions>
+        ),
       sortable: true,
       reorder: true,
     },
@@ -358,12 +367,10 @@ export function TableActions() {
       </Modal>
 
       <Modal isOpen={isModalSeeDetails} style={styleModalSeeAction}>
-        <>
-          <ModalSeeDetails
-            action={actionInfo}
-            closeModal={handleOpenModalSeeDetails}
-          />
-        </>
+        <ModalSeeDetails
+          action={actionInfo}
+          closeModal={handleOpenModalSeeDetails}
+        />
       </Modal>
 
       <Modal isOpen={isModalDisableAction} style={styleModalDisableAction}>
@@ -376,6 +383,7 @@ export function TableActions() {
       </Modal>
 
       <S.RowFilter>
+        <div>
         <SelectCheckbox />
 
         <Tooltip label="Filtrar por status" placement="right-end" hasArrow>
@@ -389,6 +397,11 @@ export function TableActions() {
             <img src={clearFilter} alt="Limpar filtro" />
           </S.ButtonFilter>
         </Tooltip>
+        </div>
+
+        <S.ButtonNewAction
+        onClick={() => navigate(ROUTES.CREATE_ACTION)}
+        ><HiPlus fill="#fff" size="20" />Plano de Ação</S.ButtonNewAction>
       </S.RowFilter>
 
       {!pending ? (
@@ -410,6 +423,8 @@ export function TableActions() {
             pointerOnHover
             noDataComponent="Desculpe não encontramos :/"
             onRowClicked={handleRowClick}
+            pagination={true}
+            paginationPerPage={10}
           />
         )
       ) : (

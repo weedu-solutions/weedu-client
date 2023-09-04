@@ -1,8 +1,9 @@
 import { useState } from 'react'
+
+import { useAuth } from '../../../../hooks/auth'
 import { Button } from '../../../Button'
 import { InputText } from '../../../InputText'
 import { Wrapper } from './styled'
-import { useAuth } from '../../../../hooks/auth'
 
 export interface InputsValues {
   email: string;
@@ -39,7 +40,7 @@ export function Login({onClick}: Props) {
         value={values.password ?? ''}
         onChange={(event: any) => setValues({ ...values, password: String(event.target.value) })}
         placeholder="Digite sua senha aqui"
-        type="password"
+        password
         />
         {error && error !== "Usuário não foi encontrado" && <span>{error}</span>}
       <Button disabled={!(values.email && values.password)} onClick={handleSubmit} title={loading ? "Carregando..." : "Entrar"} />

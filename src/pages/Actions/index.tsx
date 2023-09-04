@@ -1,29 +1,26 @@
-import { Link, Tooltip } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import iconBack from "../../assets/seta-back.svg";
-import { AddButton } from "../../components/AddButton";
 import LayoutLogged from "../../components/LayoutLogged";
-import { ROUTES } from "../../constants/routes";
 import { useAuth } from "../../hooks/auth";
 import { CustomerServices } from "../../services/customer";
 import { GraphsDash } from "./GraphsDash";
-import { AddButtonWrapper, ContainerTable, Content, Separator, Wrapper } from "./styles";
+import { ContainerTable, Content, Separator, Wrapper } from "./styles";
 import { TableActions } from "./TableActions";
 
 export function Actions() {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const infoCompanyConsultant: any = JSON.parse(
     localStorage.getItem("company_consultant") || "{}"
   );
 
   const idCustumer =
     user.user_type_id === 3 ? infoCompanyConsultant.id : user.customer[0].id;
+    
   useEffect(() => {
     const getData = async () => {
       const { data } = await CustomerServices.getAllUserCustomer(idCustumer);
-
       return localStorage.setItem("users_company", JSON.stringify(data));
     };
 
@@ -72,12 +69,6 @@ export function Actions() {
 
           <TableActions />
         </ContainerTable>
-
-        <Tooltip label="Criar plano de ação" placement="top-end" hasArrow>
-          <AddButtonWrapper>
-            <AddButton onClick={() => navigate(ROUTES.CREATE_ACTION)} />
-          </AddButtonWrapper>
-        </Tooltip>
       </Wrapper>
     </LayoutLogged>
   );

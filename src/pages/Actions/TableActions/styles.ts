@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { colors } from "../../../theme";
+
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -156,6 +158,12 @@ export const ButtonFilter = styled.button`
 
 export const RowFilter = styled.div`
   display: flex;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 interface IButtonAction {
@@ -179,5 +187,25 @@ export const ButtonActions = styled.button<IButtonAction>`
     color: #d6d7da;
     :hover {
     }
+  }
+`;
+
+export const ButtonNewAction = styled.button`
+  color: white;
+  max-height: 200px;
+  font-weight: 500;
+  background-color: ${colors.primary.medium};
+  border-radius: 10px;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  svg {
+    margin-right: 10px;
+  }
+
+  :hover {
+    box-shadow: 0px 0px 10px rgba(50, 0, 90, 0.4);
   }
 `;
