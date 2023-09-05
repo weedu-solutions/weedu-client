@@ -31,7 +31,7 @@ export function Login({onClick}: Props) {
         value={values.email ?? ''}
         onChange={(event: any) => setValues({ ...values, email: String(event.target.value) })}
         placeholder="Digite seu e-mail aqui"
-        type="email"
+        type="text"
         />
         {error && error === "Usuário não foi encontrado" && <span>{error}</span>}
       <InputText

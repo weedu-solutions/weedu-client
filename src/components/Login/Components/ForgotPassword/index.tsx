@@ -26,7 +26,7 @@ export function ForgotPassword() {
         value={email.email ?? ''}
         onChange={(event: any) => setEmail({ ...email, email: String(event.target.value) })}
         placeholder="Digite seu e-mail aqui"
-        type="email"
+        type="text"
       />
       {recoverError && recoverError === "Usuário não foi encontrado" && <span>{recoverError}</span>}
       <Button disabled={!email.email} onClick={handleSubmit} title={loading ? "Carregando..." : "Recuperar senha"} />

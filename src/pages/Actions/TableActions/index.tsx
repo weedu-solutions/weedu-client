@@ -141,7 +141,7 @@ export function TableActions() {
     setIsModalOpen(false);
   }
 
-  const headers = [
+  const headers: any = [
     {
       id: 1,
       name: "Status",
