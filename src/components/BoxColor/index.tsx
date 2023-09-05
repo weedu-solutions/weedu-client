@@ -1,6 +1,7 @@
 import { Tooltip } from "@chakra-ui/react";
 
 import * as S from "./styles";
+import { STATUS_COLORS } from "../../utils/statusColors";
 
 type IBoxColor = {
   status: number;
@@ -34,19 +35,19 @@ export function BoxColor({ status, rowInfo }: IBoxColor) {
         <S.Tag
           bgColor={
             rowInfo.is_active === 0
-              ? "#9AA8B3"
+              ? STATUS_COLORS.DESATIVADO
               : status === 1
-              ? "#378479"
+              ? STATUS_COLORS.A_INICIAR
               : status === 2
-              ? "#2185F6"
+              ? STATUS_COLORS.EM_EXECUCAO
               : status === 3
-              ? "#9AA8B3"
+              ? STATUS_COLORS.EXECUTADO
               : status === 6
-              ? "#485763"
+              ? STATUS_COLORS.DESATIVADO
               : status === 4
-              ? "#F07655"
+              ? STATUS_COLORS.ATRASADO_A_INICIAR
               : status === 5
-              ? "#E83737"
+              ? STATUS_COLORS.ATRASADO_A_TERMINAR
               : "#1E163E"
           }
         />

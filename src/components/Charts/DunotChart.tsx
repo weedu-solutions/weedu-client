@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { useAuth } from "../../hooks/auth";
 import { ActionsServices } from "../../services/actions";
+import { STATUS_COLORS } from "../../utils/statusColors";
 
 interface IFinishedActions {
   onTime: number;
@@ -49,7 +50,7 @@ export default function DunotChart() {
     { name: "Fora do prazo", value: datafinishedActions?.outOfTime },
   ];
 
-  const COLORS = ["#011627", "#E71D36"];
+  const COLORS = [STATUS_COLORS.NO_PRAZO, STATUS_COLORS.FORA_DO_PRAZO];
 
   return (
     <>

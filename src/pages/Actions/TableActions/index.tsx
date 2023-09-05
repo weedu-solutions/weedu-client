@@ -23,6 +23,7 @@ import { ModalStartAction } from "../Modals/ModalStartAction";
 import { ModalBlockContent } from "../styles";
 import { ButtonActions, Message } from "./styles";
 import * as S from "./styles";
+import { STATUS_COLORS } from "../../../utils/statusColors";
 
 export interface Option {
   value: string;
@@ -200,9 +201,9 @@ export function TableActions() {
       name: "Executada/Desativada",
       selector: (row: any) =>
         row.end_date && row.init_date ? (
-          <p>Finalizada</p>
+          <p style={{ color: STATUS_COLORS.EXECUTADO, fontWeight: 'bold' }}>Finalizada</p>
         ) : row.is_active === 0 ? (
-          <p>Desativada</p>
+          <p style={{ color: STATUS_COLORS.DESATIVADO, fontWeight: 'bold' }}>Desativada</p>
         ) : (
           <ButtonActions
             isInit={row.init_date ? true : false}
@@ -384,24 +385,25 @@ export function TableActions() {
 
       <S.RowFilter>
         <div>
-        <SelectCheckbox />
+          <SelectCheckbox />
 
-        <Tooltip label="Filtrar por status" placement="right-end" hasArrow>
-          <S.ButtonFilter onClick={() => filterStatus()}>
-            <img src={filter} alt="Filtrar" />
-          </S.ButtonFilter>
-        </Tooltip>
+          <Tooltip label="Filtrar por status" placement="right-end" hasArrow>
+            <S.ButtonFilter onClick={() => filterStatus()}>
+              <img src={filter} alt="Filtrar" />
+            </S.ButtonFilter>
+          </Tooltip>
 
-        <Tooltip label="Limpar filtro status" placement="right-end" hasArrow>
-          <S.ButtonFilter onClick={() => clearFilterStatus()}>
-            <img src={clearFilter} alt="Limpar filtro" />
-          </S.ButtonFilter>
-        </Tooltip>
+          <Tooltip label="Limpar filtro status" placement="right-end" hasArrow>
+            <S.ButtonFilter onClick={() => clearFilterStatus()}>
+              <img src={clearFilter} alt="Limpar filtro" />
+            </S.ButtonFilter>
+          </Tooltip>
         </div>
 
-        <S.ButtonNewAction
-        onClick={() => navigate(ROUTES.CREATE_ACTION)}
-        ><HiPlus fill="#fff" size="20" />Plano de Ação</S.ButtonNewAction>
+        <S.ButtonNewAction onClick={() => navigate(ROUTES.CREATE_ACTION)}>
+          <HiPlus fill="#fff" size="20" />
+          Plano de Ação
+        </S.ButtonNewAction>
       </S.RowFilter>
 
       {!pending ? (
