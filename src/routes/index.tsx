@@ -20,11 +20,9 @@ export function MyRoutes() {
         <ChakraProvider>
           <ToastContainer closeButton={false} />
           <Routes>
-            <Route path={'/signin'} element={<LoginPage />} />
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path={ROUTES.INACTIVE} element={<InactivePage />} />
             <Route path={ROUTES.RECOVER} element={<RecoverMessagePage />} />
-
 
             <Route path={ROUTES.CUSTOMERS}
               element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<Companies />} />}
