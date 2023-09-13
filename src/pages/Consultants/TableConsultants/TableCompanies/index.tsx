@@ -208,6 +208,8 @@ export function TableCompanies({ userRow }: ITableCompanies) {
                                 conditionalRowStyles={conditionalRowStyles}
                                 defaultSortFieldId={1}
                                 customStyles={styleTable}
+                                pagination={true}
+                                paginationPerPage={10}
                             />
                         </>
                 }
