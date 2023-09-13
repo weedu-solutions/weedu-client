@@ -1,7 +1,7 @@
 import { HiLogout } from "react-icons/hi";
 
 import avatar from "../../assets/avatar.svg";
-import logo from "../../assets/logo-min.svg";
+import logo from "../../assets/weduu.png";
 import { ROUTES } from "../../constants/routes";
 import { useAuth } from "../../hooks/auth";
 import * as S from "./styled";

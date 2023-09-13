@@ -1,5 +1,5 @@
 import { FormContainer, ImageContainer, Wrapper } from './styled'
-import BG from '../../assets/register-bg.jpg'
+import BG from '../../assets/bg-weedu.jpeg'
 
 interface Props {
   children: React.ReactNode;

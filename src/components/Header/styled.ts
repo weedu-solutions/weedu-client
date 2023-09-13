@@ -15,6 +15,11 @@ export const Content = styled.div`
   align-items: center;
   flex-direction: row;
   height: 100%;
+
+  img {
+    width: 90px;
+    height: 40px;
+  }
 `
 
 export const ContainerHeader = styled.div`
