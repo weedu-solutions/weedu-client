@@ -1,10 +1,11 @@
-import { Box, Image } from "native-base";
-import WeedoLogo from "../../../../assets/logo.svg";
+import { Box } from "native-base";
+
+import WeedoLogo from "../../../../assets/weedu-logo.png";
 
 export function Header() {
   return (
     <Box position="absolute" top={0} alignItems="flex-start" padding={4} w="100%">
-      <Image src={WeedoLogo} width="230px" height="44px" />
+      <img src={WeedoLogo} width={'12%'} alt="logo-weedu"/>
     </Box>
   );
 }

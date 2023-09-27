@@ -115,6 +115,9 @@ export const SelectButton = styled.button`
 export const CheckboxList = styled.div`
   position: absolute;
   top: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
   width: 15rem;
   left: 0;
   z-index: 1;
@@ -127,8 +130,8 @@ export const CheckboxList = styled.div`
   padding: 4px;
 
   p {
-    padding: 8px;
-    margin-left: 4px;
+    /* padding: 4px; */
+    /* margin-left: 4px; */
     color: #1e163e;
     font-weight: 700;
   }
@@ -136,10 +139,11 @@ export const CheckboxList = styled.div`
 
 export const CheckboxLabel = styled.label`
   display: block;
-  padding: 8px;
+  padding: 4px;
   cursor: pointer;
   margin-left: 10px;
 
+  width: 13rem;
   span {
     margin-left: 4px;
     font-weight: 500;
