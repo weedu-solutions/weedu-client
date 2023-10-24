@@ -1,0 +1,9 @@
+image: atlassian/default-image:2
+
+pipelines:
+  default:
+    - step:
+        name: Deploy via SSH
+        script:
+          - chmod 400 devops.pem
+          - ssh -i devops.pem ubuntu@18.232.197.188 "cd /home/ubuntu/weedu-client && sudo git pull --rebase && script/deploy.sh"
