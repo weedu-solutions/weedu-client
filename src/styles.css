@@ -9,13 +9,6 @@ button {
   cursor: pointer;
 }
 
-.container_header {
-  max-width: 1200px;
-  margin: 0 auto;
-  height: 100%;
-  padding: 0 10px;
-}
-
 .container {
   max-width: 1154px;
   margin: 0 auto;
@@ -24,13 +17,14 @@ button {
   position: relative;
 }
 
-.notify_progress_error, .notify_progress_success {
+.notify_progress_error,
+.notify_progress_success {
   visibility: hidden;
 }
 
 .notify_error {
-  background: #ED5669 !important;
-  border: 3px solid #E71D36 !important;
+  background: #ed5669 !important;
+  border: 3px solid #e71d36 !important;
 }
 .notify_body_error {
   flex-direction: row-reverse;
@@ -39,7 +33,7 @@ button {
 }
 
 .notify_success {
-  background: #41CBBE !important;
+  background: #41cbbe !important;
   border: 3px solid #158378 !important;
 }
 .notify_body_success {
@@ -48,6 +42,6 @@ button {
   font-weight: 500;
 }
 
-
-
-
+.dylxVS {
+  background-color: #41cbbe;
+}

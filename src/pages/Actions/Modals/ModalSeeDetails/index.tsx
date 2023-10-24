@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, FormLabel, Input, Select, Stack, Switch, Textarea } from "@chakra-ui/react";
 import { AxiosResponse } from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import closeModalIcon from "../../../../assets/icon-close.svg";
@@ -18,13 +18,20 @@ type ModalSeeDetailsProps = {
   action: IActions | undefined;
 };
 
+// {
+//   Action active 1
+//   Action not active 0
+// }
+
 export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
   const { user } = useAuth();
-  const [isActiveAction, setIsActiveAction] = useState<boolean>(false);
   const [editData, setEditData] = useState<boolean>(false);
-
+  console.log(action);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [iscloseModal, setIsCloseModal] = useState<any>();
+  const [isChecked, setIsChecked] = useState(
+    action?.is_active === 1 ? true : false
+  );
 
   const [preview_init_date, setPreview_init_date] = useState(
     action?.preview_init_date
@@ -51,17 +58,6 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
 
   const idCustumer =
     user.user_type_id === 3 ? infoCompanyConsultant.id : user.customer[0].id;
-  function IsActiveAction() {
-    if (action?.is_active === 1) {
-      setIsActiveAction(true);
-    } else {
-      setIsActiveAction(false);
-    }
-  }
-
-  useEffect(() => {
-    IsActiveAction();
-  });
 
   const {
     handleSubmit,
@@ -101,7 +97,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
       user_id: user.id,
       customer_id: idCustumer,
       where: "O",
-      is_active: user.is_active,
+      is_active: isChecked === true ? 1 : 0,
     })
       .then((res: AxiosResponse) => {
         setIsCloseModal(closeModal);
@@ -112,6 +108,10 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
         setIsCloseModal(closeModal);
         Notify(NotifyTypes.ERROR, "Não foi possível editar o Plano de ação.");
       });
+  };
+
+  const handleToggle = async () => {
+    setIsChecked(!isChecked);
   };
 
   return (
@@ -314,7 +314,9 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                   }}
                 >
                   {usersCompanyConsultant[0].user.map((user: any) => (
-                    <option value={user.name}>{user.name}</option>
+                    <option key={user.name + Math.random()} value={user.name}>
+                      {user.name}
+                    </option>
                   ))}
                 </Select>
                 <FormLabel color="#E71D36" fontSize="13px" mt="4px">
@@ -521,22 +523,29 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
 
             <Footer>
               <Margin>
-                <Toggle>
-                  <Switch
-                    colorScheme="purple"
-                    size="md"
-                    isChecked={isActiveAction}
-                  />
-                  {action?.is_active === 0 ? (
-                    <>
-                      <span>Ação desativada</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Ação ativada</span>
-                    </>
-                  )}
-                </Toggle>
+                {action?.end_date && action?.init_date ? (
+                  <Toggle>
+                    <span>Ação finalizada</span>
+                  </Toggle>
+                ) : (
+                  <Toggle>
+                    <Switch
+                      colorScheme="purple"
+                      size="md"
+                      isChecked={isChecked}
+                      onChange={handleToggle}
+                    />
+                    {!isChecked ? (
+                      <>
+                        <span>Ação desativada</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Ação ativada</span>
+                      </>
+                    )}
+                  </Toggle>
+                )}
               </Margin>
 
               <ButtonDefault

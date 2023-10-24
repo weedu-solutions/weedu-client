@@ -1,11 +1,11 @@
 import React, { createContext, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginRedirect } from '../utils/loginRedirect';
+
+import { Notify, NotifyTypes } from '../components/Notify';
 import { ROUTES } from '../constants/routes';
 import ICredentials from '../interfaces/credentials';
 import { Api } from '../services/api';
-import { Notify, NotifyTypes } from '../components/Notify';
-
+import { loginRedirect } from '../utils/loginRedirect';
 
 interface IUser {
   id: string;
@@ -111,7 +111,8 @@ export const AuthProvider: React.FC = ({ children }) => {
   const signOut = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-
+    localStorage.clear();
+    window.location.pathname = ROUTES.LOGIN;
     setData({} as IAuthState);
   }, []);
 

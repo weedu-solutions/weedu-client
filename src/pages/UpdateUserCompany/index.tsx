@@ -107,7 +107,7 @@ export function UpdateUserCompany() {
           isDisabled
           onChange={(event: any) => setDataForm({ ...dataForm, email: String(event.target.value) })}
           placeholder="Agora digite seu e-mail"
-          type="email"
+          type="text"
         />
 
         {

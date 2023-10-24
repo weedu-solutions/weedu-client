@@ -1,29 +1,17 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom"
+import { ChakraProvider } from '@chakra-ui/react'
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ToastContainer } from 'react-toastify'
 
-import { RequireAuth } from "./components/RequireAuth"
-import { AppProvider } from "../contexts"
 import { ROUTES } from "../constants/routes"
-import {
-  LoginPage,
-  Companies,
-  RegisterUserCompany,
-  UpdateUserCompany,
-  Consultants,
-  RegisterCompany,
-
-  RecoverMessagePage,
-  InactivePage,
-  Actions
-} from '../pages'
-
-import '../styles.css'
+import { AppProvider } from "../contexts"
+import { Actions, Companies, Consultants, InactivePage, LoginPage, RecoverMessagePage, RegisterCompany, RegisterUserCompany, UpdateUserCompany } from '../pages'
 import { CreateAction } from "../pages/Actions/CreateAction"
-import { ChakraProvider } from '@chakra-ui/react'
+import { ConsultantCompanies } from "../pages/Consultants/ConsultantCompanies"
 import { CreateConsultant } from "../pages/Consultants/CreateConsultant"
 import { UpdateConsultant } from "../pages/Consultants/UpdateConsultant"
-import { ConsultantCompanies } from "../pages/Consultants/ConsultantCompanies"
+import { RequireAuth } from "./components/RequireAuth"
 
+import '../styles.css'
 
 export function MyRoutes() {
   return (
@@ -35,7 +23,6 @@ export function MyRoutes() {
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path={ROUTES.INACTIVE} element={<InactivePage />} />
             <Route path={ROUTES.RECOVER} element={<RecoverMessagePage />} />
-
 
             <Route path={ROUTES.CUSTOMERS}
               element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<Companies />} />}

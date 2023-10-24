@@ -62,7 +62,7 @@ export function RegisterCompany() {
       <strong>Cadastrar uma nova empresa</strong>
       <Wrapper>
         <InputText
-          type="name"
+          type="text"
           value={dataForm.company_name ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, company_name: String(event.target.value) })}
           title="Razão Social"
@@ -96,21 +96,21 @@ export function RegisterCompany() {
           value={dataForm.maneger_email ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, maneger_email: String(event.target.value) })}
           placeholder="Agora digite o e-mail do Gestor"
-          type="email"
+          type="text"
         />
         <InputText
           title="Telefone do Gestor"
           value={dataForm.maneger_telephone ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, maneger_telephone: String(event.target.value) })}
           placeholder="Digite o telefone do Gestor"
-          type="email"
+          type="text"
         />
         <InputText
           title="E-mail do Financeiro"
           value={dataForm.financial_email ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, financial_email: String(event.target.value) })}
           placeholder="Agora digite o e-mail do Financeiro"
-          type="email"
+          type="text"
         />
         <InputText
           title="Número máximo de usuários"

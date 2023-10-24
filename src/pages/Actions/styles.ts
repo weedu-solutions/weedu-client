@@ -1,11 +1,11 @@
-import styled from 'styled-components'
-import { colors } from '../../theme'
+import styled from "styled-components";
+
+import { colors } from "../../theme";
 
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding: 80px 0;
-`
+`;
 
 export const Content = styled.div`
   width: 100%;
@@ -19,12 +19,12 @@ export const Content = styled.div`
 
   h1 {
     font-weight: 600;
-    font-family: 'Inter';
+    font-family: "Inter";
     font-style: normal;
     font-size: 32px;
-    color: #1E163E;
+    color: #1e163e;
   }
-`
+`;
 
 export const ButtonsWrapper = styled.div`
   width: 100%;
@@ -33,13 +33,7 @@ export const ButtonsWrapper = styled.div`
   justify-content: center;
   margin-top: 20px;
   padding-bottom: 30px;
-`
-
-export const AddButtonWrapper = styled.div`
-  position: absolute;
-  right: 180px;
-  bottom: 30px;
-`
+`;
 
 export const MyButton = styled.button`
   background-color: ${colors.primary.ligther};
@@ -48,21 +42,17 @@ export const MyButton = styled.button`
   font-weight: 700;
   border-radius: 4px;
   border: 2px solid ${colors.primary.medium};
-
-  &:hover {
-    filter: brightness(0.9);
-  } 
-`
+`;
 
 export const TextBlock = styled.p`
-  color: #E71D36;;
-  font-weight: 700; 
-`
+  color: #e71d36;
+  font-weight: 700;
+`;
 
 export const TextUnBlock = styled.p`
-  color: #3D2B7C;;
+  color: #3d2b7c;
   font-weight: 700;
-`
+`;
 
 export const ModalContent = styled.div`
   padding: 15px;
@@ -97,7 +87,7 @@ export const ModalContent = styled.div`
     background-color: ${colors.neutral.medium};
     width: 100%;
   }
-`
+`;
 
 export const ModalBlockContent = styled.div`
   padding: 15px;
@@ -105,7 +95,7 @@ export const ModalBlockContent = styled.div`
   align-items: flex-start;
   flex-direction: column;
   margin: 0 auto;
-  
+
   h2 {
     margin-bottom: 10px;
     font-size: 1.4rem;
@@ -113,19 +103,19 @@ export const ModalBlockContent = styled.div`
   p {
     margin-bottom: 20px;
   }
-`
+`;
 
 export const WrapperInputs = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-`
+`;
 
 export const ContentGraph = styled.div`
   border-width: 1px;
   border-style: solid;
-  border-color: #E0DDF0;
+  border-color: #e0ddf0;
   width: 49%;
   border-radius: 8px;
 
@@ -133,15 +123,23 @@ export const ContentGraph = styled.div`
     margin-left: 60px;
     margin-top: 20px;
 
-    color: #201F24;
+    color: #201f24;
     font-weight: 700;
     font-size: 25px;
   }
-`
+`;
 
 export const Separator = styled.div`
   width: 100%;
   height: 1px;
-  background-color: #7A778A;
+  background-color: #7a778a;
   margin-bottom: 30px;
-`
+`;
+
+export const ContainerTable = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  height: 100%;
+  padding: 50px;
+  position: relative;
+`;

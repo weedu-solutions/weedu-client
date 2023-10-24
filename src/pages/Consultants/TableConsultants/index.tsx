@@ -137,6 +137,8 @@ export function TableConsultants() {
                             customStyles={styleTable}
                             noDataComponent="Desculpe não encontramos :/"
                             expandableRows
+                            pagination={true}
+                            paginationPerPage={10}
                             expandableRowsComponent={({ data }) => <TableCompanies userRow={data} />}
                         />
                 }

@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { colors } from "../../../theme";
+
 export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -113,6 +115,9 @@ export const SelectButton = styled.button`
 export const CheckboxList = styled.div`
   position: absolute;
   top: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
   width: 15rem;
   left: 0;
   z-index: 1;
@@ -125,8 +130,8 @@ export const CheckboxList = styled.div`
   padding: 4px;
 
   p {
-    padding: 8px;
-    margin-left: 4px;
+    /* padding: 4px; */
+    /* margin-left: 4px; */
     color: #1e163e;
     font-weight: 700;
   }
@@ -134,10 +139,11 @@ export const CheckboxList = styled.div`
 
 export const CheckboxLabel = styled.label`
   display: block;
-  padding: 8px;
+  padding: 4px;
   cursor: pointer;
   margin-left: 10px;
 
+  width: 13rem;
   span {
     margin-left: 4px;
     font-weight: 500;
@@ -148,14 +154,62 @@ export const CheckboxInput = styled.input``;
 
 export const ButtonFilter = styled.button`
   max-height: 200px;
-border-radius: 10px;
-padding: 8px 16px;
-border: 1px solid #3d2b7c;
-margin-left: 10px;
-
+  border-radius: 10px;
+  padding: 8px 16px;
+  border: 1px solid #3d2b7c;
+  margin-left: 10px;
 `;
 
 export const RowFilter = styled.div`
- display: flex;
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    align-items: center;
+  }
 `;
 
+interface IButtonAction {
+  isInit: boolean;
+}
+
+export const ButtonActions = styled.button<IButtonAction>`
+  border: 1px solid ${(prop: any) => (prop.isInit ? "#D8564E" : "#4ED874")};
+  color: ${(prop: any) => (prop.isInit ? "#D8564E" : "#4ED874")};
+  width: 100px;
+  height: 30px;
+  border-radius: 10px;
+  font-weight: 500;
+
+  :hover {
+    filter: brightness(0.9);
+  }
+
+  :disabled {
+    border-color: #d6d7da;
+    color: #d6d7da;
+    :hover {
+    }
+  }
+`;
+
+export const ButtonNewAction = styled.button`
+  color: white;
+  max-height: 200px;
+  font-weight: 500;
+  background-color: ${colors.primary.medium};
+  border-radius: 10px;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  svg {
+    margin-right: 10px;
+  }
+
+  :hover {
+    box-shadow: 0px 0px 10px rgba(50, 0, 90, 0.4);
+  }
+`;

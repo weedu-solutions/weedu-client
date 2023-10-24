@@ -1,8 +1,9 @@
+import { NativeBaseProvider } from "native-base";
 import React from "react";
 import ReactDOM from "react-dom";
-import { MyRoutes } from "./routes";
-import { NativeBaseProvider } from "native-base";
+
 import reportWebVitals from "./reportWebVitals";
+import { MyRoutes } from "./routes";
 import { theme } from "./theme";
 
 ReactDOM.render(

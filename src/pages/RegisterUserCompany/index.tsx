@@ -93,7 +93,7 @@ export function RegisterUserCompany() {
           value={dataForm.email ?? ''}
           onChange={(event: any) => setDataForm({ ...dataForm, email: String(event.target.value) })}
           placeholder="Agora digite seu e-mail"
-          type="email"
+          type="text"
         />
         <Label htmlFor="">Tipo de perfil</Label>
         <CustomInput>
