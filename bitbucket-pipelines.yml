@@ -1,10 +1,9 @@
 image: atlassian/default-image:2 # Define a imagem Docker a ser usada para a execução deste pipeline.
 
 pipelines:
-  custom:
+  default:
     - step:
         name: Deploy via SSH # Nome descritivo para esta etapa do pipeline.
-        trigger: manual
         script:
           - chmod 400 devops.pem # Altera as permissões do arquivo "devops.pem" para torná-lo seguro.
           - ssh -i devops.pem ubuntu@18.232.197.188 "cd /home/ubuntu/weedu-client && sudo git pull --rebase && cat script/deploy.sh"
