@@ -1,4 +1,4 @@
-name:  Deploy Weedu Api
+name:  Deploy Weedu Client
 on:
   workflow_dispatch:
     inputs:
