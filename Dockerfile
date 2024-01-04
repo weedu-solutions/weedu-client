@@ -8,4 +8,4 @@ ENV NODE_OPTIONS=--max-old-space-size=1536
 RUN npm install
 
 EXPOSE 3000
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "run", "build" ]
