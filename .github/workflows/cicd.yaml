@@ -1,0 +1,43 @@
+name:  Deploy Weedu Api
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy"
+        required: true
+        default: "master"
+jobs:
+  weedu-client:
+    name: weedu-client
+    env:
+      LINUX_RUNNER: ubuntu-20.04
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Build - GIT Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Build - Set Node Version
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.21.3"
+      - name: Build - Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Build - Install NPM packages
+        run: |
+          npm install
+          npm run build
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PAT }}
+      - name: Deploy - Sync with S3
+        run: |
+          aws s3 sync ./build/ s3://acao.weedu.com.br --delete --quiet
+      - name: Deploy - Invalidate Distribution
+        run: |
+          echo Invalidation usually takes about 10-15 minutes, depending on the size of the request.
+          aws configure set preview.cloudfront true
+          aws cloudfront create-invalidation --distribution-id E2ONP7IGYN59VZ --paths '/*'
