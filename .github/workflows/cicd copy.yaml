@@ -1,14 +1,11 @@
-name:  Deploy Weedu Client
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       branch:
-#         description: "Branch to deploy"
-#         required: true
-#         default: "master"
+name:  Deploy Weedu-Client
 on:
-  push:
-    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy"
+        required: true
+        default: "master"
 jobs:
   weedu-client:
     name: weedu-client
