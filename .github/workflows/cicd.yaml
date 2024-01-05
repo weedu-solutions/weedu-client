@@ -32,10 +32,9 @@ jobs:
           aws-region: us-east-1
       - name: Build - Install NPM packages
         run: |
-          node -v
-          npm -v
-          npm install
-          npm run build
+          npm install -g pnpm
+          pnpm install
+          pnpm build
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PAT }}
       - name: Deploy - Sync with S3
