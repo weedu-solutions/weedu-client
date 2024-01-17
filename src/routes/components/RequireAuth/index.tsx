@@ -25,7 +25,7 @@ export const RequireAuth = ({
   const userRole = JSON.parse(String(user))
 
   function userRoles() {
-    switch (userRole.user_type_id) {
+    switch (userRole?.user_type_id) {
       case 1:
         return ['COLABORADOR']
       case 2:
