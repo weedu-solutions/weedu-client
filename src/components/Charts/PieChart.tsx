@@ -40,10 +40,10 @@ export default function PieChartGH() {
       return setDataStockStatus(data.started);
     };
 
-    if (user.user_type_id === 1 || 2) {
+    if (user?.user_type_id === 1 || 2) {
       getGraphic();
     }
-    if (user.user_type_id === 3) {
+    if (user?.user_type_id === 3) {
       getGraphicCustomer();
     }
   }, []);

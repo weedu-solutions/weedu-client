@@ -20,14 +20,14 @@ export function ConsultantCompanies() {
             <Wrapper>
                 <div className="container">
                     <Content>
-                        <h1>Suas empresas - {user.name}</h1>
+                        <h1>Suas empresas - {user?.name}</h1>
                     </Content>
                 </div>
             </Wrapper>
 
             <Body>
                 {
-                    user.customer.map((customer: any) =>
+                    user?.customer.map((customer: any) =>
                         <Box>
                             <h1>{customer.fantasy_name}</h1>
                             <ButtonSeeMore

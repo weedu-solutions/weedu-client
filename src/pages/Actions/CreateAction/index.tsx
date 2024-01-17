@@ -44,10 +44,10 @@ export function CreateAction() {
     const idResponsibleAction = responsible.split(',');
 
     const idCustumer =
-        user.user_type_id === 3 ?
+        user?.user_type_id === 3 ?
             infoCompanyConsultant.id
             :
-            user.customer[0].id
+            user?.customer[0].id
         ;
 
     const navigate = useNavigate()
@@ -75,7 +75,7 @@ export function CreateAction() {
             problem,
             what,
             how,
-            who: user.user_type_id === 1 ? user.name : idResponsibleAction[0],
+            who: user?.user_type_id === 1 ? user?.name : idResponsibleAction[0],
             why_1,
             why_2,
             why_3,
@@ -86,7 +86,7 @@ export function CreateAction() {
             init_date: null,
             end_date: null,
             observation,
-            user_id: user.user_type_id === 1 ? user.id : idResponsibleAction[1],
+            user_id: user?.user_type_id === 1 ? user.id : idResponsibleAction[1],
             customer_id: idCustumer,
             where: "O",
             is_active: user.is_active
@@ -271,11 +271,11 @@ export function CreateAction() {
                         <Box mt="20px">
                             <FormLabel htmlFor='who'>Responsável pela ação (Who?)</FormLabel>
                             {
-                                user.user_type_id === 1 ?
+                                user?.user_type_id === 1 ?
                                     <Input
                                         id='preview_init_date'
                                         {...register('who')}
-                                        value={user.name}
+                                        value={user?.name}
                                         focusBorderColor={"#7956F7"}
                                         h="56px"
                                         cursor={"not-allowed"}
@@ -299,13 +299,13 @@ export function CreateAction() {
 
                                         {
 
-                                            user.user_type_id === 2 ?
+                                            user?.user_type_id === 2 ?
                                                 filterCollaborators.map((user: any) =>
-                                                    <option value={[user.name, user.id]}>{user.name}</option>
+                                                    <option value={[user?.name, user.id]}>{user?.name}</option>
                                                 )
                                                 :
                                                 usersCompanyConsultant[0].user.map((user: any) =>
-                                                    <option value={user.name}>{user.name}</option>
+                                                    <option value={user?.name}>{user?.name}</option>
                                                 )
 
                                         }

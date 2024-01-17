@@ -53,7 +53,7 @@ export function ModalStartAction({
   });
 
   const idCustumer =
-    user.user_type_id === 3 ? infoCompanyConsultant.id : user.customer[0].id;
+    user?.user_type_id === 3 ? infoCompanyConsultant.id : user?.customer[0].id;
   const onSubmit = async () => {
     await Api.post(`/auth/plan/${action?.id}`, {
       problem: action?.problem,

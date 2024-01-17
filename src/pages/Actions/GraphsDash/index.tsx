@@ -53,11 +53,11 @@ export function GraphsDash() {
       return setDataFinishStatus(data.finished);
     };
 
-    if (user.user_type_id === 1 || 2) {
+    if (user?.user_type_id === 1 || 2) {
       getGraphic();
     }
 
-    if (user.user_type_id === 3) {
+    if (user?.user_type_id === 3) {
       getGraphicCustomer();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

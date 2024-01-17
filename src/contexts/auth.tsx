@@ -79,7 +79,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       });
       Notify(NotifyTypes.SUCCESS, 'Login realizado com sucesso')
       setTimeout(() => {
-        const route = loginRedirect(user.user_type_id)
+        const route = loginRedirect(user?.user_type_id)
         navigate(route);
         window.location.reload();
       }, 2000)

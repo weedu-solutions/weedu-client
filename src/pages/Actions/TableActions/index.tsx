@@ -244,11 +244,11 @@ export function TableActions() {
       return setAction(data.sort(compare));
     };
 
-    if (user.user_type_id === 1 || 2) {
+    if (user?.user_type_id === 1 || 2) {
       getTableActions();
     }
 
-    if (user.user_type_id === 3) {
+    if (user?.user_type_id === 3) {
       getTableActionsCustomer();
     }
 
