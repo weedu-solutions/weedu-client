@@ -16,7 +16,7 @@ export function Actions() {
   );
 
   const idCustumer =
-    user.user_type_id === 3 ? infoCompanyConsultant.id : user.customer[0].id;
+    user?.user_type_id === 3 ? infoCompanyConsultant.id : user?.customer[0].id;
     
   useEffect(() => {
     const getData = async () => {
@@ -32,7 +32,7 @@ export function Actions() {
     <LayoutLogged>
       <Wrapper>
         <ContainerTable>
-          {user.user_type_id === 3 ? (
+          {user?.user_type_id === 3 ? (
             <Link
               color="#7956F7"
               href="/consultant-companies"
@@ -49,16 +49,16 @@ export function Actions() {
             ""
           )}
 
-          {user.user_type_id === 3 && infoCompanyConsultant ? (
+          {user?.user_type_id === 3 && infoCompanyConsultant ? (
             <Content>
               <h1>
-                {infoCompanyConsultant.fantasy_name} - {user.name}
+                {infoCompanyConsultant.fantasy_name} - {user?.name}
               </h1>
             </Content>
           ) : (
             <Content>
               <h1>
-                {user?.customer[0].fantasy_name} - {user.name}
+                {user?.customer[0].fantasy_name} - {user?.name}
               </h1>
             </Content>
           )}

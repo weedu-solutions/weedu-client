@@ -57,7 +57,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
   );
 
   const idCustumer =
-    user.user_type_id === 3 ? infoCompanyConsultant.id : user.customer[0].id;
+    user?.user_type_id === 3 ? infoCompanyConsultant.id : user?.customer[0].id;
 
   const {
     handleSubmit,
@@ -314,8 +314,8 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                   }}
                 >
                   {usersCompanyConsultant[0].user.map((user: any) => (
-                    <option key={user.name + Math.random()} value={user.name}>
-                      {user.name}
+                    <option key={user?.name + Math.random()} value={user?.name}>
+                      {user?.name}
                     </option>
                   ))}
                 </Select>

@@ -14,7 +14,7 @@ export function Header() {
       <S.ContainerHeader>
         <S.Content>
           <img src={logo} alt="logo da empresa" />
-          {user.user_type_id === 4 ? (
+          {user?.user_type_id === 4 ? (
             <S.HeaderRight>
               <ul>
                 <li>

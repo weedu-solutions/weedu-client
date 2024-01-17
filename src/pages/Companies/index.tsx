@@ -139,7 +139,7 @@ export function Companies() {
 
   const getUserList = async (currentCompanyRow: any) => {
     const { data } = await CustomerServices.getAllUserCustomer(currentCompanyRow.id)
-    const filteredData = data.data[0].user.filter((user: IUserData) => user.user_type_id === 2)
+    const filteredData = data.data[0].user.filter((user: IUserData) => user?.user_type_id === 2)
     setUserDataList(filteredData)
   }
 
@@ -289,7 +289,7 @@ export function Companies() {
 
             <ButtonsWrapper>
               {
-                user.id !== currentCompany.id ?
+                user?.id !== currentCompany?.id ?
                   currentCompany.status === 1 ?
                     <ButtonDefault
                       onClick={handleOpenModalBlock}

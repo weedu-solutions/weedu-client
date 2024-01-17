@@ -57,7 +57,7 @@ export function RegisterUserCompany() {
 
 
   const manegerOptions = userDataList.map((user) => {
-    return { label: user.name, value: String(user.user_type_id), id: user.id }
+    return { label: user?.name, value: String(user?.user_type_id), id: user.id }
   }) as any
 
   useEffect(() => {

@@ -57,7 +57,7 @@ export function UpdateUserCompany() {
   ] as any
 
   const managerOptions = userDataList.map((user) => {
-    return { label: user.name, value: String(user.user_type_id), id: user.id }
+    return { label: user?.name, value: String(user?.user_type_id), id: user.id }
   }) as any
 
   const manager = { label: userDataForm.manager[0]?.name, value: userDataForm.manager[0]?.id, }

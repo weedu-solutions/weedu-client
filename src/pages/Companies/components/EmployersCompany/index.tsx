@@ -82,7 +82,7 @@ export function EmployersCompany({ userRow }: any) {
   }
 
   function setGestors() {
-    const filteredData = userData.filter((user: IUserData) => user.user_type_id === 2)
+    const filteredData = userData.filter((user: IUserData) => user?.user_type_id === 2)
     setUserDataList(filteredData)
   }
 

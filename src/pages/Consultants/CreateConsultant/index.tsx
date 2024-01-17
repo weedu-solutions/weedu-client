@@ -33,7 +33,7 @@ interface ICreateConsultant {
 export function CreateConsultant() {
     const { user } = useAuth();
     const navigate = useNavigate()
-    const idCustumer = user.customer[0].id;
+    const idCustumer = user?.customer[0].id;
     const [show, setShow] = React.useState(false)
     const handleClick = () => setShow(!show)
     const {
