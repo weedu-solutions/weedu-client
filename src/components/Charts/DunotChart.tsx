@@ -10,36 +10,40 @@ interface IFinishedActions {
   outOfTime: number;
 }
 
-
 export default function DunotChart() {
   const { user } = useAuth();
 
-  const [datafinishedActions, setDataFinishedActions] = useState<IFinishedActions>();
+  const [datafinishedActions, setDataFinishedActions] =
+    useState<IFinishedActions>();
   const [pending, setPending] = useState<boolean>(false);
 
-  const infoCompany: any = JSON.parse(localStorage.getItem('company_consultant') || '{}');
+  const infoCompany: any = JSON.parse(
+    localStorage.getItem("company_consultant") || "{}"
+  );
 
   useEffect(() => {
     setPending(true);
 
     const getGraphic = async () => {
-      const { data } = await ActionsServices.getDataGraphic(user.id)
+      const { data } = await ActionsServices.getDataGraphic(user.id);
       setPending(false);
       return setDataFinishedActions(data.finished);
-    }
+    };
 
     const getGraphicCustomer = async () => {
-      const { data } = await ActionsServices.getDataGraphicCustomer(infoCompany.id)
+      const { data } = await ActionsServices.getDataGraphicCustomer(
+        infoCompany.id
+      );
       setPending(false);
       return setDataFinishedActions(data.finished);
-    }
+    };
 
     if (user?.user_type_id === 1 || 2) {
-      getGraphic()            
-    } 
-    
+      getGraphic();
+    }
+
     if (user?.user_type_id === 3) {
-      getGraphicCustomer()
+      getGraphicCustomer();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,33 +58,33 @@ export default function DunotChart() {
 
   return (
     <>
-      {
-        !pending ?
-          <PieChart width={350} height={280}>
-            <Pie
-              data={data}
-              cx={150}
-              cy={135}
-              innerRadius={60}
-              outerRadius={80}
-              fill="#8884d8"
-              isAnimationActive={false}
-              dataKey="value"
-              label
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-          : <Box
-            paddingLeft='12'
-            paddingRight='20'
+      {!pending ? (
+        <PieChart width={350} height={280}>
+          <Pie
+            data={data}
+            cx={150}
+            cy={135}
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            isAnimationActive={false}
+            dataKey="value"
+            label
           >
-            <SkeletonCircle size='40' />
-          </Box>
-      }
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      ) : (
+        <Box paddingLeft="12" paddingRight="20">
+          <SkeletonCircle size="40" />
+        </Box>
+      )}
     </>
   );
 }
