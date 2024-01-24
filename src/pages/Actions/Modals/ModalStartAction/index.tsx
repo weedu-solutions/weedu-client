@@ -18,6 +18,7 @@ import { Notify, NotifyTypes } from "../../../../components/Notify";
 import { Api } from "../../../../services/api";
 import { useAuth } from "../../../../hooks/auth";
 import { useQueryClient } from "react-query";
+import { useInvalidateQueryActions } from "../../../../hooks/useActions/useInvalidateQueryActions";
 
 type ModalDisableActionProps = {
   closeModal: any;
@@ -32,7 +33,7 @@ export function ModalStartAction({
   const [startDate, setStartDate] = useState<any>();
   const [endDate, setEndDate] = useState<any>();
 
-  const queryClient = useQueryClient();
+  const { invalidateQueryActions } = useInvalidateQueryActions();
 
   function SubmitDate() {
     if (action?.init_date) {
@@ -76,45 +77,25 @@ export function ModalStartAction({
     })
       .then(() => {
         if (action?.init_date) {
-          queryClient.invalidateQueries({
-            queryKey: ["all-actions"],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["actions-costumer"],
-          });
+          invalidateQueryActions();
           closeModal();
           Notify(NotifyTypes.SUCCESS, "Plano de Ação finalizado com sucesso!");
         } else {
-          queryClient.invalidateQueries({
-            queryKey: ["all-actions"],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["actions-costumer"],
-          });
+          invalidateQueryActions();
           closeModal();
           Notify(NotifyTypes.SUCCESS, "Plano de Ação iniciado com sucesso!");
         }
       })
       .catch(() => {
         if (action?.init_date) {
-          queryClient.invalidateQueries({
-            queryKey: ["all-actions"],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["actions-costumer"],
-          });
+          invalidateQueryActions();
           closeModal();
           Notify(
             NotifyTypes.ERROR,
             "Não foi posível finalizar o Plano de Ação!"
           );
         } else {
-          queryClient.invalidateQueries({
-            queryKey: ["all-actions"],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["actions-costumer"],
-          });
+          invalidateQueryActions();
           closeModal();
           Notify(NotifyTypes.ERROR, "Não foi posível iniciar o Plano de Ação!");
         }

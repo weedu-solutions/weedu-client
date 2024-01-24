@@ -8,14 +8,14 @@ export const useListActions = () => {
 
   const { user, infoCompany } = useAuth();
 
-  //   const typeUserSimple = user?.user_type_id === 1 || user?.user_type_id === 2;
+  const typeUserSimple = user?.user_type_id === 1 || user?.user_type_id === 2;
   const typeUserCustomer = user?.user_type_id === 3;
 
   const { data: actionsCustomer, isLoading: loadingActionsCustomer } =
-    usePlanCustomer(infoCompany?.id);
+    usePlanCustomer(infoCompany?.id, typeUserCustomer);
 
   const { data: actionsUserSimple, isLoading: loadingActions } =
-    useAllActions();
+    useAllActions(typeUserSimple);
 
   function compare(a: any, b: any) {
     if (a.id < b.id) return -1;
