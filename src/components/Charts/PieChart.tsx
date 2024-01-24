@@ -18,7 +18,6 @@ export default function PieChartGH() {
 
   const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
   const [pending, setPending] = useState<boolean>(false);
-  const [activeIndex, setActiveIndex] = useState(0);
   const infoCompany: any = JSON.parse(
     localStorage.getItem("company_consultant") || "{}"
   );
@@ -77,7 +76,7 @@ export default function PieChartGH() {
             fill="#8884d8"
             dataKey="value"
             label
-            activeIndex={activeIndex}
+            activeIndex={0}
           >
             {data.map((entry, index) => (
               <Cell

@@ -14,10 +14,10 @@ import Calendar from "react-calendar";
 import { useEffect, useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import moment from "moment";
-import { AxiosResponse } from "axios";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
 import { Api } from "../../../../services/api";
 import { useAuth } from "../../../../hooks/auth";
+import { useQueryClient } from "react-query";
 
 type ModalDisableActionProps = {
   closeModal: any;
@@ -31,10 +31,11 @@ export function ModalStartAction({
   const [date, setDate] = useState(new Date());
   const [startDate, setStartDate] = useState<any>();
   const [endDate, setEndDate] = useState<any>();
-  const [iscloseModal, setIsCloseModal] = useState<any>();
   const infoCompanyConsultant: any = JSON.parse(
     localStorage.getItem("company_consultant") || "{}"
   );
+
+  const queryClient = useQueryClient();
 
   function SubmitDate() {
     if (action?.init_date) {
@@ -76,28 +77,50 @@ export function ModalStartAction({
       status: action?.status,
       is_active: user.is_active,
     })
-      .then((res: AxiosResponse) => {
-        setIsCloseModal(closeModal);
+      .then(() => {
         if (action?.init_date) {
-          window.location.reload();
-          Notify(NotifyTypes.SUCCESS, "Plano de ação finalizado com sucesso!");
+          queryClient.invalidateQueries({
+            queryKey: ["all-actions"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["actions-costumer"],
+          });
+          closeModal();
+          Notify(NotifyTypes.SUCCESS, "Plano de Ação finalizado com sucesso!");
         } else {
-          window.location.reload();
-          Notify(NotifyTypes.SUCCESS, "Plano de ação iniciado com sucesso!");
+          queryClient.invalidateQueries({
+            queryKey: ["all-actions"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["actions-costumer"],
+          });
+          closeModal();
+          Notify(NotifyTypes.SUCCESS, "Plano de Ação iniciado com sucesso!");
         }
-        return iscloseModal;
       })
-      .catch((err: AxiosResponse) => {
-        setIsCloseModal(closeModal);
+      .catch(() => {
         if (action?.init_date) {
+          queryClient.invalidateQueries({
+            queryKey: ["all-actions"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["actions-costumer"],
+          });
+          closeModal();
           Notify(
             NotifyTypes.ERROR,
-            "Não foi posível finalizar o plano de ação!"
+            "Não foi posível finalizar o Plano de Ação!"
           );
         } else {
-          Notify(NotifyTypes.ERROR, "Não foi posível iniciar o plano de ação!");
+          queryClient.invalidateQueries({
+            queryKey: ["all-actions"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["actions-costumer"],
+          });
+          closeModal();
+          Notify(NotifyTypes.ERROR, "Não foi posível iniciar o Plano de Ação!");
         }
-        return iscloseModal;
       });
   };
 
@@ -112,9 +135,9 @@ export function ModalStartAction({
             <TitleModal></TitleModal>
             <div>
               {action?.init_date ? (
-                <h1>Finalizar ação</h1>
+                <h1>Finalizar Ação</h1>
               ) : (
-                <h1>Iniciar ação</h1>
+                <h1>Iniciar ação2</h1>
               )}
             </div>
 
@@ -129,9 +152,9 @@ export function ModalStartAction({
 
           <SubTitle>
             {action?.init_date ? (
-              <h1>Defina a data de fim real da ação</h1>
+              <h1>Defina a data de fim real da Ação</h1>
             ) : (
-              <h1>Defina a data de início real da ação</h1>
+              <h1>Defina a data de início real da Ação</h1>
             )}
           </SubTitle>
 
@@ -144,7 +167,7 @@ export function ModalStartAction({
           {action?.init_date ? (
             dateInit.isAfter(dateEnd) ? (
               <ErrorMessage>
-                Atenção a data de fim da ação, não pode ser menor que a data
+                Atenção a data de fim da Ação, não pode ser menor que a data
                 início.
               </ErrorMessage>
             ) : null
@@ -158,10 +181,14 @@ export function ModalStartAction({
             color="#FFF"
             onClick={() => onSubmit()}
             disabled={
-              action?.init_date ? (dateInit.isAfter(dateEnd) ? true : false) : false
+              action?.init_date
+                ? dateInit.isAfter(dateEnd)
+                  ? true
+                  : false
+                : false
             }
           >
-            {action?.init_date ? "Finalizar ação" : "Iniciar ação"}
+            {action?.init_date ? "Finalizar Ação" : "Iniciar Ação"}
           </Button>
         </Wrapper>
       }

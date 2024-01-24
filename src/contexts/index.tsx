@@ -1,14 +1,11 @@
-import React from 'react';
-import { ActionContext } from './action';
-import { AuthProvider } from './auth';
-import { UserProvider } from './user';
+import React from "react";
+import { AuthProvider } from "./auth";
+import { UserProvider } from "./user";
 
 export const AppProvider: React.FC = ({ children }) => {
   return (
     <AuthProvider>
-      <UserProvider>
-        {children}
-      </UserProvider>
+      <UserProvider>{children}</UserProvider>
     </AuthProvider>
-  )
+  );
 };
