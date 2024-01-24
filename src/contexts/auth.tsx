@@ -38,6 +38,7 @@ export interface IAuthContextState {
   recover(email: ICredentials): void;
   idConsultant: any;
   setIdConsultant: any;
+  infoCompany: any
 }
 
 export const AuthContext = createContext<IAuthContextState>(
@@ -51,6 +52,9 @@ export const AuthProvider: React.FC = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [idConsultant, setIdConsultant] = useState();
 
+  const infoCompany: any = JSON.parse(
+    localStorage.getItem("company_consultant") || "{}"
+  );
 
   const [data, setData] = useState<IAuthState>(() => {
     const token = localStorage.getItem('token');
@@ -128,7 +132,8 @@ export const AuthProvider: React.FC = ({ children }) => {
         recover,
         recoverError,
         idConsultant,
-        setIdConsultant
+        setIdConsultant,
+        infoCompany
       }}
     >
       {children}

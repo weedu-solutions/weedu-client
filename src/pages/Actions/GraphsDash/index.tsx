@@ -29,14 +29,10 @@ interface IFinishedActions {
 }
 
 export function GraphsDash() {
-  const { user } = useAuth();
+  const { user, infoCompany } = useAuth();
 
   const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
   const [dataFinishStatus, setDataFinishStatus] = useState<IFinishedActions>();
-
-  const infoCompany: any = JSON.parse(
-    localStorage.getItem("company_consultant") || "{}"
-  );
 
   useEffect(() => {
     const getGraphic = async () => {
@@ -101,7 +97,7 @@ export function GraphsDash() {
                 fontSize="25px"
                 marginRight="4px"
               >
-                Crie planos de ação
+                Crie planos de Ação
               </Link>
               para vizualizar o gráfico de status das ações.
             </h1>
@@ -143,7 +139,7 @@ export function GraphsDash() {
         {HaveActiosFinished() === false ? (
           <MessageDefaultChart>
             <h1>
-              Este gráfico ficará disponível quando um plano de ação for
+              Este gráfico ficará disponível quando um Plano de Ação for
               finalizado.
             </h1>
           </MessageDefaultChart>

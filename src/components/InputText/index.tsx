@@ -1,8 +1,7 @@
-import { Box, IInputProps, Input, Pressable, Text } from "native-base";
+import { Box, IInputProps, Input, Text } from "native-base";
 import { useState } from "react";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 
-import { colors } from "../../theme";
 import * as S from "./styles";
 
 interface IProps extends IInputProps {

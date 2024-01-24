@@ -25,7 +25,7 @@ export function ModalOptions({
         onClick={handleOpenModalStartAction}
         disabled={action?.end_date ? true : false}
       >
-        {action?.init_date ? "Finalizar ação" : "Começar ação"}
+        {action?.init_date ? "Finalizar Ação" : "Começar Ação"}
       </Button>
 
       <Button mt="10px" width="100%" onClick={handleOpenModalSeeDetails}>
@@ -33,7 +33,7 @@ export function ModalOptions({
       </Button>
 
       <Button mt="10px" width="100%" onClick={handleOpenModalDisableAction}>
-        {action?.is_active === 1 ? "Desativar ação" : "Ativar ação"}
+        {action?.is_active === 1 ? "Desativar Ação" : "Ativar Ação"}
       </Button>
 
       <Button mt="10px" width="100%" colorScheme="red" onClick={handleModal}>

@@ -1,4 +1,14 @@
-import { Box, Button, FormControl, FormLabel, Input, Select, Stack, Switch, Textarea } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
+  Stack,
+  Switch,
+  Textarea,
+} from "@chakra-ui/react";
 import { AxiosResponse } from "axios";
 import moment from "moment";
 import { useState } from "react";
@@ -11,7 +21,17 @@ import { useAuth } from "../../../../hooks/auth";
 import IActions from "../../../../interfaces/actions";
 import { Api } from "../../../../services/api";
 import { AttentionMessage } from "../../CreateAction/styles";
-import { Footer, Form, Margin, Separator, SubTitle, Title, Toggle, Wrapper } from "./styles";
+import {
+  Footer,
+  Form,
+  Margin,
+  Separator,
+  SubTitle,
+  Title,
+  Toggle,
+  Wrapper,
+} from "./styles";
+import { useQueryClient } from "react-query";
 
 type ModalSeeDetailsProps = {
   closeModal: any;
@@ -24,11 +44,10 @@ type ModalSeeDetailsProps = {
 // }
 
 export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
-  const { user } = useAuth();
+  const { user, infoCompany } = useAuth();
+  const queryClient = useQueryClient();
   const [editData, setEditData] = useState<boolean>(false);
-  console.log(action);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [iscloseModal, setIsCloseModal] = useState<any>();
   const [isChecked, setIsChecked] = useState(
     action?.is_active === 1 ? true : false
   );
@@ -49,15 +68,12 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
   let chosenInitDate = moment(preview_init_date).format("DD/MM/YYYY");
   let chosenEndDate = moment(preview_end_date).format("DD/MM/YYYY");
 
-  const infoCompanyConsultant: any = JSON.parse(
-    localStorage.getItem("company_consultant") || "{}"
-  );
   const usersCompanyConsultant: any = JSON.parse(
     localStorage.getItem("users_company") || "{}"
   );
 
   const idCustumer =
-    user?.user_type_id === 3 ? infoCompanyConsultant.id : user?.customer[0].id;
+    user?.user_type_id === 3 ? infoCompany.id : user?.customer[0].id;
 
   const {
     handleSubmit,
@@ -99,15 +115,30 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
       where: "O",
       is_active: isChecked === true ? 1 : 0,
     })
-      .then((res: AxiosResponse) => {
-        setIsCloseModal(closeModal);
-        Notify(NotifyTypes.SUCCESS, "Plano de ação editado com sucesso!");
-        window.location.reload();
+      .then(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["all-actions"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["actions-costumer"],
+        });
+        closeModal();
+        Notify(NotifyTypes.SUCCESS, "Plano de Ação editado com sucesso!");
       })
       .catch((err: AxiosResponse) => {
-        setIsCloseModal(closeModal);
-        Notify(NotifyTypes.ERROR, "Não foi possível editar o Plano de ação.");
+        queryClient.invalidateQueries({
+          queryKey: ["all-actions"],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["actions-costumer"],
+        });
+        closeModal();
+        Notify(NotifyTypes.ERROR, "Não foi possível editar o Plano de Ação.");
       });
+  };
+
+  const handleSaveDetails = () => {
+    handleSubmit(onSubmit)();
   };
 
   const handleToggle = async () => {
@@ -120,7 +151,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
         <Title>
           <div></div>
           <div>
-            <h1>Detalhes da ação</h1>
+            <h1>Detalhes da Ação</h1>
           </div>
           <div>
             <Button colorScheme="#FFFFFF" onClick={closeModal}>
@@ -138,7 +169,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
         </SubTitle>
 
         <Form>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
             <FormControl>
               <Box>
                 <FormLabel htmlFor="problem">
@@ -274,7 +305,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
 
               <Box mt="20px">
                 <FormLabel htmlFor="how">
-                  Como irá realizar esta ação (passo a passo)? (How?)
+                  Como irá realizar esta Ação (passo a passo)? (How?)
                 </FormLabel>
                 <Textarea
                   backgroundColor="#F4F2FC"
@@ -296,13 +327,13 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
 
               <Box mt="20px">
                 <FormLabel htmlFor="name">
-                  Responsável pela ação (Who?)
+                  Responsável pela Ação (Who?)
                 </FormLabel>
 
                 <Select
                   h="56px"
                   fontSize="16px"
-                  placeholder="Informe o responsável pela ação"
+                  placeholder="Informe o responsável pela Ação"
                   focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
                   value={responsible}
                   {...register("who", {
@@ -556,7 +587,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                 loading={isSubmitting}
                 disabled={action?.status === 3 ? true : false}
                 title={"Salvar alterações"}
-                type="submit"
+                onClick={handleSaveDetails}
               />
             </Footer>
           </form>

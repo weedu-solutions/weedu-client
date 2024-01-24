@@ -10,14 +10,11 @@ import { ContainerTable, Content, Separator, Wrapper } from "./styles";
 import { TableActions } from "./TableActions";
 
 export function Actions() {
-  const { user } = useAuth();
-  const infoCompanyConsultant: any = JSON.parse(
-    localStorage.getItem("company_consultant") || "{}"
-  );
+  const { user, infoCompany } = useAuth();
 
   const idCustumer =
-    user?.user_type_id === 3 ? infoCompanyConsultant.id : user?.customer[0].id;
-    
+    user?.user_type_id === 3 ? infoCompany.id : user?.customer[0].id;
+
   useEffect(() => {
     const getData = async () => {
       const { data } = await CustomerServices.getAllUserCustomer(idCustumer);
@@ -49,10 +46,10 @@ export function Actions() {
             ""
           )}
 
-          {user?.user_type_id === 3 && infoCompanyConsultant ? (
+          {user?.user_type_id === 3 && infoCompany ? (
             <Content>
               <h1>
-                {infoCompanyConsultant.fantasy_name} - {user?.name}
+                {infoCompany.fantasy_name} - {user?.name}
               </h1>
             </Content>
           ) : (
