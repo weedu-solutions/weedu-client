@@ -14,13 +14,10 @@ interface IStockStatus {
 }
 
 export default function PieChartGH() {
-  const { user } = useAuth();
+  const { user, infoCompany } = useAuth();
 
   const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
   const [pending, setPending] = useState<boolean>(false);
-  const infoCompany: any = JSON.parse(
-    localStorage.getItem("company_consultant") || "{}"
-  );
 
   useEffect(() => {
     setPending(true);

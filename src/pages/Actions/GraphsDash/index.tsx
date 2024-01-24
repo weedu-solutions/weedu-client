@@ -29,14 +29,10 @@ interface IFinishedActions {
 }
 
 export function GraphsDash() {
-  const { user } = useAuth();
+  const { user, infoCompany } = useAuth();
 
   const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
   const [dataFinishStatus, setDataFinishStatus] = useState<IFinishedActions>();
-
-  const infoCompany: any = JSON.parse(
-    localStorage.getItem("company_consultant") || "{}"
-  );
 
   useEffect(() => {
     const getGraphic = async () => {

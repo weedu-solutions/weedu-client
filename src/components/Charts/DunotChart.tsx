@@ -11,15 +11,11 @@ interface IFinishedActions {
 }
 
 export default function DunotChart() {
-  const { user } = useAuth();
+  const { user, infoCompany } = useAuth();
 
   const [datafinishedActions, setDataFinishedActions] =
     useState<IFinishedActions>();
   const [pending, setPending] = useState<boolean>(false);
-
-  const infoCompany: any = JSON.parse(
-    localStorage.getItem("company_consultant") || "{}"
-  );
 
   useEffect(() => {
     setPending(true);

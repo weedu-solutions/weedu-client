@@ -44,7 +44,7 @@ type ModalSeeDetailsProps = {
 // }
 
 export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
-  const { user } = useAuth();
+  const { user, infoCompany } = useAuth();
   const queryClient = useQueryClient();
   const [editData, setEditData] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -68,15 +68,12 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
   let chosenInitDate = moment(preview_init_date).format("DD/MM/YYYY");
   let chosenEndDate = moment(preview_end_date).format("DD/MM/YYYY");
 
-  const infoCompanyConsultant: any = JSON.parse(
-    localStorage.getItem("company_consultant") || "{}"
-  );
   const usersCompanyConsultant: any = JSON.parse(
     localStorage.getItem("users_company") || "{}"
   );
 
   const idCustumer =
-    user?.user_type_id === 3 ? infoCompanyConsultant.id : user?.customer[0].id;
+    user?.user_type_id === 3 ? infoCompany.id : user?.customer[0].id;
 
   const {
     handleSubmit,

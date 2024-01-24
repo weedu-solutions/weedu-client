@@ -27,13 +27,10 @@ export function ModalStartAction({
   closeModal,
   action,
 }: ModalDisableActionProps) {
-  const { user } = useAuth();
+  const { user, infoCompany } = useAuth();
   const [date, setDate] = useState(new Date());
   const [startDate, setStartDate] = useState<any>();
   const [endDate, setEndDate] = useState<any>();
-  const infoCompanyConsultant: any = JSON.parse(
-    localStorage.getItem("company_consultant") || "{}"
-  );
 
   const queryClient = useQueryClient();
 
@@ -54,7 +51,7 @@ export function ModalStartAction({
   });
 
   const idCustumer =
-    user?.user_type_id === 3 ? infoCompanyConsultant.id : user?.customer[0].id;
+    user?.user_type_id === 3 ? infoCompany.id : user?.customer[0].id;
   const onSubmit = async () => {
     await Api.post(`/auth/plan/${action?.id}`, {
       problem: action?.problem,
