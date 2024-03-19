@@ -21,3 +21,13 @@ export class ActionsServices {
     return data;
   }
 }
+
+export const  getDataGraphic = async (userID: string | number) => {
+  var { data } = await Api.get(`/auth/dashboard/${userID}`);
+  return data;
+}
+
+export const getDataGraphicCustomer = async (companyID: string | number) => {
+  var { data } = await Api.get(`/auth/dashboard-customer/${companyID}`);
+  return data;
+}

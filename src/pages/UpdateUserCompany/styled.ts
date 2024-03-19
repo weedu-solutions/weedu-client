@@ -29,3 +29,14 @@ export const Label = styled.label`
 export const CustomInput = styled.div`
   margin-bottom: 20px;
 `
+
+export const CustomOption = styled.option`
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  background-color: ${(props) => (props.selected ? "#3182ce" : "white")};
+  color: ${(props) => (props.selected ? "white" : "black")};
+  &:hover {
+    background-color: #e2e8f0;
+  }
+`;

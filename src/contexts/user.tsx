@@ -1,6 +1,7 @@
-import { createContext, useState } from 'react';
+import { createContext, useState } from "react";
 
 interface IUserDataForm {
+  id: string;
   name: string;
   suname: string;
   email: string;
@@ -9,7 +10,15 @@ interface IUserDataForm {
   is_active: string;
   customer_id: Array<number>;
   manager_id: string;
-  manager: any;
+  manager: Array<{
+    email: string;
+    id: string;
+    is_active: number;
+    name: string;
+    phone: null;
+    suname: string;
+    user_type_id: number;
+  }>;
 }
 
 export interface IUserData {
@@ -23,6 +32,7 @@ export interface IUserData {
 }
 
 const initialUserDataForm = {
+  id: '',
   name: "",
   suname: "",
   email: "",
@@ -31,10 +41,18 @@ const initialUserDataForm = {
   is_active: "1",
   customer_id: [],
   manager_id: "",
-  manager: ''
-}
-
-
+  manager: [
+    {
+      email: "",
+      id: "",
+      is_active: 0,
+      name: "",
+      phone: null,
+      suname: "",
+      user_type_id: 0,
+    },
+  ],
+};
 
 export interface IAuthContextState {
   userDataForm: IUserDataForm;
@@ -44,20 +62,20 @@ export interface IAuthContextState {
 }
 
 export const UserContext = createContext<IAuthContextState>(
-  {} as IAuthContextState,
+  {} as IAuthContextState
 );
 
 export const UserProvider: React.FC = ({ children }) => {
-
-  const [userDataForm, setUserDataForm] = useState<IUserDataForm>(initialUserDataForm);
+  const [userDataForm, setUserDataForm] =
+    useState<IUserDataForm>(initialUserDataForm);
   const [userDataList, setUserDataList] = useState<Array<IUserData>>([]);
   // const [userCompany, setUserCompany] = useState<IUserDataForm>(initialUserDataForm);
 
   return (
     <UserContext.Provider
-      value={{userDataForm, setUserDataForm, userDataList, setUserDataList}}
+      value={{ userDataForm, setUserDataForm, userDataList, setUserDataList }}
     >
       {children}
     </UserContext.Provider>
-  )
-}
+  );
+};
