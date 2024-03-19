@@ -1,9 +1,7 @@
 import { Link } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import DunotChart from "../../../components/Charts/DunotChart";
 import PieChartGH from "../../../components/Charts/PieChart";
 import { useAuth } from "../../../hooks/auth";
-import { ActionsServices } from "../../../services/actions";
 import {
   ColorfulFrame,
   ContainerRow,
@@ -14,58 +12,20 @@ import {
   RowGraph,
 } from "./styles";
 import { STATUS_COLORS } from "../../../utils/statusColors";
+import { useDataGraphicUsers } from "../../../client/hooks/dashboard";
 
-interface IStockStatus {
-  starting: number;
-  execution: number;
-  executed: number;
-  lateStarting: number;
-  overdueFinishing: number;
-}
+export function GraphsDashUsers() {
+  const { user } = useAuth();
 
-interface IFinishedActions {
-  onTime: number;
-  outOfTime: number;
-}
+  const { data } = useDataGraphicUsers(user?.id);
 
-export function GraphsDash() {
-  const { user, infoCompany } = useAuth();
-
-  const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
-  const [dataFinishStatus, setDataFinishStatus] = useState<IFinishedActions>();
-
-  useEffect(() => {
-    const getGraphic = async () => {
-      const { data } = await ActionsServices.getDataGraphic(user.id);
-      setDataStockStatus(data.started);
-      return setDataFinishStatus(data.finished);
-    };
-
-    const getGraphicCustomer = async () => {
-      const { data } = await ActionsServices.getDataGraphicCustomer(
-        infoCompany.id
-      );
-      setDataStockStatus(data.started);
-      return setDataFinishStatus(data.finished);
-    };
-
-    if (user?.user_type_id === 1 || 2) {
-      getGraphic();
-    }
-
-    if (user?.user_type_id === 3) {
-      getGraphicCustomer();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function HaveActios() {
+  function HaveActions() {
     if (
-      dataStockStatus?.starting === 0 &&
-      dataStockStatus?.execution === 0 &&
-      dataStockStatus?.executed === 0 &&
-      dataStockStatus?.lateStarting === 0 &&
-      dataStockStatus?.overdueFinishing === 0
+      data?.started?.starting === 0 &&
+      data?.started?.execution === 0 &&
+      data?.started?.executed === 0 &&
+      data?.started?.lateStarting === 0 &&
+      data?.started?.overdueFinishing === 0
     ) {
       return false;
     } else {
@@ -73,8 +33,8 @@ export function GraphsDash() {
     }
   }
 
-  function HaveActiosFinished() {
-    if (dataFinishStatus?.onTime === 0 && dataFinishStatus?.outOfTime === 0) {
+  function HaveActionsFinished() {
+    if (data?.finished?.onTime === 0 && data?.finished?.outOfTime === 0) {
       return false;
     } else {
       return true;
@@ -88,7 +48,7 @@ export function GraphsDash() {
           <h1>Status das ações</h1>
         </div>
 
-        {HaveActios() === false ? (
+        {HaveActions() === false ? (
           <MessageDefaultChart>
             <h1>
               <Link
@@ -104,7 +64,7 @@ export function GraphsDash() {
           </MessageDefaultChart>
         ) : (
           <ContainerRow>
-            <PieChartGH />
+            <PieChartGH dataGraphic={data?.data?.started} />
             <LegendGraph>
               <Row>
                 <ColorfulFrame bgColor={STATUS_COLORS.A_INICIAR} />
@@ -136,7 +96,7 @@ export function GraphsDash() {
           <h1>Status das ações finalizadas</h1>
         </div>
 
-        {HaveActiosFinished() === false ? (
+        {HaveActionsFinished() === false ? (
           <MessageDefaultChart>
             <h1>
               Este gráfico ficará disponível quando um Plano de Ação for
@@ -145,7 +105,7 @@ export function GraphsDash() {
           </MessageDefaultChart>
         ) : (
           <ContainerRow>
-            <DunotChart />
+            <DunotChart dataGraphic={data?.data?.finished} />
             <LegendGraph>
               <Row>
                 <ColorfulFrame bgColor={STATUS_COLORS.NO_PRAZO} />

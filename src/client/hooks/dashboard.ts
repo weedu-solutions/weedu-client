@@ -2,20 +2,18 @@ import { AxiosError } from "axios";
 import { getDataGraphic, getDataGraphicCustomer } from "../../services/actions";
 import { useQuery } from "react-query";
 
-export const useDataGraphic = (userID: string) =>
+export const useDataGraphicUsers = (userID: string) =>
   useQuery<any, AxiosError>(
-    ["actions-costumer"],
+    ["graphic-user"],
     async () => await getDataGraphic(userID),
     {
       enabled: true,
     }
   );
 
-export const useDataGraphicCustomer = (
-  companyID: string | number,
-) =>
+export const useDataGraphicCustomer = (companyID: string | number) =>
   useQuery<any, AxiosError>(
-    ["all-actions"],
+    ["graphic-customer"],
     async () => await getDataGraphicCustomer(companyID),
     {
       enabled: true,

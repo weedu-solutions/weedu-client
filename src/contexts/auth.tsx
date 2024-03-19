@@ -103,7 +103,6 @@ export const AuthProvider: React.FC = ({ children }) => {
     try {
       setLoading(loading => !loading);
       const { data } = await Api.post('/password/email', email);
-      console.log(data)
       if (data.error) return setRecoverError(data.error);
       navigate(ROUTES.RECOVER);
     } catch (error: any) {

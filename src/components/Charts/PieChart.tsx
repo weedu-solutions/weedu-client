@@ -1,55 +1,32 @@
 import { Box, SkeletonCircle } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import { useAuth } from "../../hooks/auth";
-import { ActionsServices } from "../../services/actions";
+
 import { STATUS_COLORS } from "../../utils/statusColors";
 
-interface IStockStatus {
-  starting: number;
-  execution: number;
-  executed: number;
-  lateStarting: number;
-  overdueFinishing: number;
+export interface IPieChartGHData {
+  dataGraphic: {
+    executed: number;
+    execution: number;
+    lateStarting: number;
+    overdueFinishing: number;
+    starting: number;
+  };
 }
 
-export default function PieChartGH() {
-  const { user, infoCompany } = useAuth();
-
-  const [dataStockStatus, setDataStockStatus] = useState<IStockStatus>();
-  const [pending, setPending] = useState<boolean>(false);
-
-  useEffect(() => {
-    setPending(true);
-
-    const getGraphic = async () => {
-      const { data } = await ActionsServices.getDataGraphic(user.id);
-      setPending(false);
-      return setDataStockStatus(data.started);
-    };
-
-    const getGraphicCustomer = async () => {
-      const { data } = await ActionsServices.getDataGraphicCustomer(
-        infoCompany.id
-      );
-      setPending(false);
-      return setDataStockStatus(data.started);
-    };
-
-    if (user?.user_type_id === 1 || 2) {
-      getGraphic();
-    }
-    if (user?.user_type_id === 3) {
-      getGraphicCustomer();
-    }
-  }, []);
+export default function PieChartGH(dataGraphic: IPieChartGHData) {
 
   const data = [
-    { name: "A iniciar", value: dataStockStatus?.starting },
-    { name: "Em execução", value: dataStockStatus?.execution },
-    { name: "Executadas", value: dataStockStatus?.executed },
-    { name: "Atrasadas a iniciar", value: dataStockStatus?.lateStarting },
-    { name: "Atrasadas a terminar", value: dataStockStatus?.overdueFinishing },
+    { name: "A iniciar", value: dataGraphic?.dataGraphic?.starting },
+    { name: "Em execução", value: dataGraphic?.dataGraphic?.execution },
+    { name: "Executadas", value: dataGraphic?.dataGraphic?.executed },
+    {
+      name: "Atrasadas a iniciar",
+      value: dataGraphic?.dataGraphic?.lateStarting,
+    },
+    {
+      name: "Atrasadas a terminar",
+      value: dataGraphic?.dataGraphic?.overdueFinishing,
+    },
   ];
 
   const COLORS = [
@@ -62,7 +39,7 @@ export default function PieChartGH() {
 
   return (
     <>
-      {!pending ? (
+      {dataGraphic ? (
         <PieChart width={350} height={280}>
           <Pie
             data={data}

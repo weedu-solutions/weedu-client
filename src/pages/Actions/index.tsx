@@ -5,9 +5,10 @@ import iconBack from "../../assets/seta-back.svg";
 import LayoutLogged from "../../components/LayoutLogged";
 import { useAuth } from "../../hooks/auth";
 import { CustomerServices } from "../../services/customer";
-import { GraphsDash } from "./GraphsDash";
 import { ContainerTable, Content, Separator, Wrapper } from "./styles";
 import { TableActions } from "./TableActions";
+import { GraphsDashUsers } from "./GrapsDashUsers";
+import { GraphsDashCostumer } from "./GraphsDashCostumer";
 
 export function Actions() {
   const { user, infoCompany } = useAuth();
@@ -25,6 +26,9 @@ export function Actions() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  console.log(user);
+
   return (
     <LayoutLogged>
       <Wrapper>
@@ -60,7 +64,11 @@ export function Actions() {
             </Content>
           )}
 
-          <GraphsDash />
+          {user?.user_type_id === 1 && <GraphsDashUsers />}
+
+          {user?.user_type_id === 2 && <GraphsDashUsers />}
+
+          {user?.user_type_id === 3 && <GraphsDashCostumer />}
 
           <Separator />
 

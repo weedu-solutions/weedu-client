@@ -1,60 +1,26 @@
 import { Box, SkeletonCircle } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
-import { useAuth } from "../../hooks/auth";
-import { ActionsServices } from "../../services/actions";
 import { STATUS_COLORS } from "../../utils/statusColors";
 
-interface IFinishedActions {
-  onTime: number;
-  outOfTime: number;
+export interface IDataDunotChart {
+  dataGraphic: {
+    onTime: number;
+    outOfTime: number;
+  }
 }
 
-export default function DunotChart() {
-  const { user, infoCompany } = useAuth();
-
-  const [datafinishedActions, setDataFinishedActions] =
-    useState<IFinishedActions>();
-  const [pending, setPending] = useState<boolean>(false);
-
-  useEffect(() => {
-    setPending(true);
-
-    const getGraphic = async () => {
-      const { data } = await ActionsServices.getDataGraphic(user.id);
-      setPending(false);
-      return setDataFinishedActions(data.finished);
-    };
-
-    const getGraphicCustomer = async () => {
-      const { data } = await ActionsServices.getDataGraphicCustomer(
-        infoCompany.id
-      );
-      setPending(false);
-      return setDataFinishedActions(data.finished);
-    };
-
-    if (user?.user_type_id === 1 || 2) {
-      getGraphic();
-    }
-
-    if (user?.user_type_id === 3) {
-      getGraphicCustomer();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+export default function DunotChart(dataGraphic: IDataDunotChart) {
 
   const data = [
-    { name: "No prazo", value: datafinishedActions?.onTime },
-    { name: "Fora do prazo", value: datafinishedActions?.outOfTime },
+    { name: "No prazo", value: dataGraphic?.dataGraphic?.onTime },
+    { name: "Fora do prazo", value: dataGraphic?.dataGraphic?.outOfTime },
   ];
 
   const COLORS = [STATUS_COLORS.NO_PRAZO, STATUS_COLORS.FORA_DO_PRAZO];
 
   return (
     <>
-      {!pending ? (
+      {dataGraphic ? (
         <PieChart width={350} height={280}>
           <Pie
             data={data}

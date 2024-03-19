@@ -16,8 +16,6 @@ export function Consultants() {
   const userInfoStorage = JSON.parse(String(userStorage));
   const { data } = useFetch<any>(`/auth/consultant-customer/${userInfoStorage.id}`);
 
-  console.log(data)
-
   return (
     <LayoutLogged>
 
