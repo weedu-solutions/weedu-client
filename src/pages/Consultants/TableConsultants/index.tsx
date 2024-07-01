@@ -107,6 +107,7 @@ export function TableConsultants() {
 
   useEffect(() => {
     getConsultants();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (consultants) {

@@ -17,7 +17,6 @@ import moment from "moment";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
 import { Api } from "../../../../services/api";
 import { useAuth } from "../../../../hooks/auth";
-import { useQueryClient } from "react-query";
 import { useInvalidateQueryActions } from "../../../../hooks/useActions/useInvalidateQueryActions";
 
 type ModalDisableActionProps = {
