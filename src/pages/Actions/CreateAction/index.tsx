@@ -86,7 +86,7 @@ export function CreateAction() {
       init_date: null,
       end_date: null,
       observation,
-      user_id: user?.user_type_id === 1 ? user.id : idResponsibleAction[1],
+      user_id: user?.user_type_id === 1 ? user?.id : idResponsibleAction[1],
       customer_id: idCustumer,
       where: "O",
       is_active: user.is_active,
@@ -272,7 +272,7 @@ export function CreateAction() {
                         </option>
                       ))
                     : usersCompanyConsultant[0].user.map((user: any) => (
-                        <option value={user?.name}>{user?.name}</option>
+                        <option value={[user?.name, user.id]}>{user?.name}</option>
                       ))}
                 </Select>
               )}
