@@ -21,15 +21,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'pnpm' # Adiciona cache para pnpm
-    - name: Install pnpm
-      run: npm install -g pnpm
+        cache: 'npm' # Adiciona cache para pnpm
     - name: Install dependencies
-      run: pnpm install
+      run:  npm i  --legacy-peer-deps
     - name: Build
       env:
         CI: false
-      run: pnpm build
+      run: npm run build
     - name: Build - Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
