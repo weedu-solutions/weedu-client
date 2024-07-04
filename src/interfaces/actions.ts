@@ -8,6 +8,7 @@ export default interface IActions {
   what?: string;
   how?: string;
   who?: string;
+  user_id?: string;
   preview_init_date?: string;
   preview_end_date?: string;
   observation?: string;

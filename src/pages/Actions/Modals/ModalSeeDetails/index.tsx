@@ -58,7 +58,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
   const [preview_end_date, setPreview_end_date] = useState(
     action?.preview_end_date
   );
-  const [responsible, setResponsible] = useState(action?.who);
+  const [responsible, setResponsible] = useState(`${action?.who},${action?.user_id}`);
 
   const handlePreviewInitDate = (event: any) =>
     setPreview_init_date(event.target.value);
@@ -81,6 +81,8 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const idResponsibleAction = responsible.split(",");
+
   const onSubmit = async ({
     problem,
     why_1,
@@ -97,7 +99,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
       problem,
       what,
       how,
-      who,
+      who: idResponsibleAction[0],
       why_1,
       why_2,
       why_3,
@@ -110,7 +112,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
       init_date: action?.init_date ? action?.init_date : null,
       end_date: action?.end_date ? action?.end_date : null,
       observation,
-      user_id: user.id,
+      user_id: idResponsibleAction[1],
       customer_id: idCustumer,
       where: "O",
       is_active: isChecked === true ? 1 : 0,
@@ -345,7 +347,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
                   }}
                 >
                   {usersCompanyConsultant[0].user.map((user: any) => (
-                    <option key={user?.name + Math.random()} value={user?.name}>
+                    <option key={user?.name + Math.random()} value={[user?.name, user?.id]}>
                       {user?.name}
                     </option>
                   ))}
