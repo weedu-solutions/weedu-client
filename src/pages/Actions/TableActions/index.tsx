@@ -19,6 +19,7 @@ import { useListActions } from "../../../hooks/useActions/useListActions";
 import TableLoader from "../../../components/Loaders/TableLoader";
 import { FilterStatusActions } from "./components/FilterActions";
 import { WelcomeToWeeduAction } from "./components/WelcomeToWeedu";
+import { BoardActions } from "./BoardActions";
 
 const conditionalRowStyles = [
   {
@@ -269,26 +270,29 @@ export function TableActions() {
       {loadingActions || loadingActionsCustomer ? (
         <TableLoader />
       ) : (
-        <DataTable
-          columns={headers}
-          data={tableData}
-          conditionalRowStyles={conditionalRowStyles}
-          defaultSortFieldId={1}
-          customStyles={stylesTable}
-          highlightOnHover
-          pointerOnHover
-          noDataComponent={
-            !filterStatusIsActive ? (
-              <WelcomeToWeeduAction />
-            ) : (
-              <p>Não encontramos dados :/</p>
-            )
-          }
-          onRowClicked={handleRowClick}
-          pagination={true}
-          paginationPerPage={10}
-        />
+        // <DataTable
+        //   columns={headers}
+        //   data={tableData}
+        //   conditionalRowStyles={conditionalRowStyles}
+        //   defaultSortFieldId={1}
+        //   customStyles={stylesTable}
+        //   highlightOnHover
+        //   pointerOnHover
+        //   noDataComponent={
+        //     !filterStatusIsActive ? (
+        //       <WelcomeToWeeduAction />
+        //     ) : (
+        //       <p>Não encontramos dados :/</p>
+        //     )
+        //   }
+        //   onRowClicked={handleRowClick}
+        //   pagination={true}
+        //   paginationPerPage={10}
+        // />
+
+        <BoardActions actions={tableData} />
       )}
+
     </>
   );
 }

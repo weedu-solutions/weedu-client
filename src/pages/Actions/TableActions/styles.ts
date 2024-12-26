@@ -213,3 +213,44 @@ export const ButtonNewAction = styled.button`
     box-shadow: 0px 0px 10px rgba(50, 0, 90, 0.4);
   }
 `;
+
+// import styled from "styled-components";
+
+export const BoardContainer = styled.div`
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  overflow-x: auto;
+`;
+
+export const Column = styled.div`
+  background: #f4f5f7;
+  border-radius: 8px;
+  width: 300px;
+  min-height: 500px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+`;
+
+export const ColumnTitle = styled.h3`
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #333;
+`;
+
+export const Card = styled.div`
+  background: #fff;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+`;
