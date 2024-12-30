@@ -36,6 +36,7 @@ import { useQueryClient } from "react-query";
 type ModalSeeDetailsProps = {
   closeModal: any;
   action: IActions | undefined;
+  refetchAllActions: () => void;
 };
 
 // {
@@ -43,7 +44,7 @@ type ModalSeeDetailsProps = {
 //   Action not active 0
 // }
 
-export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
+export function ModalSeeDetails({ closeModal, action, refetchAllActions }: ModalSeeDetailsProps) {
   const { user, infoCompany } = useAuth();
   const queryClient = useQueryClient();
   const [editData, setEditData] = useState<boolean>(false);
@@ -124,6 +125,7 @@ export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
         queryClient.invalidateQueries({
           queryKey: ["actions-costumer"],
         });
+        refetchAllActions();
         closeModal();
         Notify(NotifyTypes.SUCCESS, "Plano de Ação editado com sucesso!");
       })

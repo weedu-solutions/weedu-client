@@ -239,18 +239,70 @@ export const ColumnTitle = styled.h3`
   color: #333;
 `;
 
-export const Card = styled.div`
-  background: #fff;
-  border-radius: 4px;
+export const Card = styled.div<{ isDisabled?: boolean }>`
+  background: ${({ isDisabled }) => isDisabled ? '#F3F4F6' : 'white'};
+  border-radius: 8px;
   padding: 16px;
-  margin-bottom: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid ${({ isDisabled }) => isDisabled ? '#E5E7EB' : '#eaeaea'};
+  transition: all 0.2s ease;
+  position: relative;
+
+  ${({ isDisabled }) => isDisabled && `
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+  `}
+
+  &:hover {
+    transform: ${({ isDisabled }) => isDisabled ? 'none' : 'translateY(-2px)'};
+    box-shadow: ${({ isDisabled }) => isDisabled ? '0 2px 4px rgba(0, 0, 0, 0.05)' : '0 4px 8px rgba(0, 0, 0, 0.1)'};
+  }
+`;
+
+export const CardContent = styled.div`
+  margin-top: 12px;
+`;
+
+export const CardTitle = styled.h3`
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 12px;
+  line-height: 1.4;
+`;
+
+export const CardInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+`;
 
-  p {
-    margin: 0;
-    font-size: 14px;
-  }
+export const CardInfoItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #718096;
+`;
+
+export const IconWrapper = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 1rem;
+`;
+
+export const CardHeader = styled.div`
+  margin-bottom: 12px;
 `;

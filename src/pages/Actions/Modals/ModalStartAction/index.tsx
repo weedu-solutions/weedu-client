@@ -22,10 +22,12 @@ import { useInvalidateQueryActions } from "../../../../hooks/useActions/useInval
 type ModalDisableActionProps = {
   closeModal: any;
   action: IActions | undefined;
+  refetchAllActions: () => void;
 };
 export function ModalStartAction({
   closeModal,
   action,
+  refetchAllActions
 }: ModalDisableActionProps) {
   const { user, infoCompany } = useAuth();
   const [date, setDate] = useState(new Date());
@@ -77,6 +79,7 @@ export function ModalStartAction({
       .then(() => {
         if (action?.init_date) {
           invalidateQueryActions();
+          refetchAllActions();
           closeModal();
           Notify(NotifyTypes.SUCCESS, "Plano de Ação finalizado com sucesso!");
         } else {

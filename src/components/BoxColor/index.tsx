@@ -1,57 +1,92 @@
-import { Tooltip } from "@chakra-ui/react";
+import styled from 'styled-components';
+import IActions from '../../interfaces/actions';
 
-import * as S from "./styles";
-import { STATUS_COLORS } from "../../utils/statusColors";
-
-type IBoxColor = {
+interface BoxColorProps {
   status: number;
-  rowInfo?: any;
-};
+  rowInfo: IActions;
+  isBlocked?: boolean;
+}
 
-export function BoxColor({ status, rowInfo }: IBoxColor) {
+const Badge = styled.span<{ status: number; isActive: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  
+  ${({ status, isActive }) => {
+    // Primeiro verificamos se está inativo
+    if (!isActive) {
+      return `
+        background-color: #9CA3AF;
+        color: white;
+      `;
+    }
+    
+    // Se estiver ativo, verificamos o status
+    switch (status) {
+      case 1: // A iniciar
+        return `
+          background-color: #8B5CF6;
+          color: white;
+        `;
+      case 2: // Em execução
+        return `
+          background-color: #3B82F6;
+          color: white;
+        `;
+      case 3: // Executadas
+        return `
+          background-color: #2DD4BF;
+          color: white;
+        `;
+      case 4: // Atrasadas a iniciar
+        return `
+          background-color: #FB7185;
+          color: white;
+        `;
+      case 5: // Atrasadas a terminar
+        return `
+          background-color: #EF4444;
+          color: white;
+        `;
+      default:
+        return `
+          background-color: #E5E7EB;
+          color: #374151;
+        `;
+    }
+  }}
+`;
+
+export function BoxColor({ status, rowInfo }: BoxColorProps) {
+  const getStatusText = (status: number, isActive: boolean) => {
+    // Primeiro verificamos se está inativo
+
+    // Se estiver ativo, retornamos o status apropriado
+    switch (status) {
+      case 1:
+        return 'A iniciar';
+      case 2:
+        return 'Em execução';
+      case 3:
+        return 'Executadas';
+      case 4:
+        return 'Atrasada a iniciar';
+      case 5:
+        return 'Atrasada a terminar';
+      default:
+        return 'Status desconhecido';
+    }
+  };
+
   return (
-    <>
-      <Tooltip
-        label={
-          rowInfo.is_active === 0
-            ? "Desativado"
-            : status === 1
-            ? "A iniciar"
-            : status === 2
-            ? "Em execução"
-            : status === 3
-            ? "Executado"
-            : status === 4
-            ? "Atrasado - A iniciar"
-            : status === 5
-            ? "Atrasado - A terminar"
-            : status === 6
-            ? "Desativado"
-            : status
-        }
-        placement="right"
-        hasArrow
-      >
-        <S.Tag
-          bgColor={
-            rowInfo.is_active === 0
-              ? STATUS_COLORS.DESATIVADO
-              : status === 1
-              ? STATUS_COLORS.A_INICIAR
-              : status === 2
-              ? STATUS_COLORS.EM_EXECUCAO
-              : status === 3
-              ? STATUS_COLORS.EXECUTADO
-              : status === 6
-              ? STATUS_COLORS.DESATIVADO
-              : status === 4
-              ? STATUS_COLORS.ATRASADO_A_INICIAR
-              : status === 5
-              ? STATUS_COLORS.ATRASADO_A_TERMINAR
-              : "#1E163E"
-          }
-        />
-      </Tooltip>
-    </>
+    <Badge 
+      status={status} 
+      isActive={rowInfo.is_active === 1}
+    >
+      {getStatusText(status, rowInfo.is_active === 1)}
+    </Badge>
   );
 }

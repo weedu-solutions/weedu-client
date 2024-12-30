@@ -11,16 +11,21 @@ export const useListActions = () => {
   const typeUserSimple = user?.user_type_id === 1 || user?.user_type_id === 2;
   const typeUserCustomer = user?.user_type_id === 3;
 
-  const { data: actionsCustomer, isLoading: loadingActionsCustomer } =
+  const { data: actionsCustomer, isLoading: loadingActionsCustomer, refetch: refetchActionsCustomer } =
     usePlanCustomer(infoCompany?.id, typeUserCustomer);
 
-  const { data: actionsUserSimple, isLoading: loadingActions } =
+  const { data: actionsUserSimple, isLoading: loadingActions, refetch: refetchActionsUserSimple } =
     useAllActions(typeUserSimple);
 
   function compare(a: any, b: any) {
     if (a.id < b.id) return -1;
     if (a.id > b.id) return 1;
     return 0;
+  }
+
+  const refetchAllActions = () => {
+    refetchActionsCustomer();
+    refetchActionsUserSimple();
   }
 
   const returnDataActions = useCallback(() => {
@@ -53,5 +58,8 @@ export const useListActions = () => {
     loadingActionsCustomer,
     loadingActions,
     filterStatusIsActive,
+    refetchActionsCustomer,
+    refetchActionsUserSimple,
+    refetchAllActions
   };
 };

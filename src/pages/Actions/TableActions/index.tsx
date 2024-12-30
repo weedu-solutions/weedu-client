@@ -97,10 +97,11 @@ export function TableActions() {
     selectedOptions,
     setSelectedOptions,
     filterStatusIsActive,
+    refetchAllActions
   } = useListActions();
 
   const [isModalStartAction, setIsModalStartAction] = useState(false);
-  const [isModalSeeDetails, setIsSeDetails] = useState(false);
+  const [isModalSeeDetails, setIsModalSeeDetails] = useState(false);
   const [isModalDisableAction, setIsModalDisableAction] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [actionInfo, setActionInfo] = useState<IActions | undefined>();
@@ -120,7 +121,7 @@ export function TableActions() {
   }
 
   function handleOpenModalSeeDetails() {
-    setIsSeDetails((oldValue) => !oldValue);
+    setIsModalSeeDetails((oldValue) => !oldValue);
     setIsModalOpen(false);
   }
 
@@ -233,6 +234,7 @@ export function TableActions() {
           <ModalStartAction
             action={actionInfo}
             closeModal={handleOpenModalStartAction}
+            refetchAllActions={refetchAllActions}
           />
         </ModalBlockContent>
       </Modal>
@@ -241,6 +243,7 @@ export function TableActions() {
         <ModalSeeDetails
           action={actionInfo}
           closeModal={handleOpenModalSeeDetails}
+          refetchAllActions={refetchAllActions}
         />
       </Modal>
 
@@ -249,16 +252,18 @@ export function TableActions() {
           <ModalDisableAction
             action={actionInfo}
             closeModal={handleOpenModalDisableAction}
+            refetchAllActions={refetchAllActions}
           />
         </ModalBlockContent>
       </Modal>
 
       <S.RowFilter>
         <div>
-          <FilterStatusActions
+          {/* <FilterStatusActions
             selectedOptions={selectedOptions}
             setSelectedOptions={setSelectedOptions}
-          />
+          /> */}
+          Board de Ações
         </div>
 
         <S.ButtonNewAction onClick={() => navigate(ROUTES.CREATE_ACTION)}>
@@ -290,7 +295,15 @@ export function TableActions() {
         //   paginationPerPage={10}
         // />
 
-        <BoardActions actions={tableData} />
+        <BoardActions
+          actions={tableData}
+          setActionInfo={setActionInfo}
+          setIsModalOpen={setIsModalOpen}
+          setIsModalSeeDetails={setIsModalSeeDetails}
+          setIsModalStartAction={setIsModalStartAction}
+          setIsModalDisableAction={setIsModalDisableAction}
+          refetchAllActions={refetchAllActions}
+        />
       )}
 
     </>
