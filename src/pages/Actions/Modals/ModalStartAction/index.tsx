@@ -9,7 +9,7 @@ import {
   ErrorMessage,
 } from "./styles";
 import closeModalIcon from "../../../../assets/icon-close.svg";
-import IActions from "../../../../interfaces/actions";
+import IActions, { IAction } from "../../../../interfaces/actions";
 import Calendar from "react-calendar";
 import { useEffect, useState } from "react";
 import "react-calendar/dist/Calendar.css";
@@ -17,7 +17,8 @@ import moment from "moment";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
 import { Api } from "../../../../services/api";
 import { useAuth } from "../../../../hooks/auth";
-import { useInvalidateQueryActions } from "../../../../hooks/useActions/useInvalidateQueryActions";
+import { useQueryClient } from "react-query";
+import { QUERY_KEYS } from "../../../../constants/querykeys";
 
 type ModalDisableActionProps = {
   closeModal: any;
@@ -33,8 +34,7 @@ export function ModalStartAction({
   const [date, setDate] = useState(new Date());
   const [startDate, setStartDate] = useState<any>();
   const [endDate, setEndDate] = useState<any>();
-
-  const { invalidateQueryActions } = useInvalidateQueryActions();
+  const queryClient = useQueryClient();
 
   function SubmitDate() {
     if (action?.init_date) {
@@ -78,26 +78,22 @@ export function ModalStartAction({
     })
       .then(() => {
         if (action?.init_date) {
-          invalidateQueryActions();
-          refetchAllActions();
           closeModal();
           Notify(NotifyTypes.SUCCESS, "Plano de Ação finalizado com sucesso!");
         } else {
-          invalidateQueryActions();
           closeModal();
           Notify(NotifyTypes.SUCCESS, "Plano de Ação iniciado com sucesso!");
         }
+        refetchAllActions();
       })
       .catch(() => {
         if (action?.init_date) {
-          invalidateQueryActions();
           closeModal();
           Notify(
             NotifyTypes.ERROR,
             "Não foi posível finalizar o Plano de Ação!"
           );
         } else {
-          invalidateQueryActions();
           closeModal();
           Notify(NotifyTypes.ERROR, "Não foi posível iniciar o Plano de Ação!");
         }

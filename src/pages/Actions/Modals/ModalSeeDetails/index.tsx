@@ -32,6 +32,7 @@ import {
   Wrapper,
 } from "./styles";
 import { useQueryClient } from "react-query";
+import { QUERY_KEYS } from "../../../../constants/querykeys";
 
 type ModalSeeDetailsProps = {
   closeModal: any;
@@ -119,23 +120,12 @@ export function ModalSeeDetails({ closeModal, action, refetchAllActions }: Modal
       is_active: isChecked === true ? 1 : 0,
     })
       .then(() => {
-        queryClient.invalidateQueries({
-          queryKey: ["all-actions"],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["actions-costumer"],
-        });
         refetchAllActions();
         closeModal();
         Notify(NotifyTypes.SUCCESS, "Plano de Ação editado com sucesso!");
       })
       .catch((err: AxiosResponse) => {
-        queryClient.invalidateQueries({
-          queryKey: ["all-actions"],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["actions-costumer"],
-        });
+        refetchAllActions();
         closeModal();
         Notify(NotifyTypes.ERROR, "Não foi possível editar o Plano de Ação.");
       });

@@ -32,21 +32,17 @@ interface IColumns {
 }
 
 interface IBoardActions {
-  setIsModalDisableAction: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalStartAction: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalSeeDetails: React.Dispatch<React.SetStateAction<boolean>>;
   actions: IAction[];
   setActionInfo: React.Dispatch<React.SetStateAction<IActions | undefined>>;
-  refetchAllActions: () => void;
 }
 
 export function BoardActions({
   actions,
   setActionInfo,
-  setIsModalDisableAction,
   setIsModalSeeDetails,
   setIsModalStartAction,
-  refetchAllActions
 }: IBoardActions) {
   console.log(actions)
   const STATUS_MAP: { [key: number]: string } = {
