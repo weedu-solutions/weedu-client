@@ -37,12 +37,10 @@ interface IBoardActions {
   setIsModalSeeDetails: React.Dispatch<React.SetStateAction<boolean>>;
   actions: IAction[];
   setActionInfo: React.Dispatch<React.SetStateAction<IActions | undefined>>;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   refetchAllActions: () => void;
 }
 
 export function BoardActions({
-  setIsModalOpen,
   actions,
   setActionInfo,
   setIsModalDisableAction,
@@ -195,19 +193,12 @@ export function BoardActions({
 
   function handleOpenModalStartAction(action: IAction) {
     setIsModalStartAction(true);
-    setIsModalOpen(true);
     setActionInfo(action);
   }
 
   function handleOpenModalSeeDetails(action: IAction) {
     setIsModalSeeDetails(true);
-    setIsModalOpen(true);
     setActionInfo(action);
-  }
-
-  function handleOpenModalDisableAction(action: IAction) {
-    setIsModalDisableAction((oldValue) => !oldValue);
-    setIsModalOpen(false);
   }
 
   return (

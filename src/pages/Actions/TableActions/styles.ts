@@ -163,10 +163,15 @@ export const ButtonFilter = styled.button`
 export const RowFilter = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
 
-  div {
-    display: flex;
-    align-items: center;
+  > div:first-child {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
   }
 `;
 
@@ -195,88 +200,112 @@ export const ButtonActions = styled.button<IButtonAction>`
 `;
 
 export const ButtonNewAction = styled.button`
-  color: white;
-  max-height: 200px;
-  font-weight: 500;
-  background-color: ${colors.primary.medium};
-  border-radius: 10px;
-  padding: 8px 16px;
   display: flex;
-  flex-direction: row;
   align-items: center;
+  gap: 8px;
+  background: #2563eb;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 
-  svg {
-    margin-right: 10px;
+  &:hover {
+    background: #1d4ed8;
   }
 
-  :hover {
-    box-shadow: 0px 0px 10px rgba(50, 0, 90, 0.4);
+  &:active {
+    transform: translateY(1px);
   }
 `;
 
-// import styled from "styled-components";
-
 export const BoardContainer = styled.div`
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 24px;
+  background: #f9fafb;
+  min-height: calc(100vh - 200px);
 `;
 
 export const Column = styled.div`
-  background: #f4f5f7;
-  border-radius: 8px;
-  width: 300px;
-  min-height: 500px;
+  background: #ffffff;
+  border-radius: 12px;
   padding: 16px;
+  min-height: 500px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
 `;
 
-export const ColumnTitle = styled.h3`
-  text-align: center;
-  margin-bottom: 16px;
-  font-size: 18px;
-  color: #333;
+export const ColumnTitle = styled.h2`
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  padding: 8px 12px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &::after {
+    content: attr(data-count);
+    font-size: 0.875rem;
+    background: #e5e7eb;
+    padding: 2px 8px;
+    border-radius: 12px;
+    color: #6b7280;
+  }
 `;
 
 export const Card = styled.div<{ isDisabled?: boolean }>`
   background: ${({ isDisabled }) => isDisabled ? '#F3F4F6' : 'white'};
   border-radius: 8px;
   padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid ${({ isDisabled }) => isDisabled ? '#E5E7EB' : '#eaeaea'};
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
   transition: all 0.2s ease;
   position: relative;
+  overflow: hidden;
 
-  ${({ isDisabled }) => isDisabled && `
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border-radius: 8px;
-      pointer-events: none;
+  ${({ isDisabled }) => !isDisabled && `
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+      border-color: #d1d5db;
     }
   `}
 
-  &:hover {
-    transform: ${({ isDisabled }) => isDisabled ? 'none' : 'translateY(-2px)'};
-    box-shadow: ${({ isDisabled }) => isDisabled ? '0 2px 4px rgba(0, 0, 0, 0.05)' : '0 4px 8px rgba(0, 0, 0, 0.1)'};
+  &:active {
+    transform: translateY(0);
   }
 `;
 
+export const CardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+`;
+
 export const CardContent = styled.div`
-  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
 
 export const CardTitle = styled.h3`
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 12px;
+  font-size: 0.938rem;
+  font-weight: 500;
+  color: #1f2937;
   line-height: 1.4;
 `;
 
@@ -290,8 +319,8 @@ export const CardInfoItem = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.875rem;
-  color: #718096;
+  font-size: 0.813rem;
+  color: #6b7280;
 `;
 
 export const IconWrapper = styled.span`
@@ -300,9 +329,12 @@ export const IconWrapper = styled.span`
   justify-content: center;
   width: 20px;
   height: 20px;
-  font-size: 1rem;
+  color: #9ca3af;
 `;
 
-export const CardHeader = styled.div`
-  margin-bottom: 12px;
+export const LoadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
 `;
