@@ -4,9 +4,10 @@ import { ModalOptions } from "../../Modals/ModalOptions";
 import { ModalStartAction } from "../../Modals/ModalStartAction";
 import { ModalSeeDetails } from "../../Modals/ModalSeeDetails";
 import { ModalDisableAction } from "../../Modals/ModalDisableAction";
-import IActions from "../../../../interfaces/actions";
+import IActions, { IAction } from "../../../../interfaces/actions";
 import { MODAL_STYLES } from "../constants";
 import { ModalCreateAction } from "../../Modals/ModalCreateAction";
+import { ModalFinishAction } from "../../Modals/ModalFinishAction";
 
 interface ActionModalsProps {
   modals: {
@@ -15,6 +16,7 @@ interface ActionModalsProps {
     disableAction: boolean;
     options: boolean;
     addAction: boolean;
+    finishAction: boolean;
   };
   handleModalVisibility: (
     modalName:
@@ -23,8 +25,9 @@ interface ActionModalsProps {
       | "disableAction"
       | "options"
       | "addAction"
+      | "finishAction"
   ) => void;
-  actionInfo: IActions | undefined;
+  actionInfo: IAction;
   refetchAllActions: () => void;
 }
 
@@ -90,6 +93,15 @@ export function ActionModals({
           refetchAllActions={refetchAllActions}
         />
       </Modal>
+
+      <Modal isOpen={modals.finishAction} style={MODAL_STYLES.seeAction}>
+        <ModalFinishAction
+          action={actionInfo}
+          closeModal={() => handleModalVisibility("finishAction")}
+          refetchAllActions={refetchAllActions}
+        />
+      </Modal>
     </>
   );
 }
+

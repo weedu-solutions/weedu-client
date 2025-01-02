@@ -1,13 +1,13 @@
 import { Button } from "@chakra-ui/react";
 
-import IActions from "../../../../interfaces/actions";
+import IActions, { IAction } from "../../../../interfaces/actions";
 
 type IModalOption = {
   handleOpenModalStartAction: any;
   handleOpenModalSeeDetails: any;
   handleModal: any;
   handleOpenModalDisableAction: any;
-  action: IActions | undefined;
+  action: IAction;
 };
 
 export function ModalOptions({

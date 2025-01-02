@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { colors } from "../../../theme";
 
@@ -220,69 +220,95 @@ export const ButtonNewAction = styled.button`
 `;
 
 export const BoardContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
+  display: flex;
   padding: 24px;
-  background: #f9fafb;
-  min-height: calc(100vh - 200px);
+  gap: 24px;
+  width: 100%;
+  height: 100%;
+  background: #f8fafc;
 `;
 
-export const Column = styled.div`
-  background: #ffffff;
+interface ColumnProps {
+  isDisabled?: boolean;
+}
+
+export const Column = styled.div<ColumnProps>`
+  background: ${props => props.isDisabled ? '#ffebee' : '#ffffff'};
+  border: ${props => props.isDisabled ? '2px solid #ffcdd2' : '1px solid #e2e8f0'};
+  min-width: 320px;
+  flex: 1;
   border-radius: 12px;
-  padding: 16px;
-  min-height: 500px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  
+  ${props => props.isDisabled && css`
+    cursor: not-allowed;
+    box-shadow: 0 0 15px rgba(244, 67, 54, 0.1);
+  `}
 
   &:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   }
 `;
 
-export const ColumnTitle = styled.h2`
-  font-size: 1rem;
+export const ColumnTitle = styled.h3`
+  margin: 0;
+  padding: 20px;
+  font-size: 16px;
   font-weight: 600;
-  color: #374151;
-  padding: 8px 12px;
-  background: #f3f4f6;
-  border-radius: 8px;
-  margin-bottom: 8px;
+  color: #1e293b;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 12px 12px 0 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+  letter-spacing: 0.5px;
+`;
 
-  &::after {
-    content: attr(data-count);
-    font-size: 0.875rem;
-    background: #e5e7eb;
-    padding: 2px 8px;
-    border-radius: 12px;
-    color: #6b7280;
+export const CardsContainer = styled.div`
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+
+  /* Estilização da scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f8fafc;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
   }
 `;
 
-export const Card = styled.div<{ isDisabled?: boolean }>`
-  background: ${({ isDisabled }) => isDisabled ? '#F3F4F6' : 'white'};
-  border-radius: 8px;
-  padding: 16px;
+export const Card = styled.div`
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
   cursor: pointer;
-  border: 1px solid #e5e7eb;
   transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
 
-  ${({ isDisabled }) => !isDisabled && `
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
-      border-color: #d1d5db;
-    }
-  `}
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
+  }
 
   &:active {
     transform: translateY(0);
@@ -305,22 +331,29 @@ export const CardContent = styled.div`
 export const CardTitle = styled.h3`
   font-size: 0.938rem;
   font-weight: 500;
-  color: #1f2937;
+  color: #1e293b;
   line-height: 1.4;
+  margin-bottom: 12px;
 `;
 
 export const CardInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  color: #64748b;
+  font-size: 0.875rem;
 `;
 
 export const CardInfoItem = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.813rem;
-  color: #6b7280;
+
+  svg {
+    color: #94a3b8;
+    width: 16px;
+    height: 16px;
+  }
 `;
 
 export const IconWrapper = styled.span`
@@ -337,4 +370,43 @@ export const LoadingWrapper = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 400px;
+`;
+
+export const StatusTag = styled.span<{ status: string; size?: 'small' | 'medium' }>`
+  padding: ${({ size }) => size === 'medium' ? '6px 16px' : '4px 12px'};
+  border-radius: 16px;
+  font-size: ${({ size }) => size === 'medium' ? '14px' : '12px'};
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 8px;
+
+  ${({ status }) => {
+    switch (status) {
+      case 'A iniciar':
+        return css`
+          background: #e0e7ff;
+          color: #4338ca;
+        `;
+      case 'Em execução':
+        return css`
+          background: #fef3c7;
+          color: #92400e;
+        `;
+      case 'Executadas':
+        return css`
+          background: #dcfce7;
+          color: #166534;
+        `;
+      case 'Desativadas':
+        return css`
+          background: #fee2e2;
+          color: #991b1b;
+        `;
+      default:
+        return css`
+          background: #f1f5f9;
+          color: #475569;
+        `;
+    }
+  }}
 `;

@@ -4,14 +4,14 @@ import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
-import IActions from "../../../../interfaces/actions";
+import { IAction } from "../../../../interfaces/actions";
 import { Api } from "../../../../services/api";
 import { SubTitle, Title, Wrapper } from "./styles";
 import { useQueryClient } from "react-query";
 
 type ModalDisableActionProps = {
   closeModal: any;
-  action: IActions | undefined;
+  action: IAction;
   refetchAllActions: () => void;
 };
 

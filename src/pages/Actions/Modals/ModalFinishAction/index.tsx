@@ -24,7 +24,7 @@ type ModalDisableActionProps = {
   action: IAction;
   refetchAllActions: () => void;
 };
-export function ModalStartAction({
+export function ModalFinishAction({
   closeModal,
   action,
   refetchAllActions
@@ -109,11 +109,7 @@ export function ModalStartAction({
           <Title>
             <TitleModal></TitleModal>
             <div>
-              {action?.init_date ? (
-                <h1>Finalizar Ação</h1>
-              ) : (
-                <h1>Iniciar ação2</h1>
-              )}
+              FIM REAL INICIO REAL
             </div>
 
             <div>

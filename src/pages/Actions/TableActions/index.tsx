@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { HiPlus } from "react-icons/hi";
 import { useAllActions, usePlanCustomer } from "../../../client/hooks/actions";
 import { useAuth } from "../../../hooks/auth";
-import { BoardActions } from "./BoardActions";
 import { ActionModals } from "./components/ActionModals";
 import * as S from "./styles";
-import IActions from "../../../interfaces/actions";
+import IActions, { IAction } from "../../../interfaces/actions";
 import { BoardLoader } from "../../../components/Loaders/BoardLoader";
+import { BoardActions } from "./BoardActions";
 
 export function TableActions() {
   const [modals, setModals] = useState({
@@ -16,9 +16,10 @@ export function TableActions() {
     disableAction: false,
     options: false,
     addAction: false,
+    finishAction: false
   });
 
-  const [actionInfo, setActionInfo] = useState<IActions | undefined>();
+  const [actionInfo, setActionInfo] = useState<IAction>({} as IAction);
 
   const { user, infoCompany } = useAuth();
 
@@ -92,6 +93,8 @@ export function TableActions() {
         setActionInfo={setActionInfo}
         setIsModalSeeDetails={(value) => handleModalVisibility("seeDetails")}
         setIsModalStartAction={(value) => handleModalVisibility("startAction")}
+        setIsModalFinishAction={(value) => handleModalVisibility("finishAction")}
+        setIsModalDisableAction={(value) => handleModalVisibility("disableAction")}
       />
     </>
   );

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Box, Switch } from "@chakra-ui/react";
+import { Box, Switch, Text } from "@chakra-ui/react";
 import moment from "moment";
 import { useAuth } from "../../../../hooks/auth";
 import { Api } from "../../../../services/api";
@@ -20,6 +20,7 @@ import IActions from "../../../../interfaces/actions";
 import { FormInput } from "../../../../components/Form/FormInput";
 import { FormSelect } from "../../../../components/Form/FormSelect";
 import { FormTextarea } from "../../../../components/Form/FormTextarea";
+import { StatusTag } from "../../TableActions/styles";
 
 const editActionSchema = z.object({
   problem: z.string().min(1, "O problema é obrigatório"),
@@ -129,8 +130,19 @@ export function ModalSeeDetails({
     }
   };
 
+  const getActionStatus = () => {
+    if (!action) return "A iniciar";
+    if (action.end_date) return "Executadas";
+    if (action.init_date) return "Em execução";
+    if (action.is_active === 0) return "Desativadas";
+    return "A iniciar";
+  };
+
   return (
-    <Modal title="Detalhes do Plano de Ação" onClose={closeModal}>
+    <Modal 
+      title={"Detalhes do Plano de Ação"} 
+      onClose={closeModal}
+    >
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalSection>
           <ModalSectionTitle>Identificação do Problema</ModalSectionTitle>

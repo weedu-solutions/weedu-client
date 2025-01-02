@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -8,7 +8,8 @@ import {
 } from "react-beautiful-dnd";
 import * as S from "../styles"; // Seu arquivo de estilos
 import { BoxColor } from "../../../../components/BoxColor";
-import IActions from "../../../../interfaces/actions";
+import IActions, { IAction } from "../../../../interfaces/actions";
+import { Notify, NotifyTypes } from "../../../../components/Notify";
 
 const STATUS_MAP: { [key: number]: string } = {
   1: "A iniciar",
@@ -18,14 +19,6 @@ const STATUS_MAP: { [key: number]: string } = {
   5: "Atrasadas a terminar",
 };
 
-interface IAction {
-  id: number;
-  status: number;
-  what: string;
-  who: string;
-  is_active: number;
-  preview_init_date: string;
-}
 
 interface IColumns {
   [key: string]: IAction[];
@@ -34,8 +27,10 @@ interface IColumns {
 interface IBoardActions {
   setIsModalStartAction: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalSeeDetails: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalDisableAction: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalFinishAction: React.Dispatch<React.SetStateAction<boolean>>;
   actions: IAction[];
-  setActionInfo: React.Dispatch<React.SetStateAction<IActions | undefined>>;
+  setActionInfo: React.Dispatch<React.SetStateAction<IAction>>;
 }
 
 export function BoardActions({
@@ -43,6 +38,8 @@ export function BoardActions({
   setActionInfo,
   setIsModalSeeDetails,
   setIsModalStartAction,
+  setIsModalDisableAction,
+  setIsModalFinishAction
 }: IBoardActions) {
   const STATUS_MAP: { [key: number]: string } = {
     1: "A iniciar",
@@ -51,7 +48,7 @@ export function BoardActions({
     4: "Desativadas",
   };
 
-  const [columns, setColumns] = React.useState<IColumns>(() => {
+  const [columns, setColumns] = useState<IColumns>(() => {
     const initialData: IColumns = Object.values(STATUS_MAP).reduce(
       (acc, status) => {
         acc[status] = [];
@@ -82,172 +79,163 @@ export function BoardActions({
     return initialData;
   });
 
-  const [pendingAction, setPendingAction] = React.useState<IAction | null>(
-    null
-  );
-  const [dragResult, setDragResult] = React.useState<{
-    source: any;
-    destination: any;
-  } | null>(null);
+  const [selectedAction, setSelectedAction] = useState<IActions | null>(null);
+  const [dragSource, setDragSource] = useState<any>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [draggedFromColumn, setDraggedFromColumn] = useState<string | null>(null);
 
-  const confirmModal = React.useCallback(() => {
-    if (!pendingAction || !dragResult) return;
-
-    const { source, destination } = dragResult;
-
-    const sourceCol = [...columns[source.droppableId]];
-    const destCol = [...columns[destination.droppableId]];
-    const [movedAction] = sourceCol.splice(source.index, 1);
-
-    // Atualiza o status baseado na coluna de destino
-    movedAction.status = Object.keys(STATUS_MAP).find(
-      (key) => STATUS_MAP[Number(key)] === destination.droppableId
-    ) as unknown as number;
-
-    destCol.splice(destination.index, 0, movedAction);
-
-    setColumns({
-      ...columns,
-      [source.droppableId]: sourceCol,
-      [destination.droppableId]: destCol,
-    });
-
-    // Limpar estados temporários
-    setPendingAction(null);
-    setDragResult(null);
-  }, [columns, dragResult, pendingAction]);
-
-  const cancelModal = React.useCallback(() => {
-    // Reverter o card para a coluna de origem
-    if (!dragResult) return;
-
-    const { source } = dragResult;
-    const sourceCol = [...columns[source.droppableId]];
-
-    if (pendingAction) {
-      sourceCol.splice(source.index, 0, pendingAction);
+  const handleReturnToSource = (action: IAction) => {
+    if (dragSource && dragSource.droppableId) {
+      const sourceCol = [...(columns[dragSource.droppableId] || [])];
+      sourceCol.push(action);
       setColumns({
         ...columns,
-        [source.droppableId]: sourceCol,
+        [dragSource.droppableId]: sourceCol,
       });
     }
+  };
 
-    // Limpar estados temporários
-    setPendingAction(null);
-    setDragResult(null);
-  }, [columns, dragResult, pendingAction]);
+  const handleOpenModalSeeDetails = (action: IAction) => {
+    setActionInfo(action);
+    setIsModalSeeDetails(true);
+  };
+
+  const isColumnDisabled = (targetStatus: string) => {
+    if (!draggedFromColumn) return false;
+
+    // De "A iniciar"
+    if (draggedFromColumn === STATUS_MAP[1]) {
+      return targetStatus === STATUS_MAP[1]; // Só não pode voltar pra mesma coluna
+    }
+
+    // De "Em execução"
+    if (draggedFromColumn === STATUS_MAP[2]) {
+      return targetStatus === STATUS_MAP[1] || targetStatus === STATUS_MAP[2]; // Não pode ir pra "A iniciar" nem ficar em "Em execução"
+    }
+
+    // De "Executadas" ou "Desativadas"
+    if (draggedFromColumn === STATUS_MAP[3] || draggedFromColumn === STATUS_MAP[4]) {
+      return true; // Todas as colunas ficam desabilitadas
+    }
+
+    return false;
+  };
+
+  const onDragStart = (start: DragStart) => {
+    setIsDragging(true);
+    setDraggedFromColumn(start.source.droppableId);
+  };
 
   const onDragEnd = (result: DropResult) => {
+    setIsDragging(false);
+    setDraggedFromColumn(null);
     const { source, destination } = result;
 
     if (!destination) return;
 
-    // Verificar movimento de "A iniciar" para "Em execução"
-    if (
-      source.droppableId === STATUS_MAP[1] &&
-      destination.droppableId === STATUS_MAP[2]
-    ) {
-      const sourceCol = [...columns[source.droppableId]];
-      const [movedAction] = sourceCol.splice(source.index, 1);
-
-      // Salvar ação pendente e drag result temporário
-      setPendingAction(movedAction);
-      setDragResult({ source, destination });
-
-      // Abrir modal para iniciar ação
-      handleOpenModalStartAction(movedAction);
-      return;
-    }
-
-    // Verificar movimento de "Em execução" para "Executadas"
-    if (
-      source.droppableId === STATUS_MAP[2] &&
-      destination.droppableId === STATUS_MAP[3]
-    ) {
-      const sourceCol = [...columns[source.droppableId]];
-      const [movedAction] = sourceCol.splice(source.index, 1);
-
-      // Salvar ação pendente e drag result temporário
-      setPendingAction(movedAction);
-      setDragResult({ source, destination });
-
-      // Abrir modal para concluir ação
-      handleOpenModalStartAction(movedAction);
-      return;
-    }
-
-    // Atualizar o estado normalmente se não for um movimento especial
     const sourceCol = [...columns[source.droppableId]];
-    const destCol = [...columns[destination.droppableId]];
     const [movedAction] = sourceCol.splice(source.index, 1);
+    setDragSource(source);
+    setSelectedAction(movedAction);
 
-    // Atualiza o status baseado na coluna de destino
-    movedAction.status = Object.keys(STATUS_MAP).find(
-      (key) => STATUS_MAP[Number(key)] === destination.droppableId
-    ) as unknown as number;
+    // De "A iniciar"
+    if (source.droppableId === STATUS_MAP[1]) {
+      if (destination.droppableId === STATUS_MAP[2]) {
+        // Para "Em execução"
+        setActionInfo(movedAction);
+        setIsModalStartAction(true);
+        return;
+      }
+      if (destination.droppableId === STATUS_MAP[3]) {
+        // Para "Executadas" - precisa definir início e fim
+        setActionInfo(movedAction);
+        setIsModalFinishAction(true);
+        return;
+      }
+      if (destination.droppableId === STATUS_MAP[4]) {
+        // Para "Desativadas"
+        setActionInfo(movedAction);
+        setIsModalDisableAction(true);
+        return;
+      }
+    }
 
-    destCol.splice(destination.index, 0, movedAction);
+    // De "Em execução"
+    if (source.droppableId === STATUS_MAP[2]) {
+      if (destination.droppableId === STATUS_MAP[3]) {
+        // Para "Executadas"
+        setActionInfo(movedAction);
+        setIsModalFinishAction(true);
+        return;
+      }
+      if (destination.droppableId === STATUS_MAP[4]) {
+        // Para "Desativadas"
+        setActionInfo(movedAction);
+        setIsModalDisableAction(true);
+        return;
+      }
+    }
 
-    setColumns({
-      ...columns,
-      [source.droppableId]: sourceCol,
-      [destination.droppableId]: destCol,
-    });
+    // Retorna o card para origem em qualquer outro caso
+    handleReturnToSource(movedAction);
   };
-
-  function handleOpenModalStartAction(action: IAction) {
-    setIsModalStartAction(true);
-    setActionInfo(action);
-  }
-
-  function handleOpenModalSeeDetails(action: IAction) {
-    setIsModalSeeDetails(true);
-    setActionInfo(action);
-  }
 
   return (
     <>
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext 
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      >
         <S.BoardContainer>
           {Object.values(STATUS_MAP).map((status) => (
-            <Droppable key={status} droppableId={status}>
-              {(provided) => (
-                <S.Column ref={provided.innerRef} {...provided.droppableProps}>
+            <Droppable 
+              key={status} 
+              droppableId={status}
+              isDropDisabled={isDragging && isColumnDisabled(status)}
+            >
+              {(provided, snapshot) => (
+                <S.Column 
+                  ref={provided.innerRef} 
+                  {...provided.droppableProps}
+                  isDisabled={isDragging && isColumnDisabled(status)}
+                >
                   <S.ColumnTitle>{status}</S.ColumnTitle>
-                  {columns[status].map((action, index) => (
-                    <Draggable
-                      key={action.id.toString()}
-                      draggableId={action.id.toString()}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <S.Card
-                          onClick={() => handleOpenModalSeeDetails(action)}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          <S.CardHeader>
-                            <BoxColor status={action.status} rowInfo={action} />
-                          </S.CardHeader>
-                          <S.CardContent>
-                            <S.CardTitle>{action.what}</S.CardTitle>
-                            <S.CardInfo>
-                              <S.CardInfoItem>
-                                <S.IconWrapper>👤</S.IconWrapper>
-                                {action.who}
-                              </S.CardInfoItem>
-                              <S.CardInfoItem>
-                                <S.IconWrapper>📅</S.IconWrapper>
-                                Data de início: {action.preview_init_date}
-                              </S.CardInfoItem>
-                            </S.CardInfo>
-                          </S.CardContent>
-                        </S.Card>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
+                  <S.CardsContainer>
+                    {columns[status].map((action, index) => (
+                      <Draggable
+                        key={(action.id ?? '').toString()}
+                        draggableId={(action.id ?? '').toString()}
+                        index={index}
+                      >
+                        {(provided) => (
+                          <S.Card
+                            onClick={() => handleOpenModalSeeDetails(action)}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            <S.CardHeader>
+                              <BoxColor status={action.status} rowInfo={action} />
+                            </S.CardHeader>
+                            <S.CardContent>
+                              <S.CardTitle>{action.what}</S.CardTitle>
+                              <S.CardInfo>
+                                <S.CardInfoItem>
+                                  <S.IconWrapper>👤</S.IconWrapper>
+                                  {action.who}
+                                </S.CardInfoItem>
+                                <S.CardInfoItem>
+                                  <S.IconWrapper>📅</S.IconWrapper>
+                                  Data de início: {action.preview_init_date}
+                                </S.CardInfoItem>
+                              </S.CardInfo>
+                            </S.CardContent>
+                          </S.Card>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </S.CardsContainer>
                 </S.Column>
               )}
             </Droppable>
