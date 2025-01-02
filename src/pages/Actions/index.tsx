@@ -1,19 +1,14 @@
-import { useState } from "react";
-import { HiPlus } from "react-icons/hi";
-
 import LayoutLogged from "../../components/LayoutLogged";
 import { useAuth } from "../../hooks/auth";
 import { useActions } from "../../hooks/useActions";
 import { TableActions } from "./TableActions";
 import { GraphsDashUsers } from "./GrapsDashUsers";
 import { GraphsDashCostumer } from "./GraphsDashCostumer";
-import { ModalCreateAction } from "./Modals/ModalCreateAction";
 import * as S from "./styles";
 
 export function Actions() {
   const { user, infoCompany } = useAuth();
-  const { actions, isLoading } = useActions();
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const { isLoading } = useActions();
 
   if (isLoading) {
     return (
@@ -31,19 +26,38 @@ export function Actions() {
         <S.Content>
           {/* Header */}
           <S.HeaderSection>
-            <S.HeaderInfo>
-              <S.CompanyName>
-                {user?.user_type_id === 3 && infoCompany
-                  ? infoCompany.fantasy_name
-                  : user?.customer[0].fantasy_name}
-              </S.CompanyName>
-              <S.UserName>{user?.name}</S.UserName>
-            </S.HeaderInfo>
-
-            <S.CreateButton onClick={() => setIsCreateModalOpen(true)}>
-              <HiPlus size={20} />
-              Plano de Ação
-            </S.CreateButton>
+            <S.UserSection>
+              <S.Avatar>
+                {user?.name.charAt(0)}
+              </S.Avatar>
+              <S.UserInfo>
+                <S.WelcomeText>Bem-vindo(a) de volta,</S.WelcomeText>
+                <S.CompanyName>
+                  {user?.user_type_id === 3 && infoCompany
+                    ? infoCompany.fantasy_name
+                    : user?.customer[0].fantasy_name}
+                </S.CompanyName>
+                <S.UserRole>
+                  {user?.name}
+                  <S.RoleTag>
+                    {(() => {
+                      switch (user?.user_type_id) {
+                        case 1:
+                          return "Colaborador";
+                        case 2:
+                          return "Gestor";
+                        case 3:
+                          return "Consultor";
+                        case 4:
+                          return "Administrador";
+                        default:
+                          return "Colaborador";
+                      }
+                    })()}
+                  </S.RoleTag>
+                </S.UserRole>
+              </S.UserInfo>
+            </S.UserSection>
           </S.HeaderSection>
 
           {/* Gráficos */}
@@ -61,12 +75,6 @@ export function Actions() {
           </S.BoardSection>
         </S.Content>
 
-        {/* Modal de criar ação */}
-        {isCreateModalOpen && (
-          <ModalCreateAction 
-            closeModal={() => setIsCreateModalOpen(false)} 
-          />
-        )}
       </S.Container>
     </LayoutLogged>
   );

@@ -30,24 +30,64 @@ export const LoadingText = styled.p`
 
 export const HeaderSection = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  justify-content: space-between;
+  padding: 24px;
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
 `;
 
-export const HeaderInfo = styled.div`
+export const UserSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+export const Avatar = styled.div`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #7956F7;
+`;
+
+export const UserInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 4px;
+`;
+
+export const WelcomeText = styled.span`
+  color: #64748b;
+  font-size: 14px;
 `;
 
 export const CompanyName = styled.h1`
-  font-size: 1.5rem;
-  color: #1e293b;
+  font-size: 20px;
   font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+`;
+
+export const UserRole = styled.span`
+  color: #64748b;
+  font-size: 14px;
+`;
+
+export const RoleTag = styled.span`
+  background: #f5f3ff;
+  color: #7956F7;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 8px;
 `;
 
 export const UserName = styled.p`
