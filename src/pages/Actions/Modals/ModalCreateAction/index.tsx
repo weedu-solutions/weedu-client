@@ -20,6 +20,7 @@ import { FormInput } from "../../../../components/Form/FormInput";
 import { FormSelect } from "../../../../components/Form/FormSelect";
 import { FormTextarea } from "../../../../components/Form/FormTextarea";
 import { useActions } from "../../../../client/hooks/useActions";
+import { useCompanyUsers } from "../../../../hooks/useCompanyUsers";
 
 const createActionSchema = z.object({
   problem: z.string().min(1, "O problema é obrigatório"),
@@ -31,6 +32,7 @@ const createActionSchema = z.object({
   why_3: z.string().optional(),
   why_4: z.string().optional(),
   why_5: z.string().optional(),
+  user_id: z.string().optional(),
   observation: z.string().optional(),
   preview_init_date: z.string().min(1, "Data inicial é obrigatória"),
   preview_end_date: z.string().min(1, "Data final é obrigatória"),
@@ -46,13 +48,14 @@ export function ModalCreateAction({
   closeModal,
 }: ModalCreateActionProps) {
   const { user, infoCompany } = useAuth();
-  const [responsible, setResponsible] = useState("");
-  const [loading, setLoading] = useState(false);
   const { createAction } = useActions();
+  const { getUserOptions } = useCompanyUsers();
+  const [loading, setLoading] = useState(false);
 
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
     watch,
   } = useForm<CreateActionFormData>({
@@ -66,30 +69,20 @@ export function ModalCreateAction({
     preview_init_date &&
     preview_end_date >= preview_init_date;
 
-  const usersCompanyConsultant = JSON.parse(
-    localStorage.getItem("users_company") || "[]"
-  );
   const idCustumer =
     user?.user_type_id === 3 ? infoCompany.id : user?.customer[0].id;
-
-  const formatDate = (date: string) => {
-    return moment(date).format("DD/MM/YYYY");
-  };
 
   const onSubmit = async (data: CreateActionFormData) => {
     try {
       setLoading(true);
-      const idResponsibleAction = responsible.split(",");
 
       await createAction.mutateAsync({
         ...data,
-        who: user?.user_type_id === 1 ? user?.name : idResponsibleAction[0],
-        user_id: user?.user_type_id === 1 ? user?.id : idResponsibleAction[1],
         customer_id: idCustumer,
         where: "O",
         is_active: user.is_active,
-        preview_init_date: formatDate(data.preview_init_date),
-        preview_end_date: formatDate(data.preview_end_date),
+        preview_init_date: moment(data.preview_init_date).format("DD/MM/YYYY"),
+        preview_end_date: moment(data.preview_end_date).format("DD/MM/YYYY"),
         init_date: null,
         end_date: null,
       });
@@ -162,17 +155,21 @@ export function ModalCreateAction({
 
             <FormSelect
               label="Responsável pela Ação (Who?)"
-              name="who"
+              name="user_id"
               register={register}
               error={errors.who?.message}
               placeholder="Selecione o responsável"
-              options={
-                usersCompanyConsultant[0]?.user.map((user: any) => ({
-                  value: `${user.name},${user.id}`,
-                  label: user.name,
-                })) || []
-              }
-              onChange={(e) => setResponsible(e.target.value)}
+              options={getUserOptions()}
+              onChange={(e) => {
+                const selectedId = e.target.value;
+                const selectedOption = getUserOptions().find(
+                  option => option.value === selectedId
+                );
+                if (selectedOption) {
+                  setValue('who', selectedOption.label);
+                  setValue('user_id', selectedOption.value);
+                }
+              }}
             />
           </ModalGrid>
         </ModalSection>

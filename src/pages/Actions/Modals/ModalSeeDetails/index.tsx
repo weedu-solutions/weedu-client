@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -21,6 +21,7 @@ import { FormSelect } from "../../../../components/Form/FormSelect";
 import { FormTextarea } from "../../../../components/Form/FormTextarea";
 import { BoxColor } from "../../../../components/BoxColor";
 import { useActions } from "../../../../hooks/useActions";
+import { useCompanyUsers } from "../../../../hooks/useCompanyUsers";
 
 const editActionSchema = z.object({
   problem: z.string().min(1, "O problema é obrigatório"),
@@ -59,6 +60,7 @@ export function ModalSeeDetails({
 }: ModalSeeDetailsProps) {
   const { user, infoCompany } = useAuth();
   const { updateAction } = useActions();
+  const { getUserOptions } = useCompanyUsers();
   const [editData, setEditData] = useState(false);
   const [isChecked, setIsChecked] = useState(action?.is_active === 1);
   const [preview_init_date, setPreview_init_date] = useState(
@@ -86,25 +88,30 @@ export function ModalSeeDetails({
       why_4: action?.why_4,
       why_5: action?.why_5,
       observation: action?.observation,
+      user_id: action?.user_id?.toString(),
     },
   });
 
-  const usersCompanyConsultant = JSON.parse(
-    localStorage.getItem("users_company") || "[]"
-  );
+  useEffect(() => {
+    const options = getUserOptions();
+    const selectedOption = options.find(
+      option => option.value === action?.user_id?.toString()
+    );
+    
+    if (selectedOption) {
+      setValue('who', selectedOption.label);
+      setValue('user_id', selectedOption.value);
+    }
+  }, [action?.user_id, setValue, getUserOptions]);
+
   const idCustumer =
     user?.user_type_id === 3 ? infoCompany.id : user?.customer[0].id;
-  const users: User[] = usersCompanyConsultant[0]?.user || [];
 
   const onSubmit = async (data: EditActionFormData) => {
     try {
-      const selectedUser = users.find(u => u.id === Number(data.user_id));
-
       const formData = {
         id: action.id,
         ...data,
-        who: selectedUser?.name || action?.who,
-        user_id: selectedUser?.id || action?.user_id,
         customer_id: idCustumer,
         where: "O",
         is_active: isChecked ? 1 : 0,
@@ -188,17 +195,17 @@ export function ModalSeeDetails({
                 register={register}
                 error={errors.who?.message}
                 placeholder="Selecione o responsável"
-                defaultValue={action?.user_id}
-                options={users.map(user => ({
-                  value: user.id.toString(),
-                  label: user.name
-                }))}
+                defaultValue={action?.user_id?.toString()}
+                options={getUserOptions()}
                 isDisabled={!!action?.end_date && !!action?.init_date}
                 onChange={(e) => {
-                  const selectedUser = users.find(u => u.id === Number(e.target.value));
-                  if (selectedUser) {
-                    setValue('who', selectedUser.name);
-                    setValue('user_id', selectedUser.id.toString());
+                  const selectedId = e.target.value;
+                  const selectedOption = getUserOptions().find(
+                    option => option.value === selectedId
+                  );
+                  if (selectedOption) {
+                    setValue('who', selectedOption.label);
+                    setValue('user_id', selectedOption.value);
                   }
                 }}
               />
