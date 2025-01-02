@@ -7,7 +7,6 @@ import {
   DragStart,
 } from "react-beautiful-dnd";
 import * as S from "./styles"; // Seu arquivo de estilos
-import { BoxColor } from "../../../../components/BoxColor";
 import { IAction } from "../../../../interfaces/actions";
 import { Card } from "./Card";
 
@@ -66,7 +65,6 @@ export function BoardActions({
     return initialData;
   });
 
-  const [selectedAction, setSelectedAction] = useState<IAction | null>(null);
   const [dragSource, setDragSource] = useState<any>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [draggedFromColumn, setDraggedFromColumn] = useState<string | null>(
@@ -128,7 +126,6 @@ export function BoardActions({
     const sourceCol = [...columns[source.droppableId]];
     const [movedAction] = sourceCol.splice(source.index, 1);
     setDragSource(source);
-    setSelectedAction(movedAction);
 
     // Verifica se a ação está desativada
     if (movedAction.is_active === 0) {
@@ -205,7 +202,7 @@ export function BoardActions({
                         index={index}
                       >
                         {(provided) => (
-                          <Card 
+                          <Card
                           action={action}
                           onClick={() => handleOpenModalSeeDetails(action)}
                           provided={provided}

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Container = styled.div`
   height: auto;
@@ -47,11 +47,11 @@ export const CalendarWrapper = styled.div`
     border-radius: 8px;
     padding: 8px;
     background: white;
-    
+
     .react-calendar__navigation {
       display: flex;
       margin-bottom: 8px;
-      
+
       button {
         background: none;
         padding: 4px;
@@ -60,7 +60,7 @@ export const CalendarWrapper = styled.div`
         font-size: 0.875rem;
       }
     }
-    
+
     .react-calendar__month-view__weekdays {
       text-align: center;
       text-transform: uppercase;
@@ -68,12 +68,12 @@ export const CalendarWrapper = styled.div`
       font-size: 0.75rem;
       color: #64748b;
       margin-bottom: 4px;
-      
+
       abbr {
         text-decoration: none;
       }
     }
-    
+
     .react-calendar__tile {
       padding: 4px;
       font-size: 0.813rem;
@@ -82,16 +82,16 @@ export const CalendarWrapper = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      
+
       &:hover:enabled {
         background: #f1f5f9;
       }
-      
+
       &--active {
         background: #7956F7 !important;
         color: white !important;
       }
-      
+
       &--now {
         background: #f8fafc;
       }

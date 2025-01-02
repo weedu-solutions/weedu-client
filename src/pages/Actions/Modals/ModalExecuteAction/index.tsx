@@ -1,5 +1,4 @@
 import { Modal } from "../../../../components/Modal";
-import { useTheme } from "@chakra-ui/react";
 import * as S from "./styles";
 import { useAuth } from "../../../../hooks/auth";
 import Calendar from "react-calendar";
@@ -53,7 +52,7 @@ export function ModalExecuteAction({
   const isInvalidDates = moment(startDate).isAfter(moment(endDate));
 
   return (
-    <Modal 
+    <Modal
       title={
         <S.TitleWrapper>
           <span>Datas Reais</span>
@@ -62,13 +61,13 @@ export function ModalExecuteAction({
             As datas reais representam quando a ação efetivamente começou e terminou
           </S.Tooltip>
         </S.TitleWrapper>
-      } 
-      onClose={closeModal} 
+      }
+      onClose={closeModal}
       maxWidth="450px"
     >
       <S.Container>
         <S.DateDisplay>
-          <S.DateCard 
+          <S.DateCard
             isActive={activeDate === 'start'}
             onClick={() => setActiveDate('start')}
           >
@@ -79,8 +78,8 @@ export function ModalExecuteAction({
               {moment(startDate).format("DD/MM/YYYY")}
             </S.DateValue>
           </S.DateCard>
-          
-          <S.DateCard 
+
+          <S.DateCard
             isActive={activeDate === 'end'}
             onClick={() => setActiveDate('end')}
           >
@@ -94,15 +93,15 @@ export function ModalExecuteAction({
         </S.DateDisplay>
 
         <S.CalendarWrapper>
-          <Calendar 
+          <Calendar
             onChange={(date: SetStateAction<Date>) => {
               if (activeDate === 'start') {
                 setStartDate(date);
               } else {
                 setEndDate(date);
               }
-            }} 
-            value={activeDate === 'start' ? startDate : endDate} 
+            }}
+            value={activeDate === 'start' ? startDate : endDate}
             className="calendar-custom"
           />
         </S.CalendarWrapper>
