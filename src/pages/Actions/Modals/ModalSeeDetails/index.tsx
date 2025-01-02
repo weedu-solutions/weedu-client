@@ -49,10 +49,6 @@ const formatDateToInput = (date: string | undefined) => {
   return moment(date, "DD/MM/YYYY").format("YYYY-MM-DD");
 };
 
-interface User {
-  id: number;
-  name: string;
-}
 
 export function ModalSeeDetails({
   closeModal,
@@ -97,7 +93,7 @@ export function ModalSeeDetails({
     const selectedOption = options.find(
       option => option.value === action?.user_id?.toString()
     );
-    
+
     if (selectedOption) {
       setValue('who', selectedOption.label);
       setValue('user_id', selectedOption.value);

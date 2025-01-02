@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const BoardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr); // 4 colunas com largura igual
+  grid-template-columns: repeat(3, 1fr); // 4 colunas com largura igual
   gap: 24px;
   padding: 24px;
   width: 100%;
@@ -18,7 +18,7 @@ export const Column = styled.div<{ isDisabled?: boolean }>`
   display: flex;
   flex-direction: column;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  
+
   ${props => props.isDisabled && `
     cursor: not-allowed;
     box-shadow: 0 0 15px rgba(244, 67, 54, 0.1);
@@ -85,7 +85,7 @@ export const DragIndicator = styled.div`
 export const ColumnIndicator = styled.div<{ isDraggingOver: boolean }>`
   position: relative;
   flex: 1;
-  
+
   ${props => props.isDraggingOver && css`
     background: rgba(121, 86, 247, 0.05);
     border-radius: 8px;
