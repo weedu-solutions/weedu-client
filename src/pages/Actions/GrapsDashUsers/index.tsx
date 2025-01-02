@@ -1,7 +1,6 @@
 import { Link } from "@chakra-ui/react";
 import DunotChart from "../../../components/Charts/DunotChart";
 import PieChartGH from "../../../components/Charts/PieChart";
-import { useAuth } from "../../../hooks/auth";
 import {
   ColorfulFrame,
   ContainerRow,
@@ -12,33 +11,33 @@ import {
   RowGraph,
 } from "./styles";
 import { STATUS_COLORS } from "../../../utils/statusColors";
-import { useDataGraphicUsers } from "../../../client/hooks/dashboard";
+import { useActions } from "../../../hooks/useActions";
 
 export function GraphsDashUsers() {
-  const { user } = useAuth();
-
-  const { data } = useDataGraphicUsers(user?.id);
+  const { graphicData, isLoading } = useActions();
 
   function HaveActions() {
     if (
-      data?.started?.starting === 0 &&
-      data?.started?.execution === 0 &&
-      data?.started?.executed === 0 &&
-      data?.started?.lateStarting === 0 &&
-      data?.started?.overdueFinishing === 0
+      graphicData?.started?.starting === 0 &&
+      graphicData?.started?.execution === 0 &&
+      graphicData?.started?.executed === 0 &&
+      graphicData?.started?.lateStarting === 0 &&
+      graphicData?.started?.overdueFinishing === 0
     ) {
       return false;
-    } else {
-      return true;
     }
+    return true;
   }
 
   function HaveActionsFinished() {
-    if (data?.finished?.onTime === 0 && data?.finished?.outOfTime === 0) {
+    if (graphicData?.finished?.onTime === 0 && graphicData?.finished?.outOfTime === 0) {
       return false;
-    } else {
-      return true;
     }
+    return true;
+  }
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
   }
 
   return (
@@ -48,7 +47,7 @@ export function GraphsDashUsers() {
           <h1>Status das ações</h1>
         </div>
 
-        {HaveActions() === false ? (
+        {!HaveActions() ? (
           <MessageDefaultChart>
             <h1>
               <Link
@@ -64,7 +63,7 @@ export function GraphsDashUsers() {
           </MessageDefaultChart>
         ) : (
           <ContainerRow>
-            <PieChartGH dataGraphic={data?.data?.started} />
+            <PieChartGH dataGraphic={graphicData?.data?.started} />
             <LegendGraph>
               <Row>
                 <ColorfulFrame bgColor={STATUS_COLORS.A_INICIAR} />
@@ -96,7 +95,7 @@ export function GraphsDashUsers() {
           <h1>Status das ações finalizadas</h1>
         </div>
 
-        {HaveActionsFinished() === false ? (
+        {!HaveActionsFinished() ? (
           <MessageDefaultChart>
             <h1>
               Este gráfico ficará disponível quando um Plano de Ação for
@@ -105,7 +104,7 @@ export function GraphsDashUsers() {
           </MessageDefaultChart>
         ) : (
           <ContainerRow>
-            <DunotChart dataGraphic={data?.data?.finished} />
+            <DunotChart dataGraphic={graphicData?.data?.finished} />
             <LegendGraph>
               <Row>
                 <ColorfulFrame bgColor={STATUS_COLORS.NO_PRAZO} />

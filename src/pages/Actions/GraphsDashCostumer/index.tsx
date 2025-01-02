@@ -1,7 +1,6 @@
 import { Link } from "@chakra-ui/react";
 import DunotChart from "../../../components/Charts/DunotChart";
 import PieChartGH from "../../../components/Charts/PieChart";
-import { useAuth } from "../../../hooks/auth";
 import {
   ColorfulFrame,
   ContainerRow,
@@ -12,20 +11,18 @@ import {
   RowGraph,
 } from "./styles";
 import { STATUS_COLORS } from "../../../utils/statusColors";
-import { useDataGraphicCustomer } from "../../../client/hooks/dashboard";
+import { useActions } from "../../../hooks/useActions";
 
 export function GraphsDashCostumer() {
-  const { infoCompany } = useAuth();
-
-  const { data } = useDataGraphicCustomer(infoCompany?.id);
+  const { graphicDataCustomer, isLoading } = useActions();
 
   function HaveActions() {
     if (
-      data?.started?.starting === 0 &&
-      data?.started?.execution === 0 &&
-      data?.started?.executed === 0 &&
-      data?.started?.lateStarting === 0 &&
-      data?.started?.overdueFinishing === 0
+      graphicDataCustomer?.started?.starting === 0 &&
+      graphicDataCustomer?.started?.execution === 0 &&
+      graphicDataCustomer?.started?.executed === 0 &&
+      graphicDataCustomer?.started?.lateStarting === 0 &&
+      graphicDataCustomer?.started?.overdueFinishing === 0
     ) {
       return false;
     } else {
@@ -34,11 +31,18 @@ export function GraphsDashCostumer() {
   }
 
   function HaveActionsFinished() {
-    if (data?.finished?.onTime === 0 && data?.finished?.outOfTime === 0) {
+    if (
+      graphicDataCustomer?.finished?.onTime === 0 &&
+      graphicDataCustomer?.finished?.outOfTime === 0
+    ) {
       return false;
     } else {
       return true;
     }
+  }
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
   }
 
   return (
@@ -64,7 +68,7 @@ export function GraphsDashCostumer() {
           </MessageDefaultChart>
         ) : (
           <ContainerRow>
-            <PieChartGH dataGraphic={data?.data?.started} />
+            <PieChartGH dataGraphic={graphicDataCustomer?.data?.started} />
             <LegendGraph>
               <Row>
                 <ColorfulFrame bgColor={STATUS_COLORS.A_INICIAR} />
@@ -105,7 +109,7 @@ export function GraphsDashCostumer() {
           </MessageDefaultChart>
         ) : (
           <ContainerRow>
-            <DunotChart dataGraphic={data?.data?.finished} />
+            <DunotChart dataGraphic={graphicDataCustomer?.data?.finished} />
             <LegendGraph>
               <Row>
                 <ColorfulFrame bgColor={STATUS_COLORS.NO_PRAZO} />
