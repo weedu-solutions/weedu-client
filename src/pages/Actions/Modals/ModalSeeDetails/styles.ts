@@ -7,26 +7,59 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+export const Header = styled.div`
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const Content = styled.div`
+  padding: 24px;
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+`;
+
+export const CloseButton = styled.button`
+  font-size: 24px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #374151;
+  }
+`;
+
 export const Separator = styled.div`
   width: 100%;
   height: 2px;
   background-color: #eff0f1;
 `;
-export const Title = styled.div`
-  width: 100%;
-  height: 10%;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  justify-content: space-between;
-
-  h1 {
-    font-weight: 700;
-    font-size: 25px;
-  }
-
-  button {
-  }
+export const Title = styled.h2`
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
 `;
 export const SubTitle = styled.div`
   width: 80%;

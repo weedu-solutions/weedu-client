@@ -20,8 +20,6 @@ export const RowGraph = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  margin-top: 30px;
-  margin-bottom: 30px;
 `
 
 export const LegendGraph = styled.div`
@@ -37,7 +35,7 @@ export const LegendGraph = styled.div`
 
 export const ContainerRow = styled.div`
   display: flex;
-  flex-direction: row;  
+  flex-direction: row;
 `
 
 type ColorProps = {
@@ -53,7 +51,7 @@ export const ColorfulFrame = styled.div`
 `
 export const Row = styled.div`
   display: flex;
-  flex-direction: row;  
+  flex-direction: row;
   align-items: center;
 `
 
@@ -62,6 +60,6 @@ export const MessageDefaultChart = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
 `
 

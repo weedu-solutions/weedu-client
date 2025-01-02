@@ -1,600 +1,311 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Stack,
-  Switch,
-  Textarea,
-} from "@chakra-ui/react";
-import { AxiosResponse } from "axios";
-import moment from "moment";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-
-import closeModalIcon from "../../../../assets/icon-close.svg";
-import { ButtonDefault } from "../../../../components/FormChakra/Button";
-import { Notify, NotifyTypes } from "../../../../components/Notify";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Box, Switch, Text } from "@chakra-ui/react";
+import moment from "moment";
 import { useAuth } from "../../../../hooks/auth";
-import IActions from "../../../../interfaces/actions";
-import { Api } from "../../../../services/api";
-import { AttentionMessage } from "../../CreateAction/styles";
+import { Notify, NotifyTypes } from "../../../../components/Notify";
 import {
-  Footer,
-  Form,
-  Margin,
-  Separator,
-  SubTitle,
-  Title,
-  Toggle,
-  Wrapper,
-} from "./styles";
-import { useQueryClient } from "react-query";
+  Modal,
+  ModalSection,
+  ModalSectionTitle,
+  ModalGrid,
+  ModalButtonContainer,
+  ModalCancelButton,
+  ModalSubmitButton,
+} from "../../../../components/Modal";
+import { IAction } from "../../../../interfaces/actions";
+import { FormInput } from "../../../../components/Form/FormInput";
+import { FormSelect } from "../../../../components/Form/FormSelect";
+import { FormTextarea } from "../../../../components/Form/FormTextarea";
+import { BoxColor } from "../../../../components/BoxColor";
+import { useActions } from "../../../../hooks/useActions";
+import { useCompanyUsers } from "../../../../hooks/useCompanyUsers";
 
-type ModalSeeDetailsProps = {
-  closeModal: any;
-  action: IActions | undefined;
+const editActionSchema = z.object({
+  problem: z.string().min(1, "O problema é obrigatório"),
+  what: z.string().min(1, "O que será feito é obrigatório"),
+  how: z.string().min(1, "Como será feito é obrigatório"),
+  who: z.string().min(1, "Responsável é obrigatório"),
+  why_1: z.string().nullable().optional(),
+  why_2: z.string().nullable().optional(),
+  why_3: z.string().nullable().optional(),
+  why_4: z.string().nullable().optional(),
+  why_5: z.string().nullable().optional(),
+  user_id: z.string().nullable().optional(),
+  observation: z.string().nullable().optional(),
+});
+
+type EditActionFormData = z.infer<typeof editActionSchema>;
+
+interface ModalSeeDetailsProps {
+  closeModal: () => void;
+  action: IAction;
+}
+
+const formatDateToInput = (date: string | undefined) => {
+  if (!date) return "";
+  return moment(date, "DD/MM/YYYY").format("YYYY-MM-DD");
 };
 
-// {
-//   Action active 1
-//   Action not active 0
-// }
 
-export function ModalSeeDetails({ closeModal, action }: ModalSeeDetailsProps) {
+export function ModalSeeDetails({
+  closeModal,
+  action,
+}: ModalSeeDetailsProps) {
   const { user, infoCompany } = useAuth();
-  const queryClient = useQueryClient();
-  const [editData, setEditData] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isChecked, setIsChecked] = useState(
-    action?.is_active === 1 ? true : false
-  );
-
+  const { updateAction } = useActions();
+  const { getUserOptions } = useCompanyUsers();
+  const [editData, setEditData] = useState(false);
+  const [isChecked, setIsChecked] = useState(action?.is_active === 1);
   const [preview_init_date, setPreview_init_date] = useState(
-    action?.preview_init_date
+    formatDateToInput(action?.preview_init_date)
   );
   const [preview_end_date, setPreview_end_date] = useState(
-    action?.preview_end_date
+    formatDateToInput(action?.preview_end_date)
   );
-  const [responsible, setResponsible] = useState(`${action?.who},${action?.user_id}`);
-
-  const handlePreviewInitDate = (event: any) =>
-    setPreview_init_date(event.target.value);
-  const handlePreviewEndDate = (event: any) =>
-    setPreview_end_date(event.target.value);
-
-  let chosenInitDate = moment(preview_init_date).format("DD/MM/YYYY");
-  let chosenEndDate = moment(preview_end_date).format("DD/MM/YYYY");
-
-  const usersCompanyConsultant: any = JSON.parse(
-    localStorage.getItem("users_company") || "{}"
-  );
-
-  const idCustumer =
-    user?.user_type_id === 3 ? infoCompany.id : user?.customer[0].id;
 
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
-  } = useForm();
+    setValue,
+    formState: { errors },
+  } = useForm<EditActionFormData>({
+    resolver: zodResolver(editActionSchema),
+    defaultValues: {
+      problem: action?.problem,
+      what: action?.what,
+      how: action?.how,
+      who: action?.who,
+      why_1: action?.why_1,
+      why_2: action?.why_2,
+      why_3: action?.why_3,
+      why_4: action?.why_4,
+      why_5: action?.why_5,
+      observation: action?.observation,
+      user_id: action?.user_id?.toString(),
+    },
+  });
 
-  const idResponsibleAction = responsible.split(",");
+  useEffect(() => {
+    const options = getUserOptions();
+    const selectedOption = options.find(
+      option => option.value === action?.user_id?.toString()
+    );
 
-  const onSubmit = async ({
-    problem,
-    why_1,
-    why_2,
-    why_3,
-    why_4,
-    why_5,
-    what,
-    how,
-    who,
-    observation,
-  }: IActions) => {
-    await Api.post(`/auth/plan/${action?.id}`, {
-      problem,
-      what,
-      how,
-      who: idResponsibleAction[0],
-      why_1,
-      why_2,
-      why_3,
-      why_4,
-      why_5,
-      preview_init_date:
-        editData === false ? action?.preview_init_date : chosenInitDate,
-      preview_end_date:
-        editData === false ? action?.preview_end_date : chosenEndDate,
-      init_date: action?.init_date ? action?.init_date : null,
-      end_date: action?.end_date ? action?.end_date : null,
-      observation,
-      user_id: idResponsibleAction[1],
-      customer_id: idCustumer,
-      where: "O",
-      is_active: isChecked === true ? 1 : 0,
-    })
-      .then(() => {
-        queryClient.invalidateQueries({
-          queryKey: ["all-actions"],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["actions-costumer"],
-        });
-        closeModal();
-        Notify(NotifyTypes.SUCCESS, "Plano de Ação editado com sucesso!");
-      })
-      .catch((err: AxiosResponse) => {
-        queryClient.invalidateQueries({
-          queryKey: ["all-actions"],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["actions-costumer"],
-        });
-        closeModal();
-        Notify(NotifyTypes.ERROR, "Não foi possível editar o Plano de Ação.");
-      });
-  };
+    if (selectedOption) {
+      setValue('who', selectedOption.label);
+      setValue('user_id', selectedOption.value);
+    }
+  }, [action?.user_id, setValue, getUserOptions]);
 
-  const handleSaveDetails = () => {
-    handleSubmit(onSubmit)();
-  };
+  const idCustumer =
+    user?.user_type_id === 3 ? infoCompany.id : user?.customer[0].id;
 
-  const handleToggle = async () => {
-    setIsChecked(!isChecked);
+  const onSubmit = async (data: EditActionFormData) => {
+    try {
+      const formData = {
+        id: action.id,
+        ...data,
+        customer_id: idCustumer,
+        where: "O",
+        is_active: isChecked ? 1 : 0,
+        preview_init_date: editData ? moment(preview_init_date).format("DD/MM/YYYY") : action?.preview_init_date,
+        preview_end_date: editData ? moment(preview_end_date).format("DD/MM/YYYY") : action?.preview_end_date,
+        init_date: action?.init_date || null,
+        end_date: action?.end_date || null,
+        why_1: data.why_1 || null,
+        why_2: data.why_2 || null,
+        why_3: data.why_3 || null,
+        why_4: data.why_4 || null,
+        why_5: data.why_5 || null,
+        observation: data.observation || null,
+      };
+
+      await updateAction.mutateAsync(formData);
+      Notify(NotifyTypes.SUCCESS, "Plano de Ação editado com sucesso!");
+      closeModal();
+    } catch (error) {
+      Notify(NotifyTypes.ERROR, "Não foi possível editar o Plano de Ação.");
+    }
   };
 
   return (
-    <>
-      <Wrapper>
-        <Title>
-          <div></div>
-          <div>
-            <h1>Detalhes da Ação</h1>
-          </div>
-          <div>
-            <Button colorScheme="#FFFFFF" onClick={closeModal}>
-              <img src={closeModalIcon} alt="Fechar modal" />
-            </Button>
-          </div>
-        </Title>
+    <Modal title="Detalhes do Plano de Ação" onClose={closeModal}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <ModalSection>
+          <ModalSectionTitle>Identificação do Problema</ModalSectionTitle>
+          <FormTextarea
+            label="Qual o problema ou causa que será tratado?"
+            name="problem"
+            register={register}
+            error={errors.problem?.message}
+            placeholder="Descreva o problema ou causa"
+          />
+        </ModalSection>
 
-        <SubTitle>
-          <Separator />
-          <h1>
-            Qualquer alteração dos dados atuais está sujeita a aprovação do
-            consultor
-          </h1>
-        </SubTitle>
+        <ModalSection>
+          <ModalSectionTitle>Análise dos 5 Porquês</ModalSectionTitle>
+          <ModalGrid>
+            {[1, 2, 3, 4, 5].map((num) => (
+              <FormInput
+                key={num}
+                label={`Por que? (${num})`}
+                name={`why_${num}`}
+                register={register}
+                error={errors[`why_${num}` as keyof typeof errors]?.message}
+                placeholder={`${num}º por quê?`}
+              />
+            ))}
+          </ModalGrid>
+        </ModalSection>
 
-        <Form>
-          <form>
-            <FormControl>
-              <Box>
-                <FormLabel htmlFor="problem">
-                  Qual o problema ou causa que será tratado?
-                </FormLabel>
-                <Textarea
-                  backgroundColor="#F4F2FC"
-                  borderColor="#F4F2FC"
-                  id="problem"
-                  placeholder="Informe o problema ou causa"
-                  {...register("problem", {
-                    required: 'O campo "Problema/Causa" não pode ser vazio.',
-                  })}
-                  focusBorderColor={errors.problem ? "#E71D36" : "#7956F7"}
-                  h="56px"
-                  fontSize="16px"
-                  defaultValue={action?.problem}
-                />
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.problem && errors.problem.message}
-                </FormLabel>
-              </Box>
+        <ModalSection>
+          <ModalSectionTitle>Detalhes da Ação</ModalSectionTitle>
+          <ModalGrid>
+            <Box gridColumn="span 2">
+              <FormInput
+                label="O que será feito? (What?)"
+                name="what"
+                register={register}
+                error={errors.what?.message}
+                placeholder="Descreva a ação"
+              />
+            </Box>
 
-              <Box mt="20px">
-                <FormLabel htmlFor="why_1">Porque 1</FormLabel>
-                <Input
-                  backgroundColor="#F4F2FC"
-                  borderColor="#F4F2FC"
-                  id="why_1"
-                  placeholder="Informe o que será feito"
-                  {...register("why_1")}
-                  focusBorderColor={errors.why_1 ? "#E71D36" : "#7956F7"}
-                  h="56px"
-                  fontSize="16px"
-                  defaultValue={action?.why_1}
-                />
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.why_1 && errors.why_1.message}
-                </FormLabel>
-              </Box>
+            <Box gridColumn="span 2">
+              <FormTextarea
+                label="Como irá realizar esta Ação? (How?)"
+                name="how"
+                register={register}
+                error={errors.how?.message}
+                placeholder="Descreva como será feito"
+              />
+            </Box>
 
-              <Box mt="20px">
-                <FormLabel htmlFor="why_2">Porque 2</FormLabel>
-                <Input
-                  backgroundColor="#F4F2FC"
-                  borderColor="#F4F2FC"
-                  id="why_2"
-                  placeholder="Informe o que será feito"
-                  {...register("why_2")}
-                  focusBorderColor={errors.why_2 ? "#E71D36" : "#7956F7"}
-                  h="56px"
-                  fontSize="16px"
-                  defaultValue={action?.why_2}
-                />
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.why_2 && errors.why_2.message}
-                </FormLabel>
-              </Box>
+            <Box>
+              <FormSelect
+                label="Responsável pela Ação (Who?)"
+                name="user_id"
+                register={register}
+                error={errors.who?.message}
+                placeholder="Selecione o responsável"
+                defaultValue={action?.user_id?.toString()}
+                options={getUserOptions()}
+                isDisabled={!!action?.end_date && !!action?.init_date}
+                onChange={(e) => {
+                  const selectedId = e.target.value;
+                  const selectedOption = getUserOptions().find(
+                    option => option.value === selectedId
+                  );
+                  if (selectedOption) {
+                    setValue('who', selectedOption.label);
+                    setValue('user_id', selectedOption.value);
+                  }
+                }}
+              />
+            </Box>
+          </ModalGrid>
+        </ModalSection>
 
-              <Box mt="20px">
-                <FormLabel htmlFor="why_3">Porque 3</FormLabel>
-                <Input
-                  backgroundColor="#F4F2FC"
-                  borderColor="#F4F2FC"
-                  id="why_3"
-                  placeholder="Informe o que será feito"
-                  {...register("why_3")}
-                  focusBorderColor={errors.why_3 ? "#E71D36" : "#7956F7"}
-                  h="56px"
-                  fontSize="16px"
-                  defaultValue={action?.why_3}
-                />
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.why_3 && errors.why_3.message}
-                </FormLabel>
-              </Box>
-
-              <Box mt="20px">
-                <FormLabel htmlFor="why_4">Porque 4</FormLabel>
-                <Input
-                  backgroundColor="#F4F2FC"
-                  borderColor="#F4F2FC"
-                  id="why_4"
-                  placeholder="Informe o que será feito"
-                  {...register("why_4")}
-                  focusBorderColor={errors.why_4 ? "#E71D36" : "#7956F7"}
-                  h="56px"
-                  fontSize="16px"
-                  defaultValue={action?.why_4}
-                />
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.why_4 && errors.why_4.message}
-                </FormLabel>
-              </Box>
-
-              <Box mt="20px">
-                <FormLabel htmlFor="why_5">Porque 5</FormLabel>
-                <Input
-                  backgroundColor="#F4F2FC"
-                  borderColor="#F4F2FC"
-                  id="why_5"
-                  placeholder="Informe o que será feito"
-                  {...register("why_5")}
-                  focusBorderColor={errors.why_5 ? "#E71D36" : "#7956F7"}
-                  h="56px"
-                  fontSize="16px"
-                  defaultValue={action?.why_5}
-                />
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.why_5 && errors.why_5.message}
-                </FormLabel>
-              </Box>
-
-              <Box mt="20px">
-                <FormLabel htmlFor="what">O que será feito? (What?)</FormLabel>
-                <Input
-                  backgroundColor="#F4F2FC"
-                  borderColor="#F4F2FC"
-                  id="what"
-                  placeholder="Informe o que será feito"
-                  {...register("what", {
-                    required: 'O campo "What?" não pode ser vazio.',
-                  })}
-                  focusBorderColor={errors.what ? "#E71D36" : "#7956F7"}
-                  h="56px"
-                  fontSize="16px"
-                  defaultValue={action?.what}
-                />
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.what && errors.what.message}
-                </FormLabel>
-              </Box>
-
-              <Box mt="20px">
-                <FormLabel htmlFor="how">
-                  Como irá realizar esta Ação (passo a passo)? (How?)
-                </FormLabel>
-                <Textarea
-                  backgroundColor="#F4F2FC"
-                  borderColor="#F4F2FC"
-                  id="how"
-                  placeholder="Informe o que será feito"
-                  {...register("how", {
-                    required: 'O campo "How?" não pode ser vazio.',
-                  })}
-                  focusBorderColor={errors.how ? "#E71D36" : "#7956F7"}
-                  h="56px"
-                  fontSize="16px"
-                  defaultValue={action?.how}
-                />
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.how && errors.how.message}
-                </FormLabel>
-              </Box>
-
-              <Box mt="20px">
-                <FormLabel htmlFor="name">
-                  Responsável pela Ação (Who?)
-                </FormLabel>
-
-                <Select
-                  h="56px"
-                  fontSize="16px"
-                  placeholder="Informe o responsável pela Ação"
-                  focusBorderColor={errors.email ? "#E71D36" : "#7956F7"}
-                  value={responsible}
-                  {...register("who", {
-                    required: 'O campo "Who?" não pode ser vazio.',
-                  })}
-                  onChange={(e) => {
-                    const responsibleAction = e.target.value;
-                    setResponsible(responsibleAction);
-                  }}
-                >
-                  {usersCompanyConsultant[0].user.map((user: any) => (
-                    <option key={user?.name + Math.random()} value={[user?.name, user?.id]}>
-                      {user?.name}
-                    </option>
-                  ))}
-                </Select>
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.who && errors.who.message}
-                </FormLabel>
-              </Box>
-
-              {editData ? (
-                <Box mt="20px">
-                  <Stack direction={["column", "row"]}>
-                    <Box w="50%">
-                      <FormLabel htmlFor="preview_init_date">
-                        Início Previsto (When?)
-                      </FormLabel>
-                      <Input
-                        backgroundColor="#F4F2FC"
-                        borderColor="#F4F2FC"
-                        id="preview_init_date"
-                        type="date"
-                        placeholder="00/00/0000"
-                        {...register("preview_init_date", {
-                          required:
-                            'O campo "Início previsto" nao pode ser vazio.',
-                        })}
-                        focusBorderColor={
-                          errors.preview_init_date ? "#E71D36" : "#7956F7"
-                        }
-                        h="56px"
-                        defaultValue={preview_init_date}
-                        onChange={handlePreviewInitDate}
-                        fontSize="16px"
-                      />
-                      <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                        {errors.preview_init_date &&
-                          errors.preview_init_date.message}
-                      </FormLabel>
-                    </Box>
-
-                    <Box w="50%">
-                      <FormLabel htmlFor="preview_end_date">
-                        Fim Previsto (When?)
-                      </FormLabel>
-                      <Input
-                        backgroundColor="#F4F2FC"
-                        borderColor="#F4F2FC"
-                        id="preview_end_date"
-                        type="date"
-                        {...register("preview_end_date", {
-                          required:
-                            'O campo "Fim previsto" não pode ser vazio.',
-                        })}
-                        defaultValue={preview_init_date}
-                        onChange={handlePreviewEndDate}
-                        focusBorderColor={
-                          errors.preview_end_date ? "#E71D36" : "#7956F7"
-                        }
-                        h="56px"
-                        fontSize="16px"
-                      />
-                      <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                        {errors.preview_end_date &&
-                          errors.preview_end_date.message}
-                      </FormLabel>
-                    </Box>
-                  </Stack>
-
-                  <AttentionMessage>
-                    {preview_end_date && preview_init_date
-                      ? preview_end_date < preview_init_date
-                        ? "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
-                        : ""
-                      : ""}
-                  </AttentionMessage>
-                </Box>
-              ) : (
-                <Box mt="20px">
-                  <Stack direction={["column", "row"]}>
-                    <Box w="50%">
-                      <FormLabel htmlFor="preview_init_date">
-                        Início Previsto (When?)
-                      </FormLabel>
-                      <Input
-                        backgroundColor="#F4F2FC"
-                        borderColor="#F4F2FC"
-                        id="preview_init_date"
-                        focusBorderColor={
-                          errors.preview_init_date ? "#E71D36" : "#7956F7"
-                        }
-                        h="56px"
-                        value={action?.preview_init_date}
-                        color="black"
-                        fontSize="16px"
-                        disabled
-                      />
-                      <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                        {errors.preview_init_date &&
-                          errors.preview_init_date.message}
-                      </FormLabel>
-                    </Box>
-
-                    <Box w="50%">
-                      <FormLabel htmlFor="preview_end_date">
-                        Fim Previsto (When?)
-                      </FormLabel>
-                      <Input
-                        backgroundColor="#F4F2FC"
-                        borderColor="#F4F2FC"
-                        id="preview_end_date"
-                        h="56px"
-                        color="black"
-                        focusBorderColor={
-                          errors.preview_end_date ? "#E71D36" : "#7956F7"
-                        }
-                        value={action?.preview_end_date}
-                        fontSize="16px"
-                        disabled
-                      />
-                      <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                        {errors.preview_end_date &&
-                          errors.preview_end_date.message}
-                      </FormLabel>
-                    </Box>
-                  </Stack>
-
-                  <AttentionMessage>
-                    {preview_end_date && preview_init_date
-                      ? preview_init_date > preview_end_date
-                        ? "Atenção a data de fim previsto, deve ser maior que a data de ínicio."
-                        : ""
-                      : ""}
-                  </AttentionMessage>
+        <ModalSection>
+          <ModalSectionTitle>Cronograma</ModalSectionTitle>
+          <ModalGrid>
+            <Box>
+              <FormInput
+                label="Data Início Prevista"
+                name="preview_init_date"
+                type="date"
+                register={register}
+                isDisabled={!editData}
+                defaultValue={preview_init_date}
+                onChange={(e) => setPreview_init_date(e.target.value)}
+              />
+              {action?.init_date && (
+                <Box mt={2} fontSize="sm" color="gray.600">
+                  Início real: {action.init_date}
                 </Box>
               )}
+            </Box>
 
-              <Button
-                color="#7956F7"
-                variant="link"
-                marginBottom="10px"
-                onClick={() => {
-                  setEditData(!editData);
-                }}
-              >
-                {editData ? "Cancelar" : "Editar datas previstas"}
-              </Button>
-
-              <Box mt="20px">
-                <Stack direction={["column", "row"]}>
-                  <Box w="50%">
-                    <FormLabel htmlFor="init_date">
-                      Início real (When?)
-                    </FormLabel>
-                    <Input
-                      backgroundColor="#F4F2FC"
-                      borderColor="#F4F2FC"
-                      id="init_date"
-                      placeholder="00/00/0000"
-                      focusBorderColor={
-                        errors.init_date ? "#E71D36" : "#7956F7"
-                      }
-                      h="56px"
-                      value={action?.init_date}
-                      fontSize="16px"
-                      color="black"
-                      isDisabled
-                    />
-                  </Box>
-
-                  <Box w="50%">
-                    <FormLabel htmlFor="end_date">Fim real (When?)</FormLabel>
-                    <Input
-                      backgroundColor="#F4F2FC"
-                      borderColor="#F4F2FC"
-                      id="preview_end_date"
-                      placeholder="00/00/0000"
-                      focusBorderColor={errors.end_date ? "#E71D36" : "#7956F7"}
-                      h="56px"
-                      value={action?.end_date}
-                      fontSize="16px"
-                      color="black"
-                      isDisabled
-                    />
-                  </Box>
-                </Stack>
-              </Box>
-
-              <Box mt="20px">
-                <FormLabel htmlFor="observation">Observações</FormLabel>
-                <Input
-                  backgroundColor="#F4F2FC"
-                  borderColor="#F4F2FC"
-                  id="observation"
-                  placeholder="Informe observações relevantes para execução do projeto"
-                  {...register("observation")}
-                  focusBorderColor={errors.observation ? "#E71D36" : "#7956F7"}
-                  h="56px"
-                  fontSize="16px"
-                  defaultValue={action?.observation}
-                />
-                <FormLabel color="#E71D36" fontSize="13px" mt="4px">
-                  {errors.observation && errors.observation.message}
-                </FormLabel>
-              </Box>
-            </FormControl>
-
-            <Footer>
-              <Margin>
-                {action?.end_date && action?.init_date ? (
-                  <Toggle>
-                    <span>Ação finalizada</span>
-                  </Toggle>
-                ) : (
-                  <Toggle>
-                    <Switch
-                      colorScheme="purple"
-                      size="md"
-                      isChecked={isChecked}
-                      onChange={handleToggle}
-                    />
-                    {!isChecked ? (
-                      <>
-                        <span>Ação desativada</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Ação ativada</span>
-                      </>
-                    )}
-                  </Toggle>
-                )}
-              </Margin>
-
-              <ButtonDefault
-                backgroundColor={"#7956F7"}
-                width={"35%"}
-                height={"50px"}
-                loadingText={"Salvar alterações"}
-                loading={isSubmitting}
-                disabled={action?.status === 3 ? true : false}
-                title={"Salvar alterações"}
-                onClick={handleSaveDetails}
+            <Box>
+              <FormInput
+                label="Data Fim Prevista"
+                name="preview_end_date"
+                type="date"
+                register={register}
+                isDisabled={!editData}
+                defaultValue={preview_end_date}
+                onChange={(e) => setPreview_end_date(e.target.value)}
               />
-            </Footer>
-          </form>
-        </Form>
-      </Wrapper>
-    </>
+              {action?.end_date && (
+                <Box mt={2} fontSize="sm" color="gray.600">
+                  Fim real: {action.end_date}
+                </Box>
+              )}
+            </Box>
+          </ModalGrid>
+
+          <Box mt={4}>
+            <ModalCancelButton
+              type="button"
+              onClick={() => setEditData(!editData)}
+            >
+              {editData ? "Cancelar" : "Editar datas previstas"}
+            </ModalCancelButton>
+          </Box>
+        </ModalSection>
+
+        <ModalSection>
+          <ModalSectionTitle>Status da Ação</ModalSectionTitle>
+
+          <Box
+            display="flex"
+            flexDirection="column"
+            gap={4}
+            p={4}
+            bg="gray.50"
+            borderRadius="md"
+          >
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              bg="white"
+              p={3}
+              borderRadius="md"
+              boxShadow="sm"
+            >
+              <Box display="flex" alignItems="center" gap={3}>
+                <Switch
+                  colorScheme="purple"
+                  size="md"
+                  isChecked={isChecked}
+                  onChange={() => setIsChecked(!isChecked)}
+                  isDisabled={!!action?.end_date && !!action?.init_date}
+                />
+                <Text fontWeight="500" color="gray.700">
+                  {action?.end_date && action?.init_date
+                    ? "Ação finalizada"
+                    : isChecked
+                    ? "Ação ativada"
+                    : "Ação desativada"}
+                </Text>
+              </Box>
+
+              <BoxColor status={action.status} rowInfo={action} />
+            </Box>
+          </Box>
+        </ModalSection>
+
+        <ModalButtonContainer>
+          <ModalCancelButton type="button" onClick={closeModal}>
+            Cancelar
+          </ModalCancelButton>
+          <ModalSubmitButton type="submit">Salvar alterações</ModalSubmitButton>
+        </ModalButtonContainer>
+      </form>
+    </Modal>
   );
 }
