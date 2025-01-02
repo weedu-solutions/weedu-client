@@ -44,12 +44,11 @@ export function BoardActions({
   setIsModalSeeDetails,
   setIsModalStartAction,
 }: IBoardActions) {
-  console.log(actions)
   const STATUS_MAP: { [key: number]: string } = {
     1: "A iniciar",
     2: "Em execução",
     3: "Executadas",
-    4: "Desativadas"
+    4: "Desativadas",
   };
 
   const [columns, setColumns] = React.useState<IColumns>(() => {
@@ -83,10 +82,13 @@ export function BoardActions({
     return initialData;
   });
 
-  const [pendingAction, setPendingAction] = React.useState<IAction | null>(null);
-  const [dragResult, setDragResult] = React.useState<{ source: any; destination: any } | null>(
+  const [pendingAction, setPendingAction] = React.useState<IAction | null>(
     null
   );
+  const [dragResult, setDragResult] = React.useState<{
+    source: any;
+    destination: any;
+  } | null>(null);
 
   const confirmModal = React.useCallback(() => {
     if (!pendingAction || !dragResult) return;
@@ -141,7 +143,10 @@ export function BoardActions({
     if (!destination) return;
 
     // Verificar movimento de "A iniciar" para "Em execução"
-    if (source.droppableId === STATUS_MAP[1] && destination.droppableId === STATUS_MAP[2]) {
+    if (
+      source.droppableId === STATUS_MAP[1] &&
+      destination.droppableId === STATUS_MAP[2]
+    ) {
       const sourceCol = [...columns[source.droppableId]];
       const [movedAction] = sourceCol.splice(source.index, 1);
 
@@ -155,7 +160,10 @@ export function BoardActions({
     }
 
     // Verificar movimento de "Em execução" para "Executadas"
-    if (source.droppableId === STATUS_MAP[2] && destination.droppableId === STATUS_MAP[3]) {
+    if (
+      source.droppableId === STATUS_MAP[2] &&
+      destination.droppableId === STATUS_MAP[3]
+    ) {
       const sourceCol = [...columns[source.droppableId]];
       const [movedAction] = sourceCol.splice(source.index, 1);
 

@@ -242,7 +242,6 @@ export function CreateAction() {
               <FormLabel htmlFor="who">Responsável pela Ação (Who?)</FormLabel>
               {user?.user_type_id === 1 ? (
                 <Input
-                  id="preview_init_date"
                   {...register("who")}
                   value={user?.name}
                   focusBorderColor={"#7956F7"}
@@ -272,7 +271,9 @@ export function CreateAction() {
                         </option>
                       ))
                     : usersCompanyConsultant[0].user.map((user: any) => (
-                        <option value={[user?.name, user.id]}>{user?.name}</option>
+                        <option value={[user?.name, user.id]}>
+                          {user?.name}
+                        </option>
                       ))}
                 </Select>
               )}
