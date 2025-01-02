@@ -1,5 +1,4 @@
 import Modal from "react-modal";
-import { ModalBlockContent } from "../../styles";
 import { ModalSeeDetails } from "../../Modals/ModalSeeDetails";
 import { ModalDisableAction } from "../../Modals/ModalDisableAction";
 import { IAction } from "../../../../interfaces/actions";
@@ -34,13 +33,14 @@ export function ActionModals({
 }: ActionModalsProps) {
   return (
     <>
-      <Modal isOpen={modals.startOrFinishAction} style={MODAL_STYLES.modalDefault}>
-        <ModalBlockContent>
-          <ModalStartOrFinishAction
-            action={actionInfo}
-            closeModal={() => handleModalVisibility("startOrFinishAction")}
-          />
-        </ModalBlockContent>
+      <Modal
+        isOpen={modals.startOrFinishAction}
+        style={MODAL_STYLES.modalDefault}
+      >
+        <ModalStartOrFinishAction
+          action={actionInfo}
+          closeModal={() => handleModalVisibility("startOrFinishAction")}
+        />
       </Modal>
 
       <Modal isOpen={modals.seeDetails} style={MODAL_STYLES.modalDefault}>
@@ -51,12 +51,10 @@ export function ActionModals({
       </Modal>
 
       <Modal isOpen={modals.disableAction} style={MODAL_STYLES.modalDefault}>
-        <ModalBlockContent>
-          <ModalDisableAction
-            action={actionInfo}
-            closeModal={() => handleModalVisibility("disableAction")}
-          />
-        </ModalBlockContent>
+        <ModalDisableAction
+          action={actionInfo}
+          closeModal={() => handleModalVisibility("disableAction")}
+        />
       </Modal>
 
       <Modal isOpen={modals.addAction} style={MODAL_STYLES.modalDefault}>
@@ -74,4 +72,3 @@ export function ActionModals({
     </>
   );
 }
-

@@ -6,9 +6,10 @@ import {
   DropResult,
   DragStart,
 } from "react-beautiful-dnd";
-import * as S from "../styles"; // Seu arquivo de estilos
+import * as S from "./styles"; // Seu arquivo de estilos
 import { BoxColor } from "../../../../components/BoxColor";
 import { IAction } from "../../../../interfaces/actions";
+import { Card } from "./Card";
 
 interface IColumns {
   [key: string]: IAction[];
@@ -29,7 +30,7 @@ export function BoardActions({
   setIsModalSeeDetails,
   setIsModalStartOrFinishAction,
   setIsModalDisableAction,
-  setIsModalExecuteAction
+  setIsModalExecuteAction,
 }: IBoardActions) {
   const STATUS_MAP: { [key: number]: string } = {
     1: "A iniciar",
@@ -72,7 +73,9 @@ export function BoardActions({
   const [selectedAction, setSelectedAction] = useState<IAction | null>(null);
   const [dragSource, setDragSource] = useState<any>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [draggedFromColumn, setDraggedFromColumn] = useState<string | null>(null);
+  const [draggedFromColumn, setDraggedFromColumn] = useState<string | null>(
+    null
+  );
 
   const handleReturnToSource = (action: IAction) => {
     if (dragSource && dragSource.droppableId) {
@@ -104,7 +107,10 @@ export function BoardActions({
     }
 
     // De "Executadas" ou "Desativadas"
-    if (draggedFromColumn === STATUS_MAP[3] || draggedFromColumn === STATUS_MAP[4]) {
+    if (
+      draggedFromColumn === STATUS_MAP[3] ||
+      draggedFromColumn === STATUS_MAP[4]
+    ) {
       return true; // Todas as colunas ficam desabilitadas
     }
 
@@ -172,10 +178,7 @@ export function BoardActions({
 
   return (
     <>
-      <DragDropContext
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-      >
+      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <S.BoardContainer>
           {Object.values(STATUS_MAP).map((status) => (
             <Droppable
@@ -193,34 +196,16 @@ export function BoardActions({
                   <S.CardsContainer>
                     {columns[status].map((action, index) => (
                       <Draggable
-                        key={(action.id ?? '').toString()}
-                        draggableId={(action.id ?? '').toString()}
+                        key={(action.id ?? "").toString()}
+                        draggableId={(action.id ?? "").toString()}
                         index={index}
                       >
                         {(provided) => (
-                          <S.Card
+                          <Card
+                            action={action}
                             onClick={() => handleOpenModalSeeDetails(action)}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <S.CardHeader>
-                              <BoxColor status={action.status} rowInfo={action} />
-                            </S.CardHeader>
-                            <S.CardContent>
-                              <S.CardTitle>{action.what}</S.CardTitle>
-                              <S.CardInfo>
-                                <S.CardInfoItem>
-                                  <S.IconWrapper>👤</S.IconWrapper>
-                                  {action.who}
-                                </S.CardInfoItem>
-                                <S.CardInfoItem>
-                                  <S.IconWrapper>📅</S.IconWrapper>
-                                  Data de início: {action.preview_init_date}
-                                </S.CardInfoItem>
-                              </S.CardInfo>
-                            </S.CardContent>
-                          </S.Card>
+                            provided={provided}
+                          />
                         )}
                       </Draggable>
                     ))}

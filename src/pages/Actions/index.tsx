@@ -1,78 +1,73 @@
-import { Link } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useState } from "react";
+import { HiPlus } from "react-icons/hi";
 
-import iconBack from "../../assets/seta-back.svg";
 import LayoutLogged from "../../components/LayoutLogged";
 import { useAuth } from "../../hooks/auth";
-import { CustomerServices } from "../../services/customer";
-import { ContainerTable, Content, Separator, Wrapper } from "./styles";
+import { useActions } from "../../hooks/useActions";
 import { TableActions } from "./TableActions";
 import { GraphsDashUsers } from "./GrapsDashUsers";
 import { GraphsDashCostumer } from "./GraphsDashCostumer";
+import { ModalCreateAction } from "./Modals/ModalCreateAction";
+import * as S from "./styles";
 
 export function Actions() {
   const { user, infoCompany } = useAuth();
+  const { actions, isLoading } = useActions();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const idCustumer =
-    user?.user_type_id === 3 ? infoCompany.id : user?.customer[0].id;
-
-  useEffect(() => {
-    const getData = async () => {
-      const { data } = await CustomerServices.getAllUserCustomer(idCustumer);
-      return localStorage.setItem("users_company", JSON.stringify(data));
-    };
-
-    getData();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if (isLoading) {
+    return (
+      <LayoutLogged>
+        <S.LoadingContainer>
+          <S.LoadingText>Carregando...</S.LoadingText>
+        </S.LoadingContainer>
+      </LayoutLogged>
+    );
+  }
 
   return (
     <LayoutLogged>
-      <Wrapper>
-        <ContainerTable>
-          {user?.user_type_id === 3 ? (
-            <Link
-              color="#7956F7"
-              href="/consultant-companies"
-              fontSize="20px"
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-              width="290px"
-            >
-              <img src={iconBack} alt="Voltar" />
-              Voltar para todas empresas
-            </Link>
-          ) : (
-            ""
-          )}
+      <S.Container>
+        <S.Content>
+          {/* Header */}
+          <S.HeaderSection>
+            <S.HeaderInfo>
+              <S.CompanyName>
+                {user?.user_type_id === 3 && infoCompany
+                  ? infoCompany.fantasy_name
+                  : user?.customer[0].fantasy_name}
+              </S.CompanyName>
+              <S.UserName>{user?.name}</S.UserName>
+            </S.HeaderInfo>
 
-          {user?.user_type_id === 3 && infoCompany ? (
-            <Content>
-              <h1>
-                {infoCompany.fantasy_name} - {user?.name}
-              </h1>
-            </Content>
-          ) : (
-            <Content>
-              <h1>
-                {user?.customer[0].fantasy_name} - {user?.name}
-              </h1>
-            </Content>
-          )}
+            <S.CreateButton onClick={() => setIsCreateModalOpen(true)}>
+              <HiPlus size={20} />
+              Plano de Ação
+            </S.CreateButton>
+          </S.HeaderSection>
 
-          {user?.user_type_id === 1 && <GraphsDashUsers />}
+          {/* Gráficos */}
+          <S.ChartsSection>
+            {user?.user_type_id === 3 ? (
+              <GraphsDashCostumer />
+            ) : (
+              <GraphsDashUsers />
+            )}
+          </S.ChartsSection>
 
-          {user?.user_type_id === 2 && <GraphsDashUsers />}
+          {/* Board de Ações */}
+          <S.BoardSection>
+            <TableActions />
+          </S.BoardSection>
+        </S.Content>
 
-          {user?.user_type_id === 3 && <GraphsDashCostumer />}
-
-          <Separator />
-
-          <TableActions />
-        </ContainerTable>
-      </Wrapper>
+        {/* Modal de criar ação */}
+        {isCreateModalOpen && (
+          <ModalCreateAction 
+            closeModal={() => setIsCreateModalOpen(false)} 
+          />
+        )}
+      </S.Container>
     </LayoutLogged>
   );
 }

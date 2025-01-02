@@ -77,6 +77,7 @@ export function ModalStartOrFinishAction({
           <Calendar
             onChange={setDate}
             value={date}
+            maxDate={new Date()}
             className="calendar-custom"
           />
         </S.CalendarWrapper>
