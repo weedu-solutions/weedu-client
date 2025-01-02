@@ -15,7 +15,6 @@ import {
   ModalButtonContainer,
   ModalCancelButton,
   ModalSubmitButton,
-  ModalErrorMessage,
 } from "../../../../components/Modal";
 import IActions from "../../../../interfaces/actions";
 import { FormInput } from "../../../../components/Form/FormInput";
@@ -27,12 +26,13 @@ const editActionSchema = z.object({
   what: z.string().min(1, "O que será feito é obrigatório"),
   how: z.string().min(1, "Como será feito é obrigatório"),
   who: z.string().min(1, "Responsável é obrigatório"),
-  why_1: z.string().optional(),
-  why_2: z.string().optional(),
-  why_3: z.string().optional(),
-  why_4: z.string().optional(),
-  why_5: z.string().optional(),
-  observation: z.string().optional(),
+  why_1: z.string().nullable().optional(),
+  why_2: z.string().nullable().optional(),
+  why_3: z.string().nullable().optional(),
+  why_4: z.string().nullable().optional(),
+  why_5: z.string().nullable().optional(),
+  user_id: z.string().nullable().optional(),
+  observation: z.string().nullable().optional(),
 });
 
 type EditActionFormData = z.infer<typeof editActionSchema>;
@@ -67,13 +67,11 @@ export function ModalSeeDetails({
   const [preview_end_date, setPreview_end_date] = useState(
     formatDateToInput(action?.preview_end_date)
   );
-  const [responsible, setResponsible] = useState(
-    `${action?.who},${action?.user_id}`
-  );
 
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm<EditActionFormData>({
     resolver: zodResolver(editActionSchema),
@@ -100,24 +98,28 @@ export function ModalSeeDetails({
 
   const onSubmit = async (data: EditActionFormData) => {
     try {
-      const selectedUser = users.find((u) => u.id === Number(data.who));
+      const selectedUser = users.find(u => u.id === Number(data.user_id));
 
-      await Api.post(`/auth/plan/${action?.id}`, {
+      const formData = {
         ...data,
-        who: selectedUser?.name,
-        user_id: selectedUser?.id,
+        who: selectedUser?.name || action?.who,
+        user_id: selectedUser?.id || action?.user_id,
         customer_id: idCustumer,
         where: "O",
         is_active: isChecked ? 1 : 0,
-        preview_init_date: editData
-          ? moment(preview_init_date).format("DD/MM/YYYY")
-          : action?.preview_init_date,
-        preview_end_date: editData
-          ? moment(preview_end_date).format("DD/MM/YYYY")
-          : action?.preview_end_date,
+        preview_init_date: editData ? moment(preview_init_date).format("DD/MM/YYYY") : action?.preview_init_date,
+        preview_end_date: editData ? moment(preview_end_date).format("DD/MM/YYYY") : action?.preview_end_date,
         init_date: action?.init_date || null,
         end_date: action?.end_date || null,
-      });
+        why_1: data.why_1 || null,
+        why_2: data.why_2 || null,
+        why_3: data.why_3 || null,
+        why_4: data.why_4 || null,
+        why_5: data.why_5 || null,
+        observation: data.observation || null,
+      };
+
+      await Api.post(`/auth/plan/${action?.id}`, formData);
 
       await refetchAllActions();
       Notify(NotifyTypes.SUCCESS, "Plano de Ação editado com sucesso!");
@@ -188,11 +190,18 @@ export function ModalSeeDetails({
                 error={errors.who?.message}
                 placeholder="Selecione o responsável"
                 defaultValue={action?.user_id}
-                options={users.map((user) => ({
+                options={users.map(user => ({
                   value: user.id.toString(),
-                  label: user.name,
+                  label: user.name
                 }))}
                 isDisabled={!!action?.end_date && !!action?.init_date}
+                onChange={(e) => {
+                  const selectedUser = users.find(u => u.id === Number(e.target.value));
+                  if (selectedUser) {
+                    setValue('who', selectedUser.name);
+                    setValue('user_id', selectedUser.id.toString());
+                  }
+                }}
               />
             </Box>
           </ModalGrid>
