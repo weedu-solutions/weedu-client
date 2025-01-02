@@ -1,28 +1,26 @@
 import { Modal } from "../../../../components/Modal";
-import { Box, Text, useTheme } from "@chakra-ui/react";
+import { useTheme } from "@chakra-ui/react";
 import * as S from "./styles";
 import { useAuth } from "../../../../hooks/auth";
 import Calendar from "react-calendar";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import moment from "moment";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
-import { Api } from "../../../../services/api";
 import { IAction } from "../../../../interfaces/actions";
+import { useActions } from "../../../../hooks/useActions";
 
 type ModalExecuteActionProps = {
   closeModal: any;
   action: IAction;
-  // refetchAllActions: () => void;
 };
 
 export function ModalExecuteAction({
   closeModal,
   action,
-  // refetchAllActions
 }: ModalExecuteActionProps) {
+  const { updateAction } = useActions();
   const { user, infoCompany } = useAuth();
-  const theme = useTheme();
   const [startDate, setStartDate] = useState<Date>(
     action?.init_date ? moment(action.init_date, "DD/MM/YYYY").toDate() : new Date()
   );
@@ -35,7 +33,7 @@ export function ModalExecuteAction({
 
   const onSubmit = async () => {
     try {
-      await Api.post(`/auth/plan/${action?.id}`, {
+      await updateAction.mutateAsync({
         ...action,
         init_date: moment(startDate).format("DD/MM/YYYY"),
         end_date: moment(endDate).format("DD/MM/YYYY"),
@@ -46,7 +44,6 @@ export function ModalExecuteAction({
 
       closeModal();
       Notify(NotifyTypes.SUCCESS, "Datas atualizadas com sucesso!");
-      // refetchAllActions();
     } catch (error) {
       closeModal();
       Notify(NotifyTypes.ERROR, "Não foi possível atualizar as datas!");

@@ -4,26 +4,25 @@ import { useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import moment from "moment";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
-import { Api } from "../../../../services/api";
 import { Modal } from "../../../../components/Modal";
 import * as S from "./styles";
+import { useActions } from "../../../../hooks/useActions";
 
 type ModalDisableActionProps = {
   closeModal: any;
   action: IAction;
-  //  refetchAllActions: () => void;
 };
 export function ModalStartOrFinishAction({
   closeModal,
   action,
-  //  refetchAllActions,
 }: ModalDisableActionProps) {
+  const { updateAction } = useActions();
   const [date, setDate] = useState(new Date());
   const isFinishing = !!action?.init_date;
 
   const handleSubmit = async () => {
     try {
-      await Api.post(`/auth/plan/${action?.id}`, {
+      await updateAction.mutateAsync({
         ...action,
         init_date: !isFinishing
           ? moment(date).format("DD/MM/YYYY")
@@ -40,7 +39,6 @@ export function ModalStartOrFinishAction({
           ? "Ação finalizada com sucesso!"
           : "Ação iniciada com sucesso!"
       );
-      //  refetchAllActions();
     } catch {
       Notify(
         NotifyTypes.ERROR,

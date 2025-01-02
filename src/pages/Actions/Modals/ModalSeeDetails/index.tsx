@@ -5,7 +5,6 @@ import { z } from "zod";
 import { Box, Switch, Text } from "@chakra-ui/react";
 import moment from "moment";
 import { useAuth } from "../../../../hooks/auth";
-import { Api } from "../../../../services/api";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
 import {
   Modal,
@@ -42,7 +41,6 @@ type EditActionFormData = z.infer<typeof editActionSchema>;
 interface ModalSeeDetailsProps {
   closeModal: () => void;
   action: IAction;
-  // refetchAllActions: () => void;
 }
 
 const formatDateToInput = (date: string | undefined) => {
@@ -58,7 +56,6 @@ interface User {
 export function ModalSeeDetails({
   closeModal,
   action,
-      //  refetchAllActions,
 }: ModalSeeDetailsProps) {
   const { user, infoCompany } = useAuth();
   const { updateAction } = useActions();

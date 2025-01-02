@@ -51,6 +51,6 @@ export function useActions() {
     actions: user?.user_type_id === 3 ? customerActions : actions,
     isLoading: isLoadingActions || isLoadingCustomerActions,
     createAction,
-    updateAction
+    updateAction,
   };
 } 
