@@ -35,8 +35,7 @@ export function BoardActions({
   const STATUS_MAP: { [key: number]: string } = {
     1: "A iniciar",
     2: "Em execução",
-    3: "Executadas",
-    4: "Desativadas",
+    3: "Executadas"
   };
 
   const [columns, setColumns] = useState<IColumns>(() => {
@@ -57,9 +56,6 @@ export function BoardActions({
       }
       if (action.status === 5) {
         statusName = STATUS_MAP[2];
-      }
-      if (action.is_active === 0) {
-        statusName = STATUS_MAP[4];
       }
 
       if (statusName) {
@@ -134,6 +130,14 @@ export function BoardActions({
     setDragSource(source);
     setSelectedAction(movedAction);
 
+    // Verifica se a ação está desativada
+    if (movedAction.is_active === 0) {
+      setActionInfo(movedAction);
+      setIsModalDisableAction(true); // Abre o modal de desbloquear
+      handleReturnToSource(movedAction); // Retorna o card para posição original
+      return;
+    }
+
     // De "A iniciar"
     if (source.droppableId === STATUS_MAP[1]) {
       if (destination.droppableId === STATUS_MAP[2]) {
@@ -201,11 +205,11 @@ export function BoardActions({
                         index={index}
                       >
                         {(provided) => (
-                          <Card
-                            action={action}
-                            onClick={() => handleOpenModalSeeDetails(action)}
-                            provided={provided}
-                          />
+                          <Card 
+                          action={action}
+                          onClick={() => handleOpenModalSeeDetails(action)}
+                          provided={provided}
+                        />
                         )}
                       </Draggable>
                     ))}
