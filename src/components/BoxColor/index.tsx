@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import IActions from '../../interfaces/actions';
+import { IAction } from '../../interfaces/actions';
 
 interface BoxColorProps {
   status: number;
-  rowInfo: IActions;
+  rowInfo: IAction;
   isBlocked?: boolean;
 }
 
@@ -14,7 +14,7 @@ const Badge = styled.span<{ status: number; isActive: boolean }>`
   border-radius: 16px;
   font-size: 0.75rem;
   font-weight: 500;
-  
+
   ${({ status, isActive }) => {
     // Primeiro verificamos se está inativo
     if (!isActive) {
@@ -23,7 +23,7 @@ const Badge = styled.span<{ status: number; isActive: boolean }>`
         color: white;
       `;
     }
-    
+
     // Se estiver ativo, verificamos o status
     switch (status) {
       case 1: // A iniciar
@@ -71,7 +71,7 @@ export function BoxColor({ status, rowInfo }: BoxColorProps) {
       case 2:
         return 'Em execução';
       case 3:
-        return 'Executadas';
+        return 'Executada';
       case 4:
         return 'Atrasada a iniciar';
       case 5:
@@ -82,8 +82,8 @@ export function BoxColor({ status, rowInfo }: BoxColorProps) {
   };
 
   return (
-    <Badge 
-      status={status} 
+    <Badge
+      status={status}
       isActive={rowInfo.is_active === 1}
     >
       {getStatusText(status, rowInfo.is_active === 1)}

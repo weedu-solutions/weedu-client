@@ -12,13 +12,13 @@ import { useQueryClient } from "react-query";
 type ModalDisableActionProps = {
   closeModal: any;
   action: IAction;
-  refetchAllActions: () => void;
+  // refetchAllActions: () => void;
 };
 
 export function ModalDisableAction({
   closeModal,
   action,
-  refetchAllActions
+  // refetchAllActions
 }: ModalDisableActionProps) {
   const [isActive, setIsActive] = useState<Number>();
 
@@ -52,7 +52,7 @@ export function ModalDisableAction({
         queryClient.invalidateQueries({
           queryKey: ["actions-costumer"],
         });
-        refetchAllActions();
+        // refetchAllActions();
         closeModal();
         Notify(
           NotifyTypes.SUCCESS,

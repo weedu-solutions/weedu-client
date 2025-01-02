@@ -1,104 +1,74 @@
 import Modal from "react-modal";
 import { ModalBlockContent } from "../../styles";
-import { ModalOptions } from "../../Modals/ModalOptions";
-import { ModalStartAction } from "../../Modals/ModalStartAction";
 import { ModalSeeDetails } from "../../Modals/ModalSeeDetails";
 import { ModalDisableAction } from "../../Modals/ModalDisableAction";
-import IActions, { IAction } from "../../../../interfaces/actions";
-import { MODAL_STYLES } from "../constants";
+import { IAction } from "../../../../interfaces/actions";
 import { ModalCreateAction } from "../../Modals/ModalCreateAction";
-import { ModalFinishAction } from "../../Modals/ModalFinishAction";
+import { ModalExecuteAction } from "../../Modals/ModalExecuteAction";
+import { ModalStartOrFinishAction } from "../../Modals/ModalStartOrFinishAction";
+import { MODAL_STYLES } from "../../../../components/Modal";
 
 interface ActionModalsProps {
   modals: {
-    startAction: boolean;
+    startOrFinishAction: boolean;
     seeDetails: boolean;
     disableAction: boolean;
-    options: boolean;
     addAction: boolean;
-    finishAction: boolean;
+    executeAction: boolean;
   };
   handleModalVisibility: (
     modalName:
-      | "startAction"
+      | "startOrFinishAction"
       | "seeDetails"
       | "disableAction"
-      | "options"
       | "addAction"
-      | "finishAction"
+      | "executeAction"
   ) => void;
   actionInfo: IAction;
-  refetchAllActions: () => void;
 }
 
 export function ActionModals({
   modals,
   handleModalVisibility,
   actionInfo,
-  refetchAllActions,
 }: ActionModalsProps) {
   return (
     <>
-      <Modal
-        style={MODAL_STYLES.options}
-        isOpen={modals.options}
-        ariaHideApp={false}
-      >
+      <Modal isOpen={modals.startOrFinishAction} style={MODAL_STYLES.modalDefault}>
         <ModalBlockContent>
-          <ModalOptions
-            handleOpenModalStartAction={handleModalVisibility}
-            handleOpenModalSeeDetails={() =>
-              handleModalVisibility("seeDetails")
-            }
-            handleOpenModalDisableAction={() =>
-              handleModalVisibility("disableAction")
-            }
-            handleModal={() => handleModalVisibility("options")}
+          <ModalStartOrFinishAction
             action={actionInfo}
+            closeModal={() => handleModalVisibility("startOrFinishAction")}
           />
         </ModalBlockContent>
       </Modal>
 
-      <Modal isOpen={modals.startAction} style={MODAL_STYLES.startAction}>
-        <ModalBlockContent>
-          <ModalStartAction
-            action={actionInfo}
-            closeModal={() => handleModalVisibility("startAction")}
-            refetchAllActions={refetchAllActions}
-          />
-        </ModalBlockContent>
-      </Modal>
-
-      <Modal isOpen={modals.seeDetails} style={MODAL_STYLES.seeAction}>
+      <Modal isOpen={modals.seeDetails} style={MODAL_STYLES.modalDefault}>
         <ModalSeeDetails
           action={actionInfo}
           closeModal={() => handleModalVisibility("seeDetails")}
-          refetchAllActions={refetchAllActions}
         />
       </Modal>
 
-      <Modal isOpen={modals.disableAction} style={MODAL_STYLES.disableAction}>
+      <Modal isOpen={modals.disableAction} style={MODAL_STYLES.modalDefault}>
         <ModalBlockContent>
           <ModalDisableAction
             action={actionInfo}
             closeModal={() => handleModalVisibility("disableAction")}
-            refetchAllActions={refetchAllActions}
           />
         </ModalBlockContent>
       </Modal>
 
-      <Modal isOpen={modals.addAction} style={MODAL_STYLES.seeAction}>
+      <Modal isOpen={modals.addAction} style={MODAL_STYLES.modalDefault}>
         <ModalCreateAction
           closeModal={() => handleModalVisibility("addAction")}
-          refetchAllActions={refetchAllActions}
         />
       </Modal>
 
-      <Modal isOpen={modals.finishAction} style={MODAL_STYLES.seeAction}>
-        <ModalFinishAction
+      <Modal isOpen={modals.executeAction} style={MODAL_STYLES.modalDefault}>
+        <ModalExecuteAction
           action={actionInfo}
-          closeModal={() => handleModalVisibility("finishAction")}
-          refetchAllActions={refetchAllActions}
+          closeModal={() => handleModalVisibility("executeAction")}
         />
       </Modal>
     </>

@@ -5,7 +5,6 @@ import { z } from "zod";
 import { Box } from "@chakra-ui/react";
 import moment from "moment";
 import { useAuth } from "../../../../hooks/auth";
-import { Api } from "../../../../services/api";
 import { Notify, NotifyTypes } from "../../../../components/Notify";
 import {
   Modal,
@@ -20,6 +19,7 @@ import {
 import { FormInput } from "../../../../components/Form/FormInput";
 import { FormSelect } from "../../../../components/Form/FormSelect";
 import { FormTextarea } from "../../../../components/Form/FormTextarea";
+import { useActions } from "../../../../client/hooks/useActions";
 
 const createActionSchema = z.object({
   problem: z.string().min(1, "O problema é obrigatório"),
@@ -40,16 +40,15 @@ type CreateActionFormData = z.infer<typeof createActionSchema>;
 
 interface ModalCreateActionProps {
   closeModal: () => void;
-  refetchAllActions: () => void;
 }
 
 export function ModalCreateAction({
   closeModal,
-  refetchAllActions,
 }: ModalCreateActionProps) {
   const { user, infoCompany } = useAuth();
   const [responsible, setResponsible] = useState("");
   const [loading, setLoading] = useState(false);
+  const { createAction } = useActions();
 
   const {
     handleSubmit,
@@ -82,7 +81,7 @@ export function ModalCreateAction({
       setLoading(true);
       const idResponsibleAction = responsible.split(",");
 
-      await Api.post("/auth/plan", {
+      await createAction.mutateAsync({
         ...data,
         who: user?.user_type_id === 1 ? user?.name : idResponsibleAction[0],
         user_id: user?.user_type_id === 1 ? user?.id : idResponsibleAction[1],
@@ -95,7 +94,6 @@ export function ModalCreateAction({
         end_date: null,
       });
 
-      await refetchAllActions();
       Notify(NotifyTypes.SUCCESS, "Plano de Ação criado com sucesso!");
       closeModal();
     } catch (error) {

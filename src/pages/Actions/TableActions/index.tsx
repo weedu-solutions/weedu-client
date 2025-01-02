@@ -1,64 +1,27 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { HiPlus } from "react-icons/hi";
-import { useAllActions, usePlanCustomer } from "../../../client/hooks/actions";
-import { useAuth } from "../../../hooks/auth";
 import { ActionModals } from "./components/ActionModals";
 import * as S from "./styles";
-import IActions, { IAction } from "../../../interfaces/actions";
+import { IAction } from "../../../interfaces/actions";
 import { BoardLoader } from "../../../components/Loaders/BoardLoader";
 import { BoardActions } from "./BoardActions";
+import { useActions } from "../../../client/hooks/useActions";
 
 export function TableActions() {
   const [modals, setModals] = useState({
-    startAction: false,
+    startOrFinishAction: false,
     seeDetails: false,
     disableAction: false,
-    options: false,
     addAction: false,
-    finishAction: false
+    executeAction: false
   });
 
   const [actionInfo, setActionInfo] = useState<IAction>({} as IAction);
 
-  const { user, infoCompany } = useAuth();
-
-  const isSimpleUser = useMemo(
-    () => user?.user_type_id === 1 || user?.user_type_id === 2,
-    [user?.user_type_id]
-  );
-
-  const isCustomerUser = useMemo(
-    () => user?.user_type_id === 3,
-    [user?.user_type_id]
-  );
-
   const {
-    data: actionsCustomer,
-    isLoading: loadingActionsCustomer,
-    refetch: refetchCustomer,
-  } = usePlanCustomer(infoCompany?.id, isCustomerUser);
-
-  const {
-    data: actionsUserSimple,
-    isLoading: loadingActions,
-    refetch: refetchAll,
-  } = useAllActions(isSimpleUser);
-
-  const navigate = useNavigate();
-
-  const refetchAllActions = () => {
-    refetchAll();
-    refetchCustomer();
-  };
-
-  const tableData = useMemo(() => {
-    const actions = isCustomerUser
-      ? actionsCustomer?.data
-      : actionsUserSimple?.data;
-
-    return actions || [];
-  }, [isCustomerUser, actionsCustomer?.data, actionsUserSimple?.data]);
+    actions,
+    isLoading,
+  } = useActions();
 
   const handleModalVisibility = (modalName: keyof typeof modals) => {
     setModals((prev) => ({
@@ -67,7 +30,7 @@ export function TableActions() {
     }));
   };
 
-  if (loadingActions || loadingActionsCustomer) {
+  if (isLoading) {
     return <BoardLoader />;
   }
 
@@ -77,7 +40,6 @@ export function TableActions() {
         modals={modals}
         handleModalVisibility={handleModalVisibility}
         actionInfo={actionInfo}
-        refetchAllActions={refetchAllActions}
       />
 
       <S.RowFilter>
@@ -89,11 +51,11 @@ export function TableActions() {
       </S.RowFilter>
 
       <BoardActions
-        actions={tableData}
+        actions={Array.isArray(actions) ? actions : []}
         setActionInfo={setActionInfo}
         setIsModalSeeDetails={(value) => handleModalVisibility("seeDetails")}
-        setIsModalStartAction={(value) => handleModalVisibility("startAction")}
-        setIsModalFinishAction={(value) => handleModalVisibility("finishAction")}
+        setIsModalStartOrFinishAction={(value) => handleModalVisibility("startOrFinishAction")}
+        setIsModalExecuteAction={(value) => handleModalVisibility("executeAction")}
         setIsModalDisableAction={(value) => handleModalVisibility("disableAction")}
       />
     </>

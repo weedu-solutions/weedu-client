@@ -8,27 +8,17 @@ import {
 } from "react-beautiful-dnd";
 import * as S from "../styles"; // Seu arquivo de estilos
 import { BoxColor } from "../../../../components/BoxColor";
-import IActions, { IAction } from "../../../../interfaces/actions";
-import { Notify, NotifyTypes } from "../../../../components/Notify";
-
-const STATUS_MAP: { [key: number]: string } = {
-  1: "A iniciar",
-  2: "Em execução",
-  3: "Executadas",
-  4: "Atrasadas a iniciar",
-  5: "Atrasadas a terminar",
-};
-
+import { IAction } from "../../../../interfaces/actions";
 
 interface IColumns {
   [key: string]: IAction[];
 }
 
 interface IBoardActions {
-  setIsModalStartAction: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalStartOrFinishAction: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalSeeDetails: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalDisableAction: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsModalFinishAction: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalExecuteAction: React.Dispatch<React.SetStateAction<boolean>>;
   actions: IAction[];
   setActionInfo: React.Dispatch<React.SetStateAction<IAction>>;
 }
@@ -37,9 +27,9 @@ export function BoardActions({
   actions,
   setActionInfo,
   setIsModalSeeDetails,
-  setIsModalStartAction,
+  setIsModalStartOrFinishAction,
   setIsModalDisableAction,
-  setIsModalFinishAction
+  setIsModalExecuteAction
 }: IBoardActions) {
   const STATUS_MAP: { [key: number]: string } = {
     1: "A iniciar",
@@ -79,7 +69,7 @@ export function BoardActions({
     return initialData;
   });
 
-  const [selectedAction, setSelectedAction] = useState<IActions | null>(null);
+  const [selectedAction, setSelectedAction] = useState<IAction | null>(null);
   const [dragSource, setDragSource] = useState<any>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [draggedFromColumn, setDraggedFromColumn] = useState<string | null>(null);
@@ -143,13 +133,13 @@ export function BoardActions({
       if (destination.droppableId === STATUS_MAP[2]) {
         // Para "Em execução"
         setActionInfo(movedAction);
-        setIsModalStartAction(true);
+        setIsModalStartOrFinishAction(true);
         return;
       }
       if (destination.droppableId === STATUS_MAP[3]) {
         // Para "Executadas" - precisa definir início e fim
         setActionInfo(movedAction);
-        setIsModalFinishAction(true);
+        setIsModalExecuteAction(true);
         return;
       }
       if (destination.droppableId === STATUS_MAP[4]) {
@@ -163,9 +153,9 @@ export function BoardActions({
     // De "Em execução"
     if (source.droppableId === STATUS_MAP[2]) {
       if (destination.droppableId === STATUS_MAP[3]) {
-        // Para "Executadas"
+        // Para "Executadas" - precisa definir apenas a data de fim
         setActionInfo(movedAction);
-        setIsModalFinishAction(true);
+        setIsModalStartOrFinishAction(true); // Usa o modal de finalizar
         return;
       }
       if (destination.droppableId === STATUS_MAP[4]) {
@@ -182,20 +172,20 @@ export function BoardActions({
 
   return (
     <>
-      <DragDropContext 
+      <DragDropContext
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
       >
         <S.BoardContainer>
           {Object.values(STATUS_MAP).map((status) => (
-            <Droppable 
-              key={status} 
+            <Droppable
+              key={status}
               droppableId={status}
               isDropDisabled={isDragging && isColumnDisabled(status)}
             >
               {(provided, snapshot) => (
-                <S.Column 
-                  ref={provided.innerRef} 
+                <S.Column
+                  ref={provided.innerRef}
                   {...provided.droppableProps}
                   isDisabled={isDragging && isColumnDisabled(status)}
                 >

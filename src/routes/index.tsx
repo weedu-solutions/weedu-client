@@ -5,7 +5,6 @@ import { ToastContainer } from 'react-toastify'
 import { ROUTES } from "../constants/routes"
 import { AppProvider } from "../contexts"
 import { Actions, Companies, Consultants, InactivePage, LoginPage, RecoverMessagePage, RegisterCompany, RegisterUserCompany, UpdateUserCompany } from '../pages'
-import { CreateAction } from "../pages/Actions/CreateAction"
 import { ConsultantCompanies } from "../pages/Consultants/ConsultantCompanies"
 import { CreateConsultant } from "../pages/Consultants/CreateConsultant"
 import { UpdateConsultant } from "../pages/Consultants/UpdateConsultant"
@@ -47,10 +46,6 @@ export function MyRoutes() {
             />
             <Route path={ROUTES.UPDATE_CONSULTANT}
               element={<RequireAuth fallbackAuth={<LoginPage />} roles={['ADMINISTRADOR']} element={<UpdateConsultant />} />}
-            />
-
-            <Route path={ROUTES.CREATE_ACTION}
-              element={<RequireAuth fallbackAuth={<LoginPage />} roles={['COLABORADOR', 'GESTORES', 'CONSULTORES']} element={<CreateAction />} />}
             />
 
             <Route path={ROUTES.CONSULTANT_COMPANIES}

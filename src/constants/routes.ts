@@ -15,7 +15,6 @@ export enum ROUTES {
   CONSULTANT_COMPANIES = '/consultant-companies',
 
 
-  REGISTER_ACTION = '/register-action',
   ACTIONS = '/actions',
   CREATE_ACTION = '/create-action'
 }

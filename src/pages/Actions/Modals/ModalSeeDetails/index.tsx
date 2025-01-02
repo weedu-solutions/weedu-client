@@ -16,11 +16,12 @@ import {
   ModalCancelButton,
   ModalSubmitButton,
 } from "../../../../components/Modal";
-import IActions from "../../../../interfaces/actions";
+import { IAction } from "../../../../interfaces/actions";
 import { FormInput } from "../../../../components/Form/FormInput";
 import { FormSelect } from "../../../../components/Form/FormSelect";
 import { FormTextarea } from "../../../../components/Form/FormTextarea";
-import { StatusTag } from "../../TableActions/styles";
+import { BoxColor } from "../../../../components/BoxColor";
+import { useActions } from "../../../../hooks/useActions";
 
 const editActionSchema = z.object({
   problem: z.string().min(1, "O problema é obrigatório"),
@@ -40,8 +41,8 @@ type EditActionFormData = z.infer<typeof editActionSchema>;
 
 interface ModalSeeDetailsProps {
   closeModal: () => void;
-  action: IActions | undefined;
-  refetchAllActions: () => void;
+  action: IAction;
+  // refetchAllActions: () => void;
 }
 
 const formatDateToInput = (date: string | undefined) => {
@@ -57,9 +58,10 @@ interface User {
 export function ModalSeeDetails({
   closeModal,
   action,
-  refetchAllActions,
+      //  refetchAllActions,
 }: ModalSeeDetailsProps) {
   const { user, infoCompany } = useAuth();
+  const { updateAction } = useActions();
   const [editData, setEditData] = useState(false);
   const [isChecked, setIsChecked] = useState(action?.is_active === 1);
   const [preview_init_date, setPreview_init_date] = useState(
@@ -102,6 +104,7 @@ export function ModalSeeDetails({
       const selectedUser = users.find(u => u.id === Number(data.user_id));
 
       const formData = {
+        id: action.id,
         ...data,
         who: selectedUser?.name || action?.who,
         user_id: selectedUser?.id || action?.user_id,
@@ -120,9 +123,7 @@ export function ModalSeeDetails({
         observation: data.observation || null,
       };
 
-      await Api.post(`/auth/plan/${action?.id}`, formData);
-
-      await refetchAllActions();
+      await updateAction.mutateAsync(formData);
       Notify(NotifyTypes.SUCCESS, "Plano de Ação editado com sucesso!");
       closeModal();
     } catch (error) {
@@ -130,19 +131,8 @@ export function ModalSeeDetails({
     }
   };
 
-  const getActionStatus = () => {
-    if (!action) return "A iniciar";
-    if (action.end_date) return "Executadas";
-    if (action.init_date) return "Em execução";
-    if (action.is_active === 0) return "Desativadas";
-    return "A iniciar";
-  };
-
   return (
-    <Modal 
-      title={"Detalhes do Plano de Ação"} 
-      onClose={closeModal}
-    >
+    <Modal title="Detalhes do Plano de Ação" onClose={closeModal}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalSection>
           <ModalSectionTitle>Identificação do Problema</ModalSectionTitle>
@@ -269,21 +259,43 @@ export function ModalSeeDetails({
 
         <ModalSection>
           <ModalSectionTitle>Status da Ação</ModalSectionTitle>
-          <Box display="flex" alignItems="center" gap={2}>
-            <Switch
-              colorScheme="purple"
-              size="md"
-              isChecked={isChecked}
-              onChange={() => setIsChecked(!isChecked)}
-              isDisabled={!!action?.end_date && !!action?.init_date}
-            />
-            <span>
-              {action?.end_date && action?.init_date
-                ? "Ação finalizada"
-                : isChecked
-                ? "Ação ativada"
-                : "Ação desativada"}
-            </span>
+
+          <Box
+            display="flex"
+            flexDirection="column"
+            gap={4}
+            p={4}
+            bg="gray.50"
+            borderRadius="md"
+          >
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              bg="white"
+              p={3}
+              borderRadius="md"
+              boxShadow="sm"
+            >
+              <Box display="flex" alignItems="center" gap={3}>
+                <Switch
+                  colorScheme="purple"
+                  size="md"
+                  isChecked={isChecked}
+                  onChange={() => setIsChecked(!isChecked)}
+                  isDisabled={!!action?.end_date && !!action?.init_date}
+                />
+                <Text fontWeight="500" color="gray.700">
+                  {action?.end_date && action?.init_date
+                    ? "Ação finalizada"
+                    : isChecked
+                    ? "Ação ativada"
+                    : "Ação desativada"}
+                </Text>
+              </Box>
+
+              <BoxColor status={action.status} rowInfo={action} />
+            </Box>
           </Box>
         </ModalSection>
 

@@ -3,12 +3,25 @@ import { IoClose } from "react-icons/io5";
 import * as S from "./styles";
 
 interface ModalProps {
-  title: string;
+  title?: string | React.ReactNode;
   subtitle?: string;
   children: ReactNode;
   onClose: () => void;
   maxWidth?: string;
 }
+
+export const MODAL_STYLES = {
+  modalDefault: {
+    overlay: {
+      backgroundColor: "rgba(0,0,0,0.50)",
+    },
+    content: {
+      background: "transparent",
+      border: "none",
+      margin: "auto",
+    },
+  },
+};
 
 export function Modal({
   title,
