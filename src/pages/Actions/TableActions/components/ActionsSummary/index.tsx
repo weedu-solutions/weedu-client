@@ -47,7 +47,7 @@ export function ActionsSummary({ actions }: IActionsSummary) {
 
   return (
     <S.DashboardContainer>
-      <S.DashboardTitle>Dashboard de Ações</S.DashboardTitle>
+
       <S.SummaryContainer>
         {allStatuses.map(statusNum => {
           const count = summary[statusNum] || 0;
@@ -56,16 +56,15 @@ export function ActionsSummary({ actions }: IActionsSummary) {
               key={statusNum}
               color={STATUS_COLORS[statusNum]}
             >
-              <S.StatusIcon color={STATUS_COLORS[statusNum]}>
-                {STATUS_LABELS[statusNum]?.substring(0, 2).toUpperCase()}
-              </S.StatusIcon>
-              <S.StatusInfo>
-                <S.SummaryValue>{count}</S.SummaryValue>
-                <S.SummaryLabel>{STATUS_LABELS[statusNum]}</S.SummaryLabel>
+              <S.StatusNumber color={STATUS_COLORS[statusNum]}>
+                {count}
+              </S.StatusNumber>
+              <S.StatusContent>
+                <S.StatusLabel>{STATUS_LABELS[statusNum]}</S.StatusLabel>
                 <S.StatusDescription>
                   {STATUS_DESCRIPTIONS[statusNum]}
                 </S.StatusDescription>
-              </S.StatusInfo>
+              </S.StatusContent>
             </S.SummaryCard>
           );
         })}

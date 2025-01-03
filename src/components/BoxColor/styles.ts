@@ -9,14 +9,19 @@ export const Container = styled.div`
   align-items: center;
 `;
 
-export const Box = styled.div<BoxProps>`
-  background: ${props => props.color};
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
+export const Box = styled.div<{ color: string }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${(props) => props.color};
+  border-radius: 999px;
+  padding: 4px 12px;
+  width: fit-content;
 `;
 
 export const Label = styled.span`
   color: white;
-  font-size: 0.875rem;
+  font-size: 12px;
   font-weight: 500;
+  white-space: nowrap;
 `;

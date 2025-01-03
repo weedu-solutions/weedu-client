@@ -32,43 +32,39 @@ export const SummaryContainer = styled.div`
   }
 `;
 
-export const SummaryCard = styled.div<ColorProps>`
+export const SummaryCard = styled.div`
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: flex-start;
+  padding: 16px;
   background: white;
-  border-radius: 12px;
-  padding: 1.25rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 8px;
 `;
 
-export const StatusIcon = styled.div<ColorProps>`
+export const StatusNumber = styled.div<{ color: string }>`
+  background-color: ${props => props.color};
+  color: white;
   width: 48px;
   height: 48px;
-  background: ${props => props.color};
-  border-radius: 10px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 24px;
   font-weight: bold;
-  color: white;
-  font-size: 1.125rem;
 `;
 
-export const StatusInfo = styled.div`
-  flex: 1;
+export const StatusContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
 `;
 
-export const SummaryValue = styled.div`
-  font-size: 1.5rem;
+export const StatusLabel = styled.span`
   font-weight: bold;
-  color: #1a1a1a;
+  color: #1F2937;
+  font-size: 16px;
 `;
 
 export const SummaryLabel = styled.div`

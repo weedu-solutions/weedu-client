@@ -33,10 +33,8 @@ export function BoxColor({ status, rowInfo }: BoxColorProps) {
   const label = STATUS_LABELS[status];
 
   return (
-    <S.Container>
       <S.Box color={color}>
         <S.Label>{label}</S.Label>
       </S.Box>
-    </S.Container>
   );
 }
