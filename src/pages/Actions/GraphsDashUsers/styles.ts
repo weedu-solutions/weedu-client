@@ -3,29 +3,53 @@ import styled from "styled-components";
 export const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
-  gap: 24px;
-  padding: 16px;
+  gap: 32px;
+  padding: 24px;
   width: 100%;
+  background: #f8fafc;
 `;
 
 export const GraphCard = styled.div`
   background: white;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.1);
   }
 `;
 
-export const GraphHeader = styled.h2`
+export const GraphHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+`;
+
+export const GraphTitle = styled.h2`
   font-size: 20px;
   font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 32px;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+`;
+
+export const GraphSubtitle = styled.span`
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 400;
+  margin-top: 4px;
+`;
+
+export const TitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 export const GraphContent = styled.div`

@@ -159,7 +159,7 @@ export const Legend = styled.div`
   align-items: flex-start;
   gap: 12px;
   padding: 10px;
-  background: #F8F9FC;
+  background: #F8FAFC;
   border-radius: 8px;
   margin-bottom: 16px;
 `;

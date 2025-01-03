@@ -41,7 +41,7 @@ export function TableActions() {
       />
 
       <S.RowFilter>
-        <div>Board de Ações</div>
+        <div>Board Planos de Ação</div>
         <S.ButtonNewAction onClick={() => handleModalVisibility("addAction")}>
           <HiPlus fill="#fff" size="20" />
           Plano de Ação

@@ -165,6 +165,7 @@ export const RowFilter = styled.div`
   padding: 16px 24px;
   background: white;
   border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 12px;
 
   > div:first-child {
     font-size: 1.25rem;

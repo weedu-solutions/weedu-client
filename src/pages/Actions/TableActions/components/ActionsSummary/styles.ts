@@ -6,7 +6,7 @@ interface ColorProps {
 }
 
 export const DashboardContainer = styled.div`
-  background: #f8f9fa;
+  background: #F8FAFC;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 2rem;

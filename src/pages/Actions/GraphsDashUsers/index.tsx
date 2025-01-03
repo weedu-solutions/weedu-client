@@ -71,7 +71,12 @@ export function GraphsDashUsers() {
   return (
     <S.Container>
       <S.GraphCard>
-        <S.GraphHeader>Status das ações</S.GraphHeader>
+        <S.GraphHeader>
+          <S.TitleWrapper>
+            <S.GraphTitle>Status das Ações</S.GraphTitle>
+            <S.GraphSubtitle>Distribuição atual das ações por status</S.GraphSubtitle>
+          </S.TitleWrapper>
+        </S.GraphHeader>
         <S.GraphContent>
           <S.ChartWrapper>
             <S.ChartContainer>
@@ -116,7 +121,12 @@ export function GraphsDashUsers() {
       </S.GraphCard>
 
       <S.GraphCard>
-        <S.GraphHeader>Status das ações finalizadas</S.GraphHeader>
+        <S.GraphHeader>
+          <S.TitleWrapper>
+            <S.GraphTitle>Ações Finalizadas</S.GraphTitle>
+            <S.GraphSubtitle>Análise de pontualidade das ações concluídas</S.GraphSubtitle>
+          </S.TitleWrapper>
+        </S.GraphHeader>
         <S.GraphContent>
           <S.ChartWrapper>
             <S.ChartContainer>
