@@ -1,6 +1,9 @@
 import { Api } from "../services/api";
 import { useAuth } from "../hooks/auth";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { IAction } from "../interfaces/actions";
+import moment from "moment";
+import { useMemo } from "react";
 
 export function useActions() {
   const queryClient = useQueryClient();
@@ -78,8 +81,52 @@ export function useActions() {
     onSuccess: refreshAllData
   });
 
+  const mapActionStatus = (action: any): number => {
+    const now = moment().format("DD/MM/YYYY");
+    const startDate = action.init_date;
+    const endDate = action.end_date;
+    const expectedStartDate = action.preview_init_date;
+    const expectedEndDate = action.preview_end_date;
+
+    // Verifica ações finalizadas
+    if (endDate) {
+      // Se terminou depois da data prevista de fim OU começou depois da data prevista de início
+      if ((expectedEndDate && endDate > expectedEndDate) ||
+          (expectedStartDate && startDate > expectedStartDate)) {
+        return 7; // Executada com atraso
+      }
+      return 3; // Executada no prazo
+    }
+
+    // Ação não iniciada e atrasada
+    if (!startDate && expectedStartDate && now > expectedStartDate) return 4;
+
+    // Ação em execução e atrasada
+    if (startDate && !endDate && expectedEndDate && now > expectedEndDate) return 5;
+
+    // Ação em execução dentro do prazo
+    if (startDate && !endDate) return 2;
+
+    // Ação a iniciar (não começou mas está no prazo)
+    return 1;
+  };
+
+  // No seu useQuery ou onde processa as ações
+  const processActions = (data: IAction[]) => {
+    return data?.map(action => ({
+      ...action,
+      status: mapActionStatus(action)
+    }));
+  };
+
+  const actionsFormattedStatus = useMemo(() => {
+    const rawActions = user?.user_type_id === 3 ? customerActions : actions;
+    if (!rawActions) return [];
+    return processActions(rawActions);
+  }, [user?.user_type_id, customerActions, processActions]);;
+
   return {
-    actions: user?.user_type_id === 3 ? customerActions : actions,
+    actions: actionsFormattedStatus,
     isLoading: isLoadingActions || isLoadingCustomerActions || isLoadingGraphicCustomer || isLoadingGraphic,
     graphicData,
     createAction,

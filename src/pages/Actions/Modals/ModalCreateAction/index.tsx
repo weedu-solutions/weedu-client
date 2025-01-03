@@ -19,8 +19,8 @@ import {
 import { FormInput } from "../../../../components/Form/FormInput";
 import { FormSelect } from "../../../../components/Form/FormSelect";
 import { FormTextarea } from "../../../../components/Form/FormTextarea";
-import { useActions } from "../../../../client/hooks/useActions";
 import { useCompanyUsers } from "../../../../hooks/useCompanyUsers";
+import { useActions } from "../../../../hooks/useActions";
 
 const createActionSchema = z.object({
   problem: z.string().min(1, "O problema é obrigatório"),
@@ -157,17 +157,26 @@ export function ModalCreateAction({
               label="Responsável pela Ação (Who?)"
               name="user_id"
               register={register}
-              error={errors.who?.message}
+              error={errors.user_id?.message}
               placeholder="Selecione o responsável"
               options={getUserOptions()}
               onChange={(e) => {
                 const selectedId = e.target.value;
+                console.log('Selected ID:', selectedId);
+                console.log('All options:', getUserOptions());
+                
                 const selectedOption = getUserOptions().find(
-                  option => option.value === selectedId
+                  (option) => option.value.toString() === selectedId
                 );
+                console.log('Selected Option:', selectedOption);
+
                 if (selectedOption) {
                   setValue('who', selectedOption.label);
-                  setValue('user_id', selectedOption.value);
+                  setValue('user_id', selectedId);
+                } else {
+                  console.log('No option found for ID:', selectedId);
+                  setValue('who', '');
+                  setValue('user_id', '');
                 }
               }}
             />

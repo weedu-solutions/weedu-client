@@ -1,92 +1,42 @@
 import styled from 'styled-components';
 import { IAction } from '../../interfaces/actions';
+import * as S from './styles';
 
 interface BoxColorProps {
   status: number;
-  rowInfo: IAction;
-  isBlocked?: boolean;
+  rowInfo?: any;
 }
 
-const Badge = styled.span<{ status: number; isActive: boolean }>`
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 8px;
-  border-radius: 16px;
-  font-size: 0.75rem;
-  font-weight: 500;
+const STATUS_COLORS: Record<number, string> = {
+  1: "#8B5CF6", // A iniciar (roxo)
+  2: "#3B82F6", // Em execução (azul)
+  3: "#2DD4BF", // Executada (verde água)
+  4: "#FB7185", // Atrasada a iniciar (rosa)
+  5: "#EF4444", // Atrasada a terminar (vermelho)
+  6: "#6B7280", // Bloqueada (cinza escuro)
+  7: "#F59E0B"  // Executada com atraso (laranja)
+};
 
-  ${({ status, isActive }) => {
-    // Primeiro verificamos se está inativo
-    if (!isActive) {
-      return `
-        background-color: #9CA3AF;
-        color: white;
-      `;
-    }
-
-    // Se estiver ativo, verificamos o status
-    switch (status) {
-      case 1: // A iniciar
-        return `
-          background-color: #8B5CF6;
-          color: white;
-        `;
-      case 2: // Em execução
-        return `
-          background-color: #3B82F6;
-          color: white;
-        `;
-      case 3: // Executadas
-        return `
-          background-color: #2DD4BF;
-          color: white;
-        `;
-      case 4: // Atrasadas a iniciar
-        return `
-          background-color: #FB7185;
-          color: white;
-        `;
-      case 5: // Atrasadas a terminar
-        return `
-          background-color: #EF4444;
-          color: white;
-        `;
-      default:
-        return `
-          background-color: #E5E7EB;
-          color: #374151;
-        `;
-    }
-  }}
-`;
+const STATUS_LABELS: Record<number, string> = {
+  1: "A iniciar",
+  2: "Em execução",
+  3: "Executada",
+  4: "Atrasada a iniciar",
+  5: "Atrasada a terminar",
+  6: "Bloqueada",
+  7: "Executada com atraso"
+};
 
 export function BoxColor({ status, rowInfo }: BoxColorProps) {
-  const getStatusText = (status: number, isActive: boolean) => {
-    // Primeiro verificamos se está inativo
-
-    // Se estiver ativo, retornamos o status apropriado
-    switch (status) {
-      case 1:
-        return 'A iniciar';
-      case 2:
-        return 'Em execução';
-      case 3:
-        return 'Executada';
-      case 4:
-        return 'Atrasada a iniciar';
-      case 5:
-        return 'Atrasada a terminar';
-      default:
-        return 'Status desconhecido';
-    }
-  };
+  const isBlocked = !rowInfo?.is_active;
+  const color = isBlocked ? "#6B7280" : STATUS_COLORS[status];
+  const label = STATUS_LABELS[status];
 
   return (
-    <Badge
-      status={status}
-      isActive={rowInfo.is_active === 1}
-    >
-      {getStatusText(status, rowInfo.is_active === 1)}
-    </Badge>
+    <S.Container>
+      <S.Box color={color}>
+        <S.Label>{label}</S.Label>
+      </S.Box>
+    </S.Container>
   );
 }

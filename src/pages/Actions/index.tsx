@@ -2,13 +2,15 @@ import LayoutLogged from "../../components/LayoutLogged";
 import { useAuth } from "../../hooks/auth";
 import { useActions } from "../../hooks/useActions";
 import { TableActions } from "./TableActions";
-import { GraphsDashUsers } from "./GrapsDashUsers";
-import { GraphsDashCostumer } from "./GraphsDashCostumer";
+
 import * as S from "./styles";
+import { useCompanyUsers } from "../../hooks/useCompanyUsers";
+import { useEffect } from "react";
 
 export function Actions() {
   const { user, infoCompany } = useAuth();
   const { isLoading } = useActions();
+  const { getUserOptions } = useCompanyUsers();
 
   if (isLoading) {
     return (
@@ -19,6 +21,8 @@ export function Actions() {
       </LayoutLogged>
     );
   }
+
+  getUserOptions();
 
   return (
     <LayoutLogged>
@@ -60,14 +64,7 @@ export function Actions() {
             </S.UserSection>
           </S.HeaderSection>
 
-          {/* Gráficos */}
-          <S.ChartsSection>
-            {user?.user_type_id === 3 ? (
-              <GraphsDashCostumer />
-            ) : (
-              <GraphsDashUsers />
-            )}
-          </S.ChartsSection>
+
 
           {/* Board de Ações */}
           <S.BoardSection>

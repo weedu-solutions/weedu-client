@@ -56,6 +56,10 @@ export function BoardActions({
       if (action.status === 5) {
         statusName = STATUS_MAP[2];
       }
+      // Adicionar status 7 na coluna de executadas
+      if (action.status === 7) {
+        statusName = STATUS_MAP[3];
+      }
 
       if (statusName) {
         initialData[statusName].push(action);
@@ -100,10 +104,11 @@ export function BoardActions({
       return targetStatus === STATUS_MAP[1] || targetStatus === STATUS_MAP[2]; // Não pode ir pra "A iniciar" nem ficar em "Em execução"
     }
 
-    // De "Executadas" ou "Desativadas"
+    // De "Executadas" ou "Desativadas" ou ações com status 3 ou 7
     if (
       draggedFromColumn === STATUS_MAP[3] ||
-      draggedFromColumn === STATUS_MAP[4]
+      draggedFromColumn === STATUS_MAP[4] ||
+      actions.find(a => a.status === 3 || a.status === 7)
     ) {
       return true; // Todas as colunas ficam desabilitadas
     }

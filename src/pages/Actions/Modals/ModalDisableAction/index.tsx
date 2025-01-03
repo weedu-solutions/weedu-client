@@ -51,7 +51,7 @@ export function ModalDisableAction({
   };
 
   return (
-    <Modal 
+    <Modal
       title={
         action?.is_active === 1
           ? "Desativar Ação"
@@ -64,8 +64,8 @@ export function ModalDisableAction({
         <S.Legend>
           <S.LegendIcon>ℹ️</S.LegendIcon>
           <S.LegendText>
-            A ação não será excluída, podendo ser 
-            {action?.is_active === 1 ? " reativada " : " desativada "} 
+            A ação não será excluída, podendo ser
+            {action?.is_active === 1 ? " reativada " : " desativada "}
             novamente
           </S.LegendText>
         </S.Legend>

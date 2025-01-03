@@ -5,7 +5,8 @@ import * as S from "./styles";
 import { IAction } from "../../../interfaces/actions";
 import { BoardLoader } from "../../../components/Loaders/BoardLoader";
 import { BoardActions } from "./BoardActions";
-import { useActions } from "../../../client/hooks/useActions";
+import { ActionsSummary } from "./components/ActionsSummary";
+import { useActions } from "../../../hooks/useActions";
 
 export function TableActions() {
   const [modals, setModals] = useState({
@@ -17,11 +18,8 @@ export function TableActions() {
   });
 
   const [actionInfo, setActionInfo] = useState<IAction>({} as IAction);
+  const { actions, isLoading } = useActions();
 
-  const {
-    actions,
-    isLoading,
-  } = useActions();
 
   const handleModalVisibility = (modalName: keyof typeof modals) => {
     setModals((prev) => ({
@@ -49,6 +47,10 @@ export function TableActions() {
           Plano de Ação
         </S.ButtonNewAction>
       </S.RowFilter>
+
+      <ActionsSummary
+        actions={Array.isArray(actions) ? actions : []}
+      />
 
       <BoardActions
         actions={Array.isArray(actions) ? actions : []}
