@@ -1,5 +1,7 @@
+import { Tooltip } from "@chakra-ui/react"
 import { DraggableProvided } from "react-beautiful-dnd";
-import { BoxColor } from "../../../../../components/BoxColor";
+import { FaRegCalendarCheck, FaRegCalendarPlus } from "react-icons/fa";
+
 import { IAction } from "../../../../../interfaces/actions";
 import * as S from "./styles";
 
@@ -9,7 +11,120 @@ interface CardProps {
   provided: DraggableProvided;
 }
 
+interface BoxColorProps {
+  status: number;
+  rowInfo?: any;
+}
+
+const STATUS_COLORS: Record<number, string> = {
+  1: "#8B5CF6", // A iniciar (roxo)
+  2: "#3B82F6", // Em execução (azul)
+  3: "#2DD4BF", // Executada (verde água)
+  4: "#FB7185", // Atrasada a iniciar (rosa)
+  5: "#EF4444", // Atrasada a terminar (vermelho)
+  6: "#6B7280", // Bloqueada (cinza escuro)
+  7: "#F59E0B"  // Executada com atraso (laranja)
+};
+
+const STATUS_LABELS: Record<number, string> = {
+  1: "A iniciar",
+  2: "Em execução",
+  3: "Executada",
+  4: "Atrasada a iniciar",
+  5: "Atrasada a terminar",
+  7: "Executada com atraso"
+};
+
+
+
+export function SmallBoxColor({ status, rowInfo }: BoxColorProps) {
+  const isBlocked = !rowInfo?.is_active;
+  const color = isBlocked ? "#6B7280" : STATUS_COLORS[status];
+
+  return (
+    <Tooltip hasArrow placement='top' label={STATUS_LABELS[status]}>
+      <S.Box color={color} />
+    </Tooltip>
+  );
+}
+
+const getDateLabelsAndValues = (action: IAction, status: number) => {
+  const dateConfigs: Record<number, {
+    startLabel: string;
+    endLabel: string;
+    startDate: string;
+    endDate: string;
+  }> = {
+    1: {
+      startLabel: "Data de início prevista",
+      endLabel: "Data fim prevista",
+      startDate: action.preview_init_date,
+      endDate: action.preview_end_date
+    },
+    2: {
+      startLabel: "Data de início real",
+      endLabel: "Data fim prevista",
+      startDate: action.init_date,
+      endDate: action.preview_end_date
+    },
+    3: {
+      startLabel: "Data de início real",
+      endLabel: "Data fim real",
+      startDate: action.init_date,
+      endDate: action.end_date
+    },
+    4: {
+      startLabel: "Data de início prevista",
+      endLabel: "Data fim prevista",
+      startDate: action.preview_init_date,
+      endDate: action.preview_end_date
+    },
+    5: {
+      startLabel: "Data de início real",
+      endLabel: "Data fim prevista",
+      startDate: action.init_date,
+      endDate: action.preview_end_date
+    },
+    7: {
+      startLabel: "Data de início real",
+      endLabel: "Data fim real",
+      startDate: action.init_date,
+      endDate: action.end_date
+    }
+  };
+
+  return dateConfigs[status] || {
+    startLabel: "Data de início",
+    endLabel: "Data fim",
+    startDate: action.preview_init_date,
+    endDate: action.preview_end_date
+  };
+};
+
 export function Card({ action, onClick, provided }: CardProps) {
+  const renderDates = () => {
+    if (action.status === 6) return null;
+    
+    const { startLabel, endLabel, startDate, endDate } = getDateLabelsAndValues(action, action.status);
+
+    return (
+      <S.SmallDetailsContainer>
+        <Tooltip hasArrow placement='left' label={startLabel}>
+          <S.DateContainer>
+            <FaRegCalendarPlus size={14} color="#464646" />
+            <S.DateValueText>{startDate}</S.DateValueText>
+          </S.DateContainer>
+        </Tooltip>
+
+        <Tooltip hasArrow placement='left' label={endLabel}>
+          <S.DateContainer>
+            <FaRegCalendarCheck size={14} color="#464646" />
+            <S.DateValueText>{endDate}</S.DateValueText>
+          </S.DateContainer>
+        </Tooltip>
+      </S.SmallDetailsContainer>
+    );
+  };
 
   return (
     <S.Card
@@ -19,76 +134,26 @@ export function Card({ action, onClick, provided }: CardProps) {
       {...provided.dragHandleProps}
     >
       <S.CardHeader>
-        <S.LabelWithEmoji>
-          <S.Emoji>👤</S.Emoji>
-          <S.Title>{action.who}</S.Title>
-        </S.LabelWithEmoji>
-        <BoxColor status={action.status} rowInfo={action} />
-      </S.CardHeader>
-
-      <S.CardContent>
-        <S.InfoRow>
+        <S.ToHeaderContainer>     
+          <SmallBoxColor status={action.status} rowInfo={action} />
           <S.LabelWithEmoji>
-            <S.Emoji>🎯</S.Emoji>
-            <S.Label>Plano de ação</S.Label>
+            <S.Emoji>👤</S.Emoji>
+            <S.UserName>{action.who}</S.UserName>
           </S.LabelWithEmoji>
-          <S.Value>{action.what}</S.Value>
-        </S.InfoRow>
+        </S.ToHeaderContainer>
 
-        {action.problem && (
-          <S.InfoRow>
-            <S.LabelWithEmoji>
-              <S.Emoji>⚠️</S.Emoji>
-              <S.Label>Problema</S.Label>
-            </S.LabelWithEmoji>
-            <S.Value>{action.problem}</S.Value>
-          </S.InfoRow>
-        )}
+        <S.IdentifierContainer>
+          <Tooltip hasArrow placement='left' label="Plano de ação">
+            <S.ActionPlan>{action.what}</S.ActionPlan>
+          </Tooltip>
 
-        <S.DateRow>
-          <S.DateGroup>
-            <S.DateCard>
-              <S.DateHeader>
-                <S.Emoji>⏳</S.Emoji>
-                <S.DateLabel>Início previsto</S.DateLabel>
-              </S.DateHeader>
-              <S.DateValue>{(action.preview_init_date)}</S.DateValue>
-            </S.DateCard>
-            
-            {action.init_date && (
-              <S.DateCard isReal>
-                <S.DateHeader>
-                  <S.Emoji>✅</S.Emoji>
-                  <S.DateLabel>Data de início</S.DateLabel>
-                </S.DateHeader>
-                <S.DateValue isReal>{(action.init_date)}</S.DateValue>
-              </S.DateCard>
-            )}
-          </S.DateGroup>
-        </S.DateRow>
+          <Tooltip hasArrow placement='left' label="Problema">
+            <S.Problem>{action.problem}</S.Problem>
+          </Tooltip>
+        </S.IdentifierContainer>
 
-        <S.DateRow>
-          <S.DateGroup>
-            <S.DateCard>
-              <S.DateHeader>
-                <S.Emoji>⏳</S.Emoji>
-                <S.DateLabel>Fim previsto</S.DateLabel>
-              </S.DateHeader>
-              <S.DateValue>{(action.preview_end_date)}</S.DateValue>
-            </S.DateCard>
-            
-            {action.end_date && (
-              <S.DateCard isReal>
-                <S.DateHeader>
-                  <S.Emoji>✅</S.Emoji>
-                  <S.DateLabel>Data de fim</S.DateLabel>
-                </S.DateHeader>
-                <S.DateValue isReal>{(action.end_date)}</S.DateValue>
-              </S.DateCard>
-            )}
-          </S.DateGroup>
-        </S.DateRow>
-      </S.CardContent>
+        {renderDates()}
+      </S.CardHeader>
     </S.Card>
   );
 }

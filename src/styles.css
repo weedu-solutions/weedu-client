@@ -45,3 +45,7 @@ button {
 .dylxVS {
   background-color: #41cbbe;
 }
+
+.Toastify__toast-container {
+  z-index: 200000;
+}

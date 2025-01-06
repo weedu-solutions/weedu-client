@@ -80,11 +80,13 @@ export function ModalCreateAction({
         ...data,
         customer_id: idCustumer,
         where: "O",
+        who: data?.who,
         is_active: user.is_active,
         preview_init_date: moment(data.preview_init_date).format("DD/MM/YYYY"),
         preview_end_date: moment(data.preview_end_date).format("DD/MM/YYYY"),
         init_date: null,
         end_date: null,
+        user_id: data?.user_id?.toString(),
       });
 
       Notify(NotifyTypes.SUCCESS, "Plano de Ação criado com sucesso!");
@@ -162,21 +164,12 @@ export function ModalCreateAction({
               options={getUserOptions()}
               onChange={(e) => {
                 const selectedId = e.target.value;
-                console.log('Selected ID:', selectedId);
-                console.log('All options:', getUserOptions());
-                
                 const selectedOption = getUserOptions().find(
                   (option) => option.value.toString() === selectedId
                 );
-                console.log('Selected Option:', selectedOption);
-
                 if (selectedOption) {
                   setValue('who', selectedOption.label);
-                  setValue('user_id', selectedId);
-                } else {
-                  console.log('No option found for ID:', selectedId);
-                  setValue('who', '');
-                  setValue('user_id', '');
+                  setValue('user_id', selectedOption.value);
                 }
               }}
             />
