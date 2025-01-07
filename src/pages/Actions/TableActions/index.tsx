@@ -14,7 +14,9 @@ export function TableActions() {
     seeDetails: false,
     disableAction: false,
     addAction: false,
-    executeAction: false
+    executeAction: false,
+    createActionInProgress: false,
+    createActionFinished: false
   });
 
   const [actionInfo, setActionInfo] = useState<IAction>({} as IAction);
@@ -55,10 +57,13 @@ export function TableActions() {
       <BoardActions
         actions={Array.isArray(actions) ? actions : []}
         setActionInfo={setActionInfo}
+        setIsModalAddAction={(value) => handleModalVisibility("addAction")}
         setIsModalSeeDetails={(value) => handleModalVisibility("seeDetails")}
         setIsModalStartOrFinishAction={(value) => handleModalVisibility("startOrFinishAction")}
         setIsModalExecuteAction={(value) => handleModalVisibility("executeAction")}
         setIsModalDisableAction={(value) => handleModalVisibility("disableAction")}
+        setIsModalCreateActionFinished={(value) => handleModalVisibility("createActionFinished")}
+        setIsModalCreateActionInProgress={(value) => handleModalVisibility("createActionInProgress")}
       />
     </>
   );

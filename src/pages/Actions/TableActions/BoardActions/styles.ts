@@ -11,37 +11,19 @@ export const BoardContainer = styled.div`
 `;
 
 export const Column = styled.div<{ isDisabled?: boolean }>`
-  background: ${props => props.isDisabled ? '#ffebee' : '#ffffff'};
-  border: ${props => props.isDisabled ? '2px solid #ffcdd2' : '1px solid #e2e8f0'};
-  height: fit-content;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-
-  ${props => props.isDisabled && `
-    cursor: not-allowed;
-    box-shadow: 0 0 15px rgba(244, 67, 54, 0.1);
-  `}
-
-  &:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  }
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  min-width: 300px;
+  margin: 0 8px;
+  opacity: ${({ isDisabled }) => (isDisabled ? "0.5" : "1")};
 `;
 
 export const ColumnTitle = styled.h3`
+  font-size: 14px;
+  font-weight: 500;
+  color: #464646;
   margin: 0;
-  padding: 20px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1e293b;
-  border-bottom: 1px solid #e2e8f0;
-  background: #f8fafc;
-  border-radius: 12px 12px 0 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  letter-spacing: 0.5px;
 `;
 
 export const CardsContainer = styled.div`
@@ -108,4 +90,35 @@ export const EmptyColumnIcon = styled.div`
   font-size: 24px;
   margin-bottom: 8px;
   opacity: 0.5;
+`;
+
+export const ColumnHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #f0f0f0;
+`;
+
+export const ColumnButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: none;
+  background-color: transparent;
+  color: #464646;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f5f5f5;
+    transform: scale(1.1);
+  }
+
+  svg {
+    color: #464646;
+  }
 `;

@@ -6,6 +6,8 @@ import { ModalCreateAction } from "../../Modals/ModalCreateAction";
 import { ModalExecuteAction } from "../../Modals/ModalExecuteAction";
 import { ModalStartOrFinishAction } from "../../Modals/ModalStartOrFinishAction";
 import { MODAL_STYLES } from "../../../../components/Modal";
+import { ModalCreateActionInProgress } from "../../Modals/ModalCreateActionInProgress";
+import { ModalCreateActionFinished } from "../../Modals/ModalCreateActionFinished";
 
 interface ActionModalsProps {
   modals: {
@@ -14,6 +16,8 @@ interface ActionModalsProps {
     disableAction: boolean;
     addAction: boolean;
     executeAction: boolean;
+    createActionInProgress: boolean;
+    createActionFinished: boolean;
   };
   handleModalVisibility: (
     modalName:
@@ -22,6 +26,8 @@ interface ActionModalsProps {
       | "disableAction"
       | "addAction"
       | "executeAction"
+      | "createActionInProgress"
+      | "createActionFinished"
   ) => void;
   actionInfo: IAction;
 }
@@ -67,6 +73,24 @@ export function ActionModals({
         <ModalExecuteAction
           action={actionInfo}
           closeModal={() => handleModalVisibility("executeAction")}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={modals.createActionInProgress}
+        style={MODAL_STYLES.modalDefault}
+      >
+        <ModalCreateActionInProgress
+          closeModal={() => handleModalVisibility("createActionInProgress")}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={modals.createActionFinished}
+        style={MODAL_STYLES.modalDefault}
+      >
+        <ModalCreateActionFinished
+          closeModal={() => handleModalVisibility("createActionFinished")}
         />
       </Modal>
     </>

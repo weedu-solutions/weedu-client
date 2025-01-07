@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import {
   DragDropContext,
-  Droppable,
   Draggable,
-  DropResult,
   DragStart,
+  Droppable,
+  DropResult,
 } from "react-beautiful-dnd";
-import * as S from "./styles"; // Seu arquivo de estilos
+import { FaPlus } from "react-icons/fa";
+
+// Seu arquivo de estilos
 import { IAction } from "../../../../interfaces/actions";
 import { Card } from "./Card";
+import * as S from "./styles";
 
 interface IColumns {
   [key: string]: IAction[];
@@ -19,6 +22,11 @@ interface IBoardActions {
   setIsModalSeeDetails: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalDisableAction: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModalExecuteAction: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalCreateActionInProgress: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
+  setIsModalCreateActionFinished: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModalAddAction: React.Dispatch<React.SetStateAction<boolean>>;
   actions: IAction[];
   setActionInfo: React.Dispatch<React.SetStateAction<IAction>>;
 }
@@ -30,11 +38,14 @@ export function BoardActions({
   setIsModalStartOrFinishAction,
   setIsModalDisableAction,
   setIsModalExecuteAction,
+  setIsModalCreateActionInProgress,
+  setIsModalCreateActionFinished,
+  setIsModalAddAction,
 }: IBoardActions) {
   const STATUS_MAP: { [key: number]: string } = {
     1: "A iniciar",
     2: "Em execução",
-    3: "Executadas"
+    3: "Executadas",
   };
 
   const [columns, setColumns] = useState<IColumns>(() => {
@@ -108,7 +119,7 @@ export function BoardActions({
     if (
       draggedFromColumn === STATUS_MAP[3] ||
       draggedFromColumn === STATUS_MAP[4] ||
-      actions.find(a => a.status === 3 || a.status === 7)
+      actions.find((a) => a.status === 3 || a.status === 7)
     ) {
       return true; // Todas as colunas ficam desabilitadas
     }
@@ -182,6 +193,29 @@ export function BoardActions({
     handleReturnToSource(movedAction);
   };
 
+  const renderColumnButton = (status: string) => {
+    if (
+      status === STATUS_MAP[1] ||
+      status === STATUS_MAP[2] ||
+      status === STATUS_MAP[3]
+    ) {
+      return (
+        <S.ColumnButton
+          onClick={() =>
+            status === STATUS_MAP[3]
+              ? setIsModalCreateActionFinished(true)
+              : status === STATUS_MAP[1]
+              ? setIsModalAddAction(true)
+              : setIsModalCreateActionInProgress(true)
+          }
+        >
+          <FaPlus size={14} />
+        </S.ColumnButton>
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
@@ -198,7 +232,10 @@ export function BoardActions({
                   {...provided.droppableProps}
                   isDisabled={isDragging && isColumnDisabled(status)}
                 >
-                  <S.ColumnTitle>{status}</S.ColumnTitle>
+                  <S.ColumnHeader>
+                    <S.ColumnTitle>{status}</S.ColumnTitle>
+                    {renderColumnButton(status)}
+                  </S.ColumnHeader>
                   <S.CardsContainer>
                     {columns[status].map((action, index) => (
                       <Draggable
@@ -208,10 +245,10 @@ export function BoardActions({
                       >
                         {(provided) => (
                           <Card
-                          action={action}
-                          onClick={() => handleOpenModalSeeDetails(action)}
-                          provided={provided}
-                        />
+                            action={action}
+                            onClick={() => handleOpenModalSeeDetails(action)}
+                            provided={provided}
+                          />
                         )}
                       </Draggable>
                     ))}
