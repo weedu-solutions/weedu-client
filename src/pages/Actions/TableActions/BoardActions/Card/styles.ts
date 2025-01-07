@@ -66,13 +66,14 @@ export const ActionPlan = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
-  padding: 4px;
+
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
+    padding: 4px;
   }
 `;
 
@@ -85,13 +86,13 @@ export const Problem = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 200px;
-  padding: 4px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.05);
+    padding: 4px;
   }
 `;
 
@@ -183,12 +184,12 @@ export const LabelWithEmoji = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 4px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
 
   &:hover {
+    padding: 4px;
     background-color: rgba(0, 0, 0, 0.05);
   }
 `;
@@ -197,12 +198,12 @@ export const DateContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
 
   &:hover {
+    padding: 4px;
     background-color: rgba(0, 0, 0, 0.05);
   }
 `;

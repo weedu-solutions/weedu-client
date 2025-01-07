@@ -26,7 +26,7 @@ export function useActions() {
       const { data } = await Api.get(`/auth/plan-customer/${infoCompany?.id}`);
       return data?.data || [];
     },
-    enabled: user?.user_type_id === 3 && !!infoCompany?.id
+    enabled: user?.user_type_id === 3
   });
 
   // Buscar dados do gráfico
