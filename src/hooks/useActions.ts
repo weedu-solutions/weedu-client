@@ -82,33 +82,41 @@ export function useActions() {
   });
 
   const mapActionStatus = (action: any): number => {
-    const now = moment().format("DD/MM/YYYY");
-    const startDate = action.init_date;
-    const endDate = action.end_date;
-    const expectedStartDate = action.preview_init_date;
-    const expectedEndDate = action.preview_end_date;
+    const now = moment();
+    const startDate = action.init_date ? moment(action.init_date, "DD/MM/YYYY") : null;
+    const endDate = action.end_date ? moment(action.end_date, "DD/MM/YYYY") : null;
+    const expectedStartDate = action.preview_init_date ? moment(action.preview_init_date, "DD/MM/YYYY") : null;
+    const expectedEndDate = action.preview_end_date ? moment(action.preview_end_date, "DD/MM/YYYY") : null;
 
-    // Verifica ações finalizadas
+    // Ação finalizada
     if (endDate) {
-      // Se terminou depois da data prevista de fim OU começou depois da data prevista de início
-      if ((expectedEndDate && endDate > expectedEndDate) ||
-          (expectedStartDate && startDate > expectedStartDate)) {
+      // Verifica se terminou depois da data prevista OU começou depois da data prevista
+      if ((expectedEndDate && endDate.isAfter(expectedEndDate)) ||
+          (expectedStartDate && startDate && startDate.isAfter(expectedStartDate))) {
         return 7; // Executada com atraso
       }
       return 3; // Executada no prazo
     }
 
-    // Ação não iniciada e atrasada
-    if (!startDate && expectedStartDate && now > expectedStartDate) return 4;
+    // Ação não iniciada
+    if (!startDate) {
+      // Verifica se já passou da data prevista de início
+      if (expectedStartDate && now.isAfter(expectedStartDate)) {
+        return 4; // Não iniciada e atrasada
+      }
+      return 1; // A iniciar (dentro do prazo)
+    }
 
-    // Ação em execução e atrasada
-    if (startDate && !endDate && expectedEndDate && now > expectedEndDate) return 5;
+    // Ação em execução
+    if (startDate && !endDate) {
+      // Verifica se já passou da data prevista de término
+      if (expectedEndDate && now.isAfter(expectedEndDate)) {
+        return 5; // Em execução e atrasada
+      }
+      return 2; // Em execução dentro do prazo
+    }
 
-    // Ação em execução dentro do prazo
-    if (startDate && !endDate) return 2;
-
-    // Ação a iniciar (não começou mas está no prazo)
-    return 1;
+    return 1; // Estado padrão: a iniciar
   };
 
   // No seu useQuery ou onde processa as ações
