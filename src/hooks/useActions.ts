@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/auth";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { IAction } from "../interfaces/actions";
 import moment from "moment";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 export function useActions() {
   const queryClient = useQueryClient();
@@ -55,9 +55,6 @@ export function useActions() {
     queryClient.invalidateQueries({ queryKey: ['actions'] });
     queryClient.invalidateQueries({ queryKey: ['customerActions'] });
     queryClient.invalidateQueries({ queryKey: ['graphicUsers'] });
-    queryClient.refetchQueries({ queryKey: ['actions'] });
-    queryClient.refetchQueries({ queryKey: ['customerActions'] });
-    queryClient.refetchQueries({ queryKey: ['graphicUsers'] });
   };
 
   // Mutations
@@ -131,7 +128,7 @@ export function useActions() {
     const rawActions = user?.user_type_id === 3 ? customerActions : actions;
     if (!rawActions) return [];
     return processActions(rawActions);
-  }, [user?.user_type_id, customerActions, processActions]);;
+  }, [ customerActions, actions]);
 
   return {
     actions: actionsFormattedStatus,
@@ -141,6 +138,6 @@ export function useActions() {
     updateAction,
     executeAction,
     startOrFinishAction,
-    graphicDataCustomer
+    graphicDataCustomer,
   };
 }

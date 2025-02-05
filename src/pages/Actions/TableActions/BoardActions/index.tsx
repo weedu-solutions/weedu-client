@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DragDropContext,
   Draggable,
@@ -48,7 +48,7 @@ export function BoardActions({
     3: "Executadas",
   };
 
-  const [columns, setColumns] = useState<IColumns>(() => {
+  const initializeColumns = (actionsData: IAction[]) => {
     const initialData: IColumns = Object.values(STATUS_MAP).reduce(
       (acc, status) => {
         acc[status] = [];
@@ -57,7 +57,7 @@ export function BoardActions({
       {} as IColumns
     );
 
-    actions.forEach((action) => {
+    actionsData.forEach((action) => {
       let statusName = STATUS_MAP[action.status];
 
       // Redistribuir atrasadas
@@ -78,7 +78,13 @@ export function BoardActions({
     });
 
     return initialData;
-  });
+  };
+
+  const [columns, setColumns] = useState<IColumns>(() => initializeColumns(actions));
+
+  useEffect(() => {
+    setColumns(initializeColumns(actions));
+  }, [actions]);
 
   const [dragSource, setDragSource] = useState<any>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -234,7 +240,7 @@ export function BoardActions({
                 >
                   <S.ColumnHeader>
                     <S.ColumnTitle>{status}</S.ColumnTitle>
-                    {renderColumnButton(status)}
+                    {/* {renderColumnButton(status)} */}
                   </S.ColumnHeader>
                   <S.CardsContainer>
                     {columns[status].map((action, index) => (
