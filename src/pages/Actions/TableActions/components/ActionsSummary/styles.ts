@@ -1,10 +1,5 @@
 import styled from "styled-components";
 
-interface ColorProps {
-  color: string;
-  isSelected?: boolean;
-}
-
 export const DashboardContainer = styled.div`
   background: #F8FAFC;
   border-radius: 12px;

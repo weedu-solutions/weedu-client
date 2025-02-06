@@ -1,5 +1,3 @@
-import styled from 'styled-components';
-import { IAction } from '../../interfaces/actions';
 import * as S from './styles';
 
 interface BoxColorProps {

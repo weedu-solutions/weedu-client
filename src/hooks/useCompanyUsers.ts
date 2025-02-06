@@ -34,6 +34,15 @@ export function useCompanyUsers() {
   });
 
   const getUserOptions = (): SelectOption[] => {
+    if (user?.user_type_id === 1) {
+      return users[0]?.user
+        ?.filter((u: User) => u.id === user.id)
+        .map((user: User): SelectOption => ({
+          value: user.id,
+          label: `${user.name} ${user.suname}`,
+        })) || [];
+    }
+
     return (
       users[0]?.user?.map((user: User): SelectOption => ({
         value: user.id,

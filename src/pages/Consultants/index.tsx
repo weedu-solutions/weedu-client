@@ -8,7 +8,6 @@ import { AddButtonWrapper, Content, Wrapper } from "./styled";
 import { TableConsultants } from "./TableConsultants";
 
 
-
 export function Consultants() {
 
   const navigate = useNavigate()

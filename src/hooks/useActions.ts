@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/auth";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { IAction } from "../interfaces/actions";
 import moment from "moment";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
 export function useActions() {
   const queryClient = useQueryClient();

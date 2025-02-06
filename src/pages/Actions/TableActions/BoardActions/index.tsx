@@ -6,9 +6,7 @@ import {
   Droppable,
   DropResult,
 } from "react-beautiful-dnd";
-import { FaPlus } from "react-icons/fa";
 
-// Seu arquivo de estilos
 import { IAction } from "../../../../interfaces/actions";
 import { Card } from "./Card";
 import * as S from "./styles";
@@ -199,28 +197,28 @@ export function BoardActions({
     handleReturnToSource(movedAction);
   };
 
-  const renderColumnButton = (status: string) => {
-    if (
-      status === STATUS_MAP[1] ||
-      status === STATUS_MAP[2] ||
-      status === STATUS_MAP[3]
-    ) {
-      return (
-        <S.ColumnButton
-          onClick={() =>
-            status === STATUS_MAP[3]
-              ? setIsModalCreateActionFinished(true)
-              : status === STATUS_MAP[1]
-              ? setIsModalAddAction(true)
-              : setIsModalCreateActionInProgress(true)
-          }
-        >
-          <FaPlus size={14} />
-        </S.ColumnButton>
-      );
-    }
-    return null;
-  };
+  // const renderColumnButton = (status: string) => {
+  //   if (
+  //     status === STATUS_MAP[1] ||
+  //     status === STATUS_MAP[2] ||
+  //     status === STATUS_MAP[3]
+  //   ) {
+  //     return (
+  //       <S.ColumnButton
+  //         onClick={() =>
+  //           status === STATUS_MAP[3]
+  //             ? setIsModalCreateActionFinished(true)
+  //             : status === STATUS_MAP[1]
+  //             ? setIsModalAddAction(true)
+  //             : setIsModalCreateActionInProgress(true)
+  //         }
+  //       >
+  //         <FaPlus size={14} />
+  //       </S.ColumnButton>
+  //     );
+  //   }
+  //   return null;
+  // };
 
   return (
     <>
